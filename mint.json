@@ -1,0 +1,114 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Documentation",
+  "logo": {
+    "dark": "/logo/dark.svg",
+    "light": "/logo/light.svg"
+  },
+  "favicon": "/favicon.svg",
+  "colors": {
+    "primary": "#F77C69",
+    "light": "#FE9C92",
+    "dark": "#C73C1C",
+    "anchors": {
+      "from": "#F77C69",
+      "to": "#AD2E12"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "Support",
+      "url": "https://joinmassive.atlassian.net/servicedesk/customer/portal/2/group/2/create/10"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Dashboard",
+    "url": "https://partners.joinmassive.com"
+  },
+  "anchors": [
+    {
+      "name": "Blog",
+      "icon": "newspaper",
+      "url": "https://www.joinmassive.com/blog"
+    },
+    {
+      "name": "Support",
+      "icon": "ticket",
+      "url": "https://joinmassive.atlassian.net/servicedesk/customer/portal/2/group/2/create/10"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": [
+        "residential-proxy-reference/introduction",
+        "residential-proxy-reference/quickstart",
+        "residential-proxy-reference/authentication"
+      ]
+    },
+    {
+      "group": "Proxy Configuration",
+      "pages": [
+        "residential-proxy-reference/routing",
+        "residential-proxy-reference/geotargeting",
+        "residential-proxy-reference/sticky-sessions",
+        "residential-proxy-reference/device-type-targeting",
+        "residential-proxy-reference/accounting",
+        "residential-proxy-reference/usage-restrictions",
+        "residential-proxy-reference/error-types"
+      ]
+    },
+    {
+      "group": "Sample Integrations",
+      "pages": [
+        "residential-proxy-reference/samples/puppeteer",
+        "residential-proxy-reference/samples/python",
+        "residential-proxy-reference/samples/scrapy",
+        "residential-proxy-reference/samples/ruby",
+        "residential-proxy-reference/samples/.net"
+      ]
+    },
+    {
+      "group": "Advanced Features",
+      "pages": [
+        "advanced-features/serp-api",
+        "advanced-features/reporting-api"
+      ]
+    },
+    {
+      "group": "Reseller API",
+      "pages": [
+        "reseller-api-reference/reseller-api-introduction",
+        "reseller-api-reference/reseller-api-authentication",
+        "reseller-api-reference/reseller-api-quickstart",
+        "reseller-api-reference/create-new-account",
+        "reseller-api-reference/get-account",
+        "reseller-api-reference/get-list-of-existing-accounts",
+        "reseller-api-reference/update-account",
+        "reseller-api-reference/disable-account",
+        "reseller-api-reference/enable-account",
+        "reseller-api-reference/allocate-traffic-for-an-account",
+        "reseller-api-reference/get-account-usage",
+        "reseller-api-reference/get-the-allocation-list"
+      ]
+    },
+    {
+      "group": "Monetization SDK",
+      "pages": [
+        "sdk/introduction",
+        "sdk/quickstart",
+        "sdk/desktop-windows",
+        "sdk/mobile-android",
+        "sdk/tv-fire",
+        "sdk/desktop-mac-objective-c",
+        "sdk/desktop-mac-swift",
+        "sdk/mobile-ios"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "x": "https://x.com/joinmassive",
+    "github": "https://github.com/magicinternet",
+    "linkedin": "https://www.linkedin.com/company/joinmassive"
+  }
+}

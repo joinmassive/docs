@@ -1,0 +1,53 @@
+---
+title: 'Quickstart'
+description: 'This guide will help you get started with the Proxy Resellers API in just a few minutes.'
+---
+
+# Prerequisites
+
+- Your API key for the Proxy Resellers API
+- cURL or any HTTP client (like Postman)
+
+# Step 1: Verify Your API Key
+
+First, let's check if your API key is working:
+
+```bash
+curl --location 'https://api-network.joinmassive.com/resellers/accounts' \
+--header 'x-api-key: {API_KEY}'
+```
+
+If successful, you should receive a list of existing accounts or an empty array.
+
+# Step 2: Create a New Account
+
+Let's create a new reseller account:
+
+```bash
+curl --location 'https://api-network.joinmassive.com/resellers/accounts' \
+--header 'Content-Type: application/json' \
+--header 'x-api-key: {API_KEY}' \
+--data '{
+  "username": "newreseller@example.com",
+  "password": "securepassword123",
+  "limit": 1000000
+}'
+```
+
+If successful, you'll receive a response with the new account's ID.
+
+# Step 3: Retrieve Account Details
+
+Now, let's fetch the details of the account we just created:
+
+```bash
+curl --location 'https://api-network.joinmassive.com/resellers/accounts/{account_id}' \
+--header 'x-api-key: {API_KEY}'
+```
+
+Replace {account_id} with the ID received in Step 2.
+
+# Next Steps
+
+You've now successfully created and retrieved an account using the Proxy Resellers API!
+To learn more about available operations, check out our API Reference section.

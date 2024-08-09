@@ -1,0 +1,69 @@
+---
+title: 'Reporting API'
+description: 'This guide will help you get started with the Reporting API in just a few minutes.'
+---
+
+# Getting started
+
+We’ll use `curl` for our API call examples. You could also consider a dedicated tool for developing API requests (like [Postman](https://www.postman.com/)).
+
+# Authenticate
+
+You’ll need a [session token](https://www.metabase.com/glossary/session_token) to authenticate your requests, or Metabase will refuse to talk with you. To get a session token, submit a request to the [/api/session](https://www.metabase.com/docs/latest/api/session) endpoint with your username and password:
+
+```bash
+curl -X POST \
+      -H "Content-Type: application/json" \
+      -d '{"username": "{METABASE_EMAIL}", "password": "{METABASE_PASSWORD}"}' \
+      https://massive.metabaseapp.com/api/session
+```
+
+<Info>
+  **Attention:** Your Metabase email and password are different than the credentials used to sign in to Massive's Partner Portal.
+</Info>
+
+This request will return a JSON object with a key called `ID` and the token as the key’s value, e.g.
+
+```
+{ "id": "38f4939c-ad7f-4cbe-ae54-30946daf8593" }
+```
+
+You’ll need to include that session token in the headers of your subsequent requests like this:
+
+```
+"X-Metabase-Session": "38f4939c-ad7f-4cbe-ae54-30946daf8593"
+```
+
+Some things to note about sessions:
+
+- By default, sessions are good for **14 days**.
+- You should cache credentials to reuse them until they expire because logins are rate-limited for security.
+- Invalid and expired session tokens return a 401 (Unauthorized) status code.
+- Handle 401 status codes gracefully. We recommend writing your code to fetch a new session token and automatically retry a request when the API returns a `401 status code`.
+
+# Read any card
+
+The reporting API builds on your dashboard view. You can query any data in your dashboard via the API with the command below:
+
+_Note: If there is data you’d like to query that is not in your dashboard please reach out to your contact at Massive via Slack or Email._
+
+```bash
+curl -X POST \
+      -H "Content-Type: application/json" \
+      -H "X-Metabase-Session: 38f4939c-ad7f-4cbe-ae54-30946daf8593" \
+      https://massive.metabaseapp.com/api/card/484/query/json
+```
+
+You simply need to replace the session ID with your from the authentication step and the card ID from your dashboard:
+
+```
+X-Metabase-Session: 38f4939c-ad7f-4cbe-ae54-30946daf8593
+```
+
+You can find the card ID in the URL of the card. In the example below that would be `484`:
+
+_Note: You must open a specific card and you should not use the ID of the whole dashboard._
+
+![484][1]
+
+[1]: ../../../images/484.png

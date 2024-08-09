@@ -1,0 +1,211 @@
+---
+title: 'Mac (Swift)'
+description: 'Integrate Massive SDK into your Mac application with this guide.'
+---
+
+## Example code
+
+```swift
+import Massive
+
+...
+
+MSVInit(apiToken: apiToken, completion: { (massive: MSVNode?, error: Error?) -> Void in
+  if massive != nil {
+    massive.userOptedIn = true
+
+    massive.menuBarUsageShown = true
+
+    if massive.menuBarUsageShown {
+      massive.menuBarUsageShown = false
+    }
+
+    let massiveViewController = massive.createUsageViewController()
+    view.addSubview(massiveViewController.view)
+
+    massive.pauseUsage(timePeriod: .hour)
+
+    if massive.usagePaused {
+      massive.unpauseUsage()
+    }
+
+    if massive.userOptedIn {
+      massive.userOptedIn = false
+    }
+  }
+} as! MSVInitCompletionHandler)
+```
+
+## Getting started
+
+1.  Download the [latest SDK package][5].
+2.  Open the Xcode project you want to integrate the SDK into.
+3.  If your project navigator isn’t shown, go to **View** > **Navigators** >
+    **Show Project Navigator**.
+4.  Open the SDK package and drag the `Massive.framework` bundle into the
+    navigator.
+5.  If the **Copy items if needed** box and box for your app target aren’t
+    checked, check them.
+6.  Press the **Finish** button.
+7.  In the implementation file for your app delegate, import the SDK:
+
+    ```swift
+    // Importing in Swift:
+    import Massive
+    ```
+
+8.  In your `applicationDidFinishLaunching` method, start and wait till the SDK
+    is ready by calling the `MSVInit` function and defining a
+    `MSVInitCompletionHandler` block:
+
+    ```swift
+    // Starting in Swift:
+    func applicationDidFinishLaunching(_ notification: Notification) {
+      ...
+
+      MSVInit(apiToken: apiToken, completion: { (massive: MSVNode?, error: Error?) -> Void in
+        if massive != nil {
+          ...
+        }
+      } as! MSVInitCompletionHandler)
+
+      ...
+    }
+    ```
+
+9.  When the user opts in, toggle the `userOptedIn` property on:
+
+    ```swift
+    // Opting in in Swift:
+    massive.userOptedIn = true
+    ```
+
+10. Next, show user tooling by toggling the `menuBarUsageShown` property on on
+    demand or calling the `getUsageViewController` method then adding the view
+    of the returned controller to your interface:
+
+    ```swift
+    // Showing system tooling in Swift:
+    massive.menuBarUsageShown = true
+
+    // Showing custom tooling in Swift:
+    let massiveViewController = massive.createUsageViewController()
+    view.addSubview(massiveViewController.view)
+    ```
+
+See the [API reference][6] for detailed info and optional SDK functionality.
+
+## Sample apps
+
+See the `README.txt` file and `Massive Sample` folder in the [SDK package][7].
+
+## API reference
+
+### Protocol
+
+**`MSVNode`**
+
+Defines a node of the Massive distributed computer.
+
+---
+
+### Types
+
+**`typealias MSVInitCompletionHandler = (MSVNode?, Error?) -> Void`**
+
+A block called asynchronously after a Massive node has been started. The node,
+if started successfully, or startup error, if not, is passed to the block.
+
+---
+
+**`enum MSVTimePeriod: Int`**
+
+A capped or uncapped duration.
+
+**Cases**
+
+**`case indefinite`** An indefinite time period.
+
+**`case hour`** An hour.
+
+**`case day`** A day.
+
+**`case week`** A week.
+
+---
+
+### Functions
+
+**`func MSVInit(apiToken: String, completion: MSVInitCompletionHandler)`**
+
+Starts a Massive node, pending user opt-in, attributed to your API token.
+
+**Parameters**
+
+**`apiToken`** A unique developer identifier obtained from this website.
+
+**`completion`** A block called asynchronously after node startup.
+
+---
+
+### Properties
+
+**`var userOptedIn: Bool { get set }`**
+
+The state of user opt-in. `true` allows computing resources to be
+opportunistically consumed; `false` doesn’t. Resource consumption is disallowed
+by default; the user must agree to easy-to-understand terms of the exchange
+you’re offering before you toggle this property on.
+
+---
+
+**`var usagePaused: Bool { get }`**
+
+The enablement state of resource consumption. `true` indicates usage is paused;
+`false`, unpaused.
+
+---
+
+**`var menuBarUsageShown: Bool { get set }`**
+
+The visibility state of menu-bar tooling. `true` adds charts representing
+resource consumption to the user’s menu bar; `false` removes them. Resource
+charts aren’t made available by default; they must be added to the menu bar by
+toggling this property on or to your interface by calling the
+`createUsageViewController` method.
+
+---
+
+### Methods
+
+**`func pauseUsage(timePeriod: MSVTimePeriod)`**
+
+Disables opportunistic resource consumption for the finite time period or till
+you call the `unpauseUsage` method. Resource consumption is enabled by default.
+
+**Parameters**
+
+**`timePeriod`** A capped or uncapped duration.
+
+---
+
+**`func unpauseUsage()`**
+
+Re-enables resource consumption if disabled.
+
+---
+
+**`func createUsageViewController() -> NSViewController`**
+
+Constructs a view controller with charts representing resource consumption that
+you can add to your app’s interface. Resource charts must be added to your
+interface by calling this method or to the menu bar by toggling the
+`menuBarUsageShown` property on.
+
+**Return value**
+
+The view controller with resource charts.
+
+[5]: https://downloads.joinmassive.com/sdk/macos/Massive%20SDK.dmg
+[6]: #api-reference
+[7]: #getting-started

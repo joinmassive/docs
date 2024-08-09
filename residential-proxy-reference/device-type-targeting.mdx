@@ -1,0 +1,28 @@
+---
+title: 'Device-type targeting'
+description: 'You can target different device types to execute the request on.'
+---
+
+| Key  | Value                                                                |
+|------|----------------------------------------------------------------------|
+| type | The type of device to target. Possible values: `mobile`, `common`.   |
+
+**Supported Devices**
+- `mobile` to execute request on mobile devices.
+- `common` to execute request on any non-mobile device.
+
+Example using query parameters:
+
+```bash
+curl -x https://network.joinmassive.com:65535 \
+     -U '{PROXY_USERNAME}:{API_KEY}-type-mobile-country-US' \
+     https://cloudflare.com/cdn-cgi/trace
+```
+
+This parameter can be used in combination with all other options. The following request targets a mobile IP in New York State and assigns it a persistent session:
+
+```bash
+curl -x https://network.joinmassive.com:65535 \
+     -U '{PROXY_USERNAME}:{API_KEY}-type-mobile-country-US-subdivision-NY-session-1' \
+     https://cloudflare.com/cdn-cgi/trace
+```

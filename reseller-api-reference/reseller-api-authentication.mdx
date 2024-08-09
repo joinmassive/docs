@@ -1,0 +1,43 @@
+---
+title: 'Authentication'
+description: 'The Proxy Resellers API uses API key authentication. You must include your API key in the header of every request to authenticate.'
+---
+
+<Info>
+  **Attention:** The API key for the Network API is not automatically enabled for this API. You must specifically request access to the Proxy Resellers API.
+</Info>
+
+# Obtaining an API Key
+
+To get an API key for the Proxy Resellers API:
+
+1. Contact [Massive support](emailto:support@joinmassive.com) and request access to the Proxy Resellers API
+2. Once approved, you will receive your API key
+
+# Using Your API Key
+
+Include your API key in the `x-api-key` header of all requests:
+
+```http
+x-api-key: {API_KEY}
+```
+
+**Example cURL request:**
+
+```bash
+curl --location 'https://api-network.joinmassive.com/resellers/accounts' \
+--header 'Content-Type: application/json' \
+--header 'x-api-key: {API_KEY}' \
+--data '{
+  "username": "johndoe@example.com",
+  "password": "secretpassword"
+}'
+```
+
+# Security Best Practices
+
+- Keep your API key secure and don't share it publicly
+- Use environment variables to store your API key in applications
+- Rotate your API key periodically for enhanced security
+
+If you believe your API key has been compromised, contact Massive support immediately for a replacement.

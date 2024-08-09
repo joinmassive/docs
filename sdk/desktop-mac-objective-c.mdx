@@ -1,0 +1,203 @@
+---
+title: 'Mac (Objective-C)'
+description: 'Integrate Massive SDK into your Mac application with this guide.'
+---
+
+## Example code
+
+```objectivec
+#import <Massive/Massive.h>
+
+...
+
+MSVInitWithAPIToken(apiToken, ^(id<MSVNode> massive, NSError *error) {
+  if (massive) {
+    massive.userOptedIn = YES;
+
+    massive.menuBarUsageShown = YES;
+    if (massive.menuBarUsageShown) massive.menuBarUsageShown = NO;
+
+    NSViewController *massiveViewController = [massive createUsageViewController];
+    [view addSubview:massiveViewController.view];
+
+    [massive pauseUsageForTimePeriod:MSVHour];
+    if (massive.usagePaused) [massive unpauseUsage];
+
+    if (massive.userOptedIn) massive.userOptedIn = NO;
+  }
+});
+```
+
+## Getting started
+
+1.  Download the [latest SDK package][5].
+2.  Open the Xcode project you want to integrate the SDK into.
+3.  If your project navigator isn’t shown, go to **View** > **Navigators** >
+    **Show Project Navigator**.
+4.  Open the SDK package and drag the `Massive.framework` bundle into the
+    navigator.
+5.  If the **Copy items if needed** box and box for your app target aren’t
+    checked, check them.
+6.  Press the **Finish** button.
+7.  In the implementation file for your app delegate, import the SDK:
+
+    ```objectivec
+    // Importing in Objective-C:
+    #import <Massive/Massive.h>
+    ```
+
+8.  In your `applicationDidFinishLaunching` method, start and wait till the SDK
+    is ready by calling the `MSVInitWithAPIToken` function and defining a
+    `MSVInitCompletionHandler` block:
+
+    ```objectivec
+    // Starting in Objective-C:
+    - (void)applicationDidFinishLaunching:(NSNotification *)notification {
+      ...
+
+      MSVInitWithAPIToken(apiToken, ^(id<MSVNode> massive, NSError *error) {
+        if (massive) {
+          ...
+        }
+      });
+
+      ...
+    }
+    ```
+
+9.  When the user opts in, toggle the `userOptedIn` property on:
+
+    ```objectivec
+    // Opting in in Objective-C:
+    massive.userOptedIn = YES;
+    ```
+
+10. Next, show user tooling by toggling the `menuBarUsageShown` property on on
+    demand or calling the `getUsageViewController` method then adding the view
+    of the returned controller to your interface:
+
+    ```objectivec
+    // Showing system tooling in Objective-C:
+    massive.menuBarUsageShown = YES;
+
+    // Showing custom tooling in Objective-C:
+    NSViewController *massiveViewController = [massive createUsageViewController];
+    [view addSubview:massiveViewController.view];
+    ```
+
+See the [API reference][6] for detailed info and optional SDK functionality.
+
+## Sample apps
+
+See the `README.txt` file and `Massive Sample` folder in the [SDK package][7].
+
+## API reference
+
+### Protocol
+
+**`MSVNode`**
+
+Defines a node of the Massive distributed computer.
+
+---
+
+### Types
+
+**`typedef void (^MSVInitCompletionHandler)(id<MSVNode> node, NSError *error);`**
+
+A block called asynchronously after a Massive node has been started. The node,
+if started successfully, or startup error, if not, is passed to the block.
+
+---
+
+**`typedef enum MSVTimePeriod: NSInteger { ... } MSVTimePeriod;`**
+
+A capped or uncapped duration.
+
+**Cases**
+
+**`MSVIndefinite`** An indefinite time period.
+
+**`MSVHour`** An hour.
+
+**`MSVDay`** A day.
+
+**`MSVWeek`** A week.
+
+---
+
+### Functions
+
+**`void MSVInitWithAPIToken(NSString *apiToken, MSVInitCompletionHandler completion);`**
+
+Starts a Massive node, pending user opt-in, attributed to your API token.
+
+**Parameters**
+
+**`apiToken`** A unique developer identifier obtained from this website.
+
+**`completion`** A block called asynchronously after node startup.
+
+---
+
+### Properties
+
+**`@property BOOL userOptedIn;`**
+
+The state of user opt-in. `YES` allows computing resources to be
+opportunistically consumed; `NO` doesn’t. Resource consumption is disallowed by
+default; the user must agree to easy-to-understand terms of the exchange you’re
+offering before you toggle this property on.
+
+---
+
+**`@property(readonly) BOOL usagePaused;`**
+
+The enablement state of resource consumption. `YES` indicates usage is paused;
+`NO`, unpaused.
+
+---
+
+**`@property BOOL menuBarUsageShown;`**
+
+The visibility state of menu-bar tooling. `YES` adds charts representing
+resource consumption to the user’s menu bar; `NO` removes them. Resource charts
+aren’t made available by default; they must be added to the menu bar by toggling
+this property on or to your interface by calling the `createUsageViewController`
+method.
+
+---
+
+### Methods
+
+**`- (void)pauseUsageForTimePeriod:(MSVTimePeriod)timePeriod;`**
+
+Disables opportunistic resource consumption for the finite time period or till
+you call the `unpauseUsage` method. Resource consumption is enabled by default.
+
+**Parameters**
+
+**`timePeriod`** A capped or uncapped duration.
+
+---
+
+**`- (void)unpauseUsage;`**
+
+Re-enables resource consumption if disabled.
+
+---
+
+**`- (NSViewController *)createUsageViewController;`**
+
+Constructs a view controller with charts representing resource consumption that
+you can add to your app’s interface. Resource charts must be added to your
+interface by calling this method or to the menu bar by toggling the
+`menuBarUsageShown` property on.
+
+**Return value**
+
+The view controller with resource charts.
+
+[5]: https://downloads.joinmassive.com/sdk/macos/Massive%20SDK.dmg
+[6]: #api-reference
+[7]: #getting-started

@@ -1,0 +1,319 @@
+---
+title: 'Windows (C/C++)'
+description: 'Integrate Massive SDK into your Windows application with this guide.'
+---
+## Example code
+
+```c
+#include <Massive.h>
+
+...
+
+void initCallback(MassiveStatus status, void *context) {
+  if (status == MassiveStatus::OP_SUCCESS) {
+    if (MassiveStart() != MassiveStatus::OP_SUCCESS) {
+      MassiveShowTaskbarUsage();
+
+      bool isTaskbarUsageShown = false;
+      MassiveIsTaskbarUsageShown(&isTaskbarUsageShown);
+
+      if (isTaskbarUsageShown) MassiveHideTaskbarUsage();
+
+      bool isMassiveStarted = false;
+      MassiveIsStarted(&isMassiveStarted);
+
+      if (isMassiveStarted) MassiveStop();
+    }
+  }
+}
+
+MassiveOptions options = MassiveOptions::STOP_MASSIVE_ON_APP_QUIT;
+MassiveInitWithAPIToken(apiToken, options, initCallback, context);
+
+...
+
+MassiveCleanUp();
+```
+
+## Getting started
+
+1.  Download the [latest SDK package][3].
+2.  Extract the package to your folder of choice.
+3.  Open your IDE and the project you want to integrate the SDK into.
+4.  Add the extracted `include` folder to your include path.
+5.  Add the `lib\win64` folder to your library path and, from that folder, the `MassiveClient.dll`
+    library as a dependency.
+6.  Configure the `MassiveInstaller.exe` installer to be copied, at build time, from the `bin` to
+    output folders.
+7.  In your implementation file, import the SDK:
+
+    ```c
+    // Importing in C/C++:
+    #include <Massive.h>
+    ```
+
+8.  Start and wait till the SDK is ready by calling the `MassiveInitWithAPIToken` function and
+    defining a `MassiveInitCallback` continuation function:
+
+    ```c
+    // Starting in C/C++:
+    MassiveInitWithAPIToken(apiToken, options, initCallback, context);
+
+    void initCallback(MassiveStatus status, void *context) {
+      if (status == MassiveStatus::OP_SUCCESS) {
+        ...
+      }
+    }
+    ```
+
+9.  When the user opts in, call the `MassiveStart` function:
+
+    ```c
+    // Opting in in C/C++:
+    MassiveStart();
+    ```
+
+10. Next, show user tooling by calling the `MassiveShowTaskbarUsage` function on demand:
+
+    ```c
+    // Showing system tooling in C/C++:
+    MassiveShowTaskbarUsage();
+    ```
+
+See the [API reference][6] for detailed info and optional SDK functionality.
+
+## Sample apps
+
+See the `README.txt` file and `samples` folder in the [SDK package][7]. The
+samples demonstrate how to integrate the SDK into your project and use its
+functionality.
+
+- `MassiveCliSample` is a simple console application that demonstrates how to
+  integrate the SDK into a C/C++ project.
+- `MassiveSample` is a simple Windows application that demonstrates how to
+  integrate the SDK into a C# project.
+
+## API reference
+
+### Types
+
+**`typedef enum MassiveStatus`**
+
+An enumeration of possible states of the Massive SDK.
+
+**Values**
+
+**`OP_SUCCESS`** The operation was successful.
+
+**`INVALID_ARGS`** The arguments passed to the function were invalid.
+
+**`UNINITIALIZED_SERVICE`** The Massive service was not initialized.
+
+**`INITIALIZING_SERVICE`** The Massive service is initializing.
+
+**`ALREADY_STARTED`** The node is already started.
+
+**`CORRUPTED_INSTALLATION`** The installation is corrupted.
+
+**`INTERNAL_ERROR`** An internal error occurred.
+
+---
+
+**`typedef enum MassiveOptions`**
+
+An enumeration of options for the Massive SDK initialization.
+
+**Values**
+
+**`NONE`** No options.
+
+**`STOP_MASSIVE_ON_APP_QUIT`** Stops the Massive service when the client app quits.
+
+---
+
+**`typedef void(__cdecl *MassiveInitCallback)(MassiveStatus status, void *context);`**
+
+A function called asynchronously after a node of the Massive network
+has been initialized. The startup state and local data from the caller are
+passed to the function.
+
+**Parameters**
+
+**`status`** The startup state of the node.
+
+**`context`** Any local data passed to the `MassiveInitWithAPIToken` function.
+
+---
+
+**`typedef void(__cdecl *MassiveCallback)(void *context);`**
+
+Type of generic callback that is used to handle async events from the SDK.
+
+**Parameters**
+
+**`context`** Any local data passed to the function which uses this callback.
+
+---
+
+### Functions
+
+**`void __cdecl MassiveInitWithAPIToken(const char *apiToken, const MassiveOptions options, MassiveInitCallback callback, void *context);`**
+
+Starts a Massive node, pending user opt-in, attributed to your API token.
+
+**Parameters**
+
+**`apiToken`** A unique developer identifier obtained from this website.
+
+**`options`** Options for the Massive SDK initialization.
+
+**`callback`** A function called asynchronously after node startup.
+
+**`context`** Any local data to pass to the `callback` function.
+
+---
+
+**`void __cdecl MassiveCleanUp();`**
+
+De-initializes and releases all resources acquired by Massive.
+
+---
+
+**`const char *__cdecl MassiveGetVersion();`**
+
+Returns the version of the Massive SDK.
+
+**Return value**
+
+The version of the Massive SDK in the format `major.minor.patch`.
+
+---
+
+**`MassiveStatus __cdecl MassiveStart();`**
+
+Allows computing resources to be opportunistically consumed. The user must agree
+to easy-to-understand terms of the exchange you’re offering before you call this
+function.
+
+**Return value**
+
+Execution status code.
+
+---
+
+**`MassiveStatus __cdecl MassiveStop();`**
+
+Disallows computing resources to be consumed.
+
+**Return value**
+
+Execution status code.
+
+---
+
+**`MassiveStatus __cdecl MassiveIsStarted(bool *isStarted);`**
+
+Queries the allowing state of the computing resources sharing.
+
+**Return value**
+
+Execution status code.
+
+---
+
+**`MassiveStatus __cdecl MassiveShowTaskbarUsage();`**
+
+Adds charts representing resource consumption to the user’s taskbar. Resource
+charts must be made available by calling this function.
+
+**Return value**
+
+Execution status code.
+
+---
+
+**`MassiveStatus __cdecl MassiveHideTaskbarUsage();`**
+
+Hides charts representing resource consumption from the user's taskbar.
+
+**Return value**
+
+Execution status code.
+
+---
+
+**`MassiveStatus __cdecl MassiveIsTaskbarUsageShown(bool *isShown);`**
+
+Queries the visibility state of taskbar tooling.
+
+**Return value**
+
+Execution status code.
+
+---
+
+**`MassiveStatus __cdecl MassiveStoppedViaTaskbarCallback(MassiveCallback callback, void *context);`**
+
+Sets a callback to be called when user opts out from Massive using Taskbar UI.
+
+**Parameters**
+
+**`callback`** A callback to notify about the event.
+
+**`context`** Any local data to pass to the `callback` function.
+
+**Return value**
+
+Execution status code.
+
+---
+
+**`MassiveStatus __cdecl MassiveStartedViaTaskbarCallback(MassiveCallback callback, void *context);`**
+
+Sets a callback to be called when user opts in to Massive using Taskbar UI.
+
+**Parameters**
+
+**`callback`** A callback to notify about the event.
+
+**`context`** Any local data to pass to the `callback` function.
+
+**Return value**
+
+Execution status code.
+
+---
+
+**`MassiveStatus __cdecl MassiveSetServiceUnavailableCallback(MassiveCallback callback, void *context);`**
+
+Sets a callback to be called when connection to the Massive is lost.
+
+**Parameters**
+
+**`callback`** A callback to notify about the event.
+
+**`context`** Any local data to pass to the `callback` function.
+
+**Return value**
+
+Execution status code.
+
+---
+
+**`MassiveStatus __cdecl MassiveSetServiceAvailableCallback(MassiveCallback callback, void *context);`**
+
+Sets a callback to be called when connection to the Massive is restored.
+
+**Parameters**
+
+**`callback`** A callback to notify about the event.
+
+**`context`** Any local data to pass to the `callback` function.
+
+**Return value**
+
+Execution status code.
+
+[3]: https://downloads.joinmassive.com/sdk/windows/MassiveSDK.zip
+[6]: #api-reference
+[7]: #getting-started
