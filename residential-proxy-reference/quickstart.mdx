@@ -30,7 +30,3 @@ curl --proxy https://network.joinmassive.com:65535 --proxy-user '{PROXY_USERNAME
 Hello, {userContext.firstName ?? 'reader'}!
 
 You plan is {userContext.org.plan ?? 'free'} 
-
-```bash
-curl --proxy https://network.joinmassive.com:65535 --proxy-user '{userContext.proxy.username}:{userContext.proxy.password}' https://cloudflare.com/cdn-cgi/trace
-```
