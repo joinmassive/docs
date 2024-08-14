@@ -25,5 +25,10 @@ Make sure your credentials work and that you use the correct port configuration.
 
 ```bash
 curl --proxy https://network.joinmassive.com:65535 --proxy-user '{PROXY_USERNAME}:{API_KEY}' https://cloudflare.com/cdn-cgi/trace
+```
 
+Hello, {userContext.firstName ?? 'reader'}!
+
+```bash
+curl --proxy https://network.joinmassive.com:65535 --proxy-user '{userContext.proxy.username}:{userContext.proxy.password}' https://cloudflare.com/cdn-cgi/trace
 ```
