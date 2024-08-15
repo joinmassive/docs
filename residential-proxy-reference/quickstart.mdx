@@ -26,3 +26,15 @@ Make sure your API key works with this simple shell script.
 ```bash
 curl --proxy https://network.joinmassive.com:65535 --proxy-user '{userContext.proxy_username ?? 'PROXY_USERNAME'}:{userContext.api_key ?? 'API_KEY'}' https://cloudflare.com/cdn-cgi/trace
 ```
+
+fisrtName: {userContext.fisrtName ?? 'fisrtName'}
+
+lastName: {userContext.lastName ?? 'lastName'}
+
+email: {userContext.email ?? 'email'}
+
+status: {userContext.status ?? 'status'}
+
+proxy_username: {userContext.proxy_username ?? 'proxy_username'}
+
+api_key: {userContext.api_key ?? 'api_key'}
