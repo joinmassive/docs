@@ -7,24 +7,22 @@ description: 'Start crawling the web in under 5 minutes.'
 
 Make sure your credentials work and that you use the correct port configuration.
 
-|             |                     |
-|-------------|---------------------|
-| Username    | `{PROXY_USERNAME}`  |
-| API Key     | `{API_KEY}`         |
-| HTTPS Port  | 65535               |
-| HTTP Port   | 65534               |
-| SOCKS5 Port | 65533               |
+| | |
+| :---: | :---: |
+| Username    | `{userContext.proxy.username ?? 'PROXY_USERNAME'}` |
+| API Key     | `{userContext.proxy.password ?? 'API_KEY'}` |
+| HTTPS Port  | 65535 |
+| HTTP Port   | 65534 |
+| SOCKS5 Port | 65533 |
 
 ## Check credentials
 
- Make sure your API key works with this simple shell script.
+Make sure your API key works with this simple shell script.
 
- <Info>
+<Info>
   **Attention:** If you credentials do not appear below, they may not be provisioned. Sign up for an account or email [support@joinmassive.com](support@joinmassive.com).
 </Info>
 
 ```bash
-curl --proxy https://network.joinmassive.com:65535 --proxy-user '{PROXY_USERNAME}:{API_KEY}' https://cloudflare.com/cdn-cgi/trace
+curl --proxy https://network.joinmassive.com:65535 --proxy-user '{userContext.proxy.username ?? 'PROXY_USERNAME'}:{userContext.proxy.password ?? 'API_KEY'}' https://cloudflare.com/cdn-cgi/trace
 ```
-
-Hello, {userContext.firstName ?? 'reader'}!
