@@ -9,8 +9,8 @@ Make sure your credentials work and that you use the correct port configuration.
 
 | | |
 | :---: | :---: |
-| Username    | `{userContext.proxy.username ?? 'PROXY_USERNAME'}` |
-| API Key     | `{userContext.proxy.password ?? 'API_KEY'}` |
+| Username    | `{userContext.proxy_username ?? 'PROXY_USERNAME'}` |
+| API Key     | `{userContext.api_key ?? 'API_KEY'}` |
 | HTTPS Port  | 65535 |
 | HTTP Port   | 65534 |
 | SOCKS5 Port | 65533 |
@@ -24,5 +24,5 @@ Make sure your API key works with this simple shell script.
 </Info>
 
 ```bash
-curl --proxy https://network.joinmassive.com:65535 --proxy-user '{userContext.proxy.username ?? 'PROXY_USERNAME'}:{userContext.proxy.password ?? 'API_KEY'}' https://cloudflare.com/cdn-cgi/trace
+curl --proxy https://network.joinmassive.com:65535 --proxy-user '{userContext.proxy_username ?? 'PROXY_USERNAME'}:{userContext.api_key ?? 'API_KEY'}' https://cloudflare.com/cdn-cgi/trace
 ```
