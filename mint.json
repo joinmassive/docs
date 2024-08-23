@@ -97,12 +97,24 @@
       "pages": [
         "sdk/introduction",
         "sdk/quickstart",
-        "sdk/desktop-windows",
-        "sdk/mobile-android",
-        "sdk/tv-fire",
-        "sdk/desktop-mac-objective-c",
-        "sdk/desktop-mac-swift",
-        "sdk/mobile-ios"
+        {
+          "group": "Desktop",
+          "pages": [
+            "sdk/desktop",
+            "sdk/desktop-windows",
+            "sdk/desktop-mac-objective-c",
+            "sdk/desktop-mac-swift"
+          ]
+        },
+        {
+          "group": "Mobile & smart TV",
+          "pages": [
+            "sdk/mobile-and-smart-tv",
+            "sdk/mobile-android",
+            "sdk/tv-fire",
+            "sdk/mobile-ios"
+          ]
+        }
       ]
     }
   ],
