@@ -7,7 +7,7 @@ You can tune the request by providing geo parameters like an [ISO ZIP code, subd
 
 ```bash
 curl -x https://network.joinmassive.com:65535 \
-     -U '{PROXY_USERNAME}:{API_KEY}-country-US-zipcode-10001' \
+     -U '{PROXY_USERNAME}-country-US-zipcode-10001:{API_KEY}' \
      https://cloudflare.com/cdn-cgi/trace
 ```
 ## Country, subdivision, city, zipcode
@@ -52,7 +52,7 @@ Geotargeting by country and city is always more robust than by ZIP code.
 
 ```bash
 curl -x https://network.joinmassive.com:65535 \
-     -U '{PROXY_USERNAME}:{API_KEY}-country-US' \
+     -U '{PROXY_USERNAME}-country-US:{API_KEY}' \
      https://cloudflare.com/cdn-cgi/trace
 ```
 
@@ -60,7 +60,7 @@ curl -x https://network.joinmassive.com:65535 \
 
 ```bash
 curl -x https://network.joinmassive.com:65535 \
-     -U '{PROXY_USERNAME}:{API_KEY}-country-US-city-NY' \
+     -U '{PROXY_USERNAME}-country-US-city-NY:{API_KEY}' \
      https://cloudflare.com/cdn-cgi/trace
 ```
 
@@ -68,7 +68,7 @@ curl -x https://network.joinmassive.com:65535 \
 
 ```bash
 curl -x https://network.joinmassive.com:65535 \
-     -U '{PROXY_USERNAME}:{API_KEY}-country-US-subdivision-NY' \
+     -U '{PROXY_USERNAME}-country-US-subdivision-NY:{API_KEY}' \
      https://cloudflare.com/cdn-cgi/trace
 ```
 
@@ -76,7 +76,7 @@ curl -x https://network.joinmassive.com:65535 \
 
 ```bash
 curl -x https://network.joinmassive.com:65535 \
-     -U '{PROXY_USERNAME}:{API_KEY}-country-US-zipcode-10001' \
+     -U '{PROXY_USERNAME}-country-US-zipcode-10001:{API_KEY}' \
      https://cloudflare.com/cdn-cgi/trace
 ```
 
