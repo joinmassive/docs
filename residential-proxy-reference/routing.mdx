@@ -11,7 +11,7 @@ Our proxy protocol uses `-` syntax to append routing parameters, which will used
 
 ```bash
 curl -x https://network.joinmassive.com:65535 \
-     -U '{PROXY_USERNAME}:{API_KEY}-country-US-zipcode-10001' \
+     -U '{PROXY_USERNAME}-country-US-zipcode-10001:{API_KEY}' \
      https://cloudflare.com/cdn-cgi/trace
 ```
 
@@ -21,6 +21,6 @@ The alternative syntax `?` + `=` + `&` is also supported.
 
 ```bash
 curl -x https://network.joinmassive.com:65535 \
-     -U '{PROXY_USERNAME}:{API_KEY}?country=US&zipcode=10001' \
+     -U '{PROXY_USERNAME}?country=US&zipcode=10001:{API_KEY}' \
      https://cloudflare.com/cdn-cgi/trace
 ```

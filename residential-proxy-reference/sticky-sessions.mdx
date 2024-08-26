@@ -12,7 +12,7 @@ You can inject a session identifier, like a unique representation of your app or
 
 ```bash
 curl -x https://network.joinmassive.com:65535 \
-     -U '{PROXY_USERNAME}:{API_KEY}-session-37' \
+     -U '{PROXY_USERNAME}-session-37:{API_KEY}' \
      https://cloudflare.com/cdn-cgi/trace
 ```
 
@@ -67,7 +67,7 @@ Workarounds:
 
 ```bash
 curl -x https://us-network.joinmassive.com:65535 \
-     -U '{PROXY_USERNAME}:{API_KEY}-session-123' \
+     -U '{PROXY_USERNAME}-session-123:{API_KEY}' \
      https://cloudflare.com/cdn-cgi/trace
 ```
 
@@ -75,6 +75,6 @@ curl -x https://us-network.joinmassive.com:65535 \
 
 ```bash
 curl -x https://network.joinmassive.com:65535 \
-     -U '{PROXY_USERNAME}:{API_KEY}-country-US-session-123' \
+     -U '{PROXY_USERNAME}-country-US-session-123:{API_KEY}' \
      https://cloudflare.com/cdn-cgi/trace
 ```

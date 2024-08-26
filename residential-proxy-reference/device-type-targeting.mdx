@@ -15,7 +15,7 @@ Example using query parameters:
 
 ```bash
 curl -x https://network.joinmassive.com:65535 \
-     -U '{PROXY_USERNAME}:{API_KEY}-type-mobile-country-US' \
+     -U '{PROXY_USERNAME}-type-mobile-country-US:{API_KEY}' \
      https://cloudflare.com/cdn-cgi/trace
 ```
 
@@ -23,6 +23,6 @@ This parameter can be used in combination with all other options. The following 
 
 ```bash
 curl -x https://network.joinmassive.com:65535 \
-     -U '{PROXY_USERNAME}:{API_KEY}-type-mobile-country-US-subdivision-NY-session-1' \
+     -U '{PROXY_USERNAME}-type-mobile-country-US-subdivision-NY-session-1:{API_KEY}' \
      https://cloudflare.com/cdn-cgi/trace
 ```
