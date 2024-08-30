@@ -1,0 +1,282 @@
+---
+title: 'Search service'
+description: 'Extract live results from popular search engines'
+---
+
+## Usage
+
+The search service has a RESTful interface that accepts `GET` requests at
+**https://&#8203;beta.api.joinmassive.com/search**. Searches are performed in real time by default
+or can be queued up for [later retrieval](#asynchronous-mode). Real-time searches take an average of
+a few seconds but may require multiple retries, in which case up to **120 seconds** is allocated per
+API request.
+
+### Authentication
+
+You can access the service by including
+[your secret API token](https://partners.joinmassive.com/profile) in an `Authorization` header:
+
+```http
+Authorization: Bearer [Insert API token here]
+```
+
+Here’s an example request that uses the [common Curl command](https://curl.se/):
+
+```bash
+$ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"          \
+          'https://beta.api.joinmassive.com/search?terms=foo'
+```
+
+### Search parameters
+
+Required and optional parameters can be added in a
+[standard query string](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_is_a_URL#parameters).
+The keys and values that Massive supports are as follows:
+
+| Key           | Required | Value                                                                                                                                                                                                                                                                                     |
+| :------------ | :------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `terms`       | ✅       | The broad or exact word or phrase to query (e.g., `foo bar baz` or `"foo bar baz"`); the terms require [form or URL encoding](https://developer.mozilla.org/en-US/docs/Glossary/Percent-encoding) (with any space character being replaced by a `+` character or `%20` sequence)          |
+| `serps`       | ⬜       | The number of results pages to retrieve, from `1` to `15` inclusive; `1` is the default count                                                                                                                                                                                             |
+| `engine`      | ⬜       | The search engine to use, `google`, `bing`, or `duckduckgo`; `google` is the default engine                                                                                                                                                                                               |
+| `device`      | ⬜       | **[Google only]** The name as returned by the [devices endpoint](#device-emulation) of the device to emulate searching on (these names are case insensitive but required to include form- or URL-encoded spaces and punctuation marks); device emulation is unused by default             |
+| `country`     | ⬜       | The [two-letter ISO code](https://www.iso.org/obp/ui/#search/code) of the country to search from (these codes are case insensitive); a random country will be used by default                                                                                                             |
+| `subdivision` | ⬜       | The alphanumeric second part (proceeding the separator) of a [first-level subdivision code](https://www.iso.org/obp/ui/#search/code) in the (prerequisite) country to search from (these codes are case insensitive); a random subdivision will be used by default                        |
+| `city`        | ⬜       | The [commonly spelled name](https://www.geonames.org/) of the city in the (prerequisite) country to search from (these names are temporarily case sensitive and required to include form- or URL-encoded spaces and punctuation marks); a random city will be used by default             |
+| `uule`        | ⬜       | **[Google only]** The [proprietary encoded string](https://moz.com/blog/geolocation-the-ultimate-tip-to-emulate-local-search) for emulating the location to search from; if possible, the actual location will be searched from not emulated; location emulation is unused by default     |
+| `language`    | ⬜       | **[Google only]** The [commonly spelled name or Google code](https://www.google.com/advanced_search) of the language to search in (these names and codes are case insensitive but required to include form- or URL-encoded spaces and punctuation marks); English is the default language |
+| `mode`        | ⬜       | The synchronous or asynchronous timing of when to retrieve results, `sync` or `async` (see [details below](#asynchronous-mode)); `sync` is the default mode                                                                                                                               |
+| `format`      | ⬜       | The format to output to, `html` or `json` (see [details below](#response-format)); `html` is the default format                                                                                                                                                                           |
+| `expiration`  | ⬜       | The maximum age of cached results in days to accept, where `0` will disable caching; `1` is the default number of days                                                                                                                                                                    |
+| `subaccount`  | ⬜       | Any unique identifier of up to 255 characters (regardless of character encoding); Massive will bill requests made from subaccounts separately                                                                                                                                             |
+
+### Device emulation
+
+The `device` parameter (which is currently limited to Google searches) lets you fetch
+device-specific results. For a list of supported devices, make a request with your API token and no
+parameters to **https://&#8203;beta.api.joinmassive.com/search/devices**:
+
+```bash
+$ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"        \
+          'https://beta.api.joinmassive.com/search/devices'
+```
+
+The response will be an alphabetized JSON array of device names:
+
+```json
+[
+  "Blackberry PlayBook",
+  "Blackberry PlayBook landscape",
+  "BlackBerry Z30",
+  "[Remaining device names here]"
+]
+```
+
+### Asynchronous mode
+
+A request that includes the `mode=async` key-value pair will be satisfied asynchronously:
+
+```bash
+$ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"                     \
+          'https://beta.api.joinmassive.com/search?terms=foo&mode=async'
+```
+
+The API will return JSON that contains a job identifier:
+
+```json
+{ "id": "1851dab8-4619-409f-893f-47dd3a180bc3" }
+```
+
+The job results or status can be requested at any time thereafter by passing a token and the
+identifier to **https://&#8203;beta.api.joinmassive.com/search/results**:
+
+```bash
+$ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"                                                \
+          'https://beta.api.joinmassive.com/search/results?id=1851dab8-4619-409f-893f-47dd3a180bc3'
+```
+
+If the results are ready, they’ll be returned in the
+[same format as synchronous results](#response-format); otherwise, a JSON status message will be
+returned.
+
+A `retrieving` status indicates that the search is in progress:
+
+```json
+{ "status": "retrieving" }
+```
+
+A `failed` status indicates that the search was unsuccessful and the request should be retried:
+
+```json
+{ "status": "failed" }
+```
+
+### Response format
+
+You can receive search results in their original HTML or as structured JSON.
+
+#### HTML
+
+Google and Bing don’t feature infinite scrolling, so if you request more than one results page from
+those search engines, the HTML of each page will be separated from the next by an empty line
+(`\n\n`).
+
+#### JSON
+
+If you set the output to JSON, your results will be parsed into nested objects as in the following
+example:
+
+```json
+{
+               "query": "foo",
+  "approxResultsCount": 286000000,
+        "resultsCount": 26,
+             "results": [{
+                                "type": "organic",
+                                "page": 1,
+                             "section": "main",
+                            "position": 1,
+                                 "url": "https://foofighters.com/",
+                               "title": "Foo Fighters",
+                                "site": "Foo Fighters",
+                          "visibleUrl": "https://foofighters.com",
+                             "snippet": "Official website of Foo Fighters.",
+                              "rating": null,
+                               "votes": null,
+                           "sitelinks": [{
+                                          "position": 1,
+                                               "url": "https://foofighters.com/tour-dates/",
+                                             "title": "Tour Dates"
+                                        }, {
+                                          "position": 2,
+                                               "url": "https://shop.foofighters.com/",
+                                             "title": "Foo Fighters"
+                                        }, {
+                                          "position": 3,
+                                               "url": "https://foofighters.com/news/",
+                                             "title": "News"
+                                        }, {
+                                          "position": 4,
+                                               "url": "https://foofighters.com/news/a-message-from-the-hawkins-family/",
+                                             "title": "A Message from The Hawkins..."
+                                        }],
+                              "images": []
+                        }, {
+                                "type": "organic",
+                                "page": 1,
+                             "section": "main",
+                            "position": 2,
+                                 "url": "https://www.merriam-webster.com/dictionary/foo",
+                               "title": "Foo Definition & Meaning",
+                                "site": "Merriam-Webster",
+                          "visibleUrl": "https://www.merriam-webster.com › dictionary › foo",
+                             "snippet": "The meaning of FOO is Scottish variant of how.",
+                              "rating": null,
+                               "votes": null,
+                           "sitelinks": [],
+                              "images": [{
+                                          "position": 1,
+                                            "source": "[Image data here]",
+                                               "alt": "foo from www.merriam-webster.com"
+                                        }]
+                        }, {
+                                "type": "organic",
+                                "page": 1,
+                             "section": "main",
+                            "position": 3,
+                                 "url": "https://www.youtube.com/channel/UCi2KNss4Yx73NG0JARSFe0A",
+                               "title": "Foo Fighters",
+                                "site": "YouTube · Foo Fighters",
+                          "visibleUrl": "3.9M+ followers",
+                             "snippet": "Official Music Videos · Foo Fighters - Something From Nothing · Foo Fighters - In The Clear. Foo Fighters. 15M views.",
+                              "rating": null,
+                               "votes": null,
+                           "sitelinks": [],
+                              "images": [{
+                                          "position": 1,
+                                            "source": "[Image data here]",
+                                               "alt": "foo from www.youtube.com"
+                                        }]
+                        }, {
+                          "[Remaining organic results here]"
+                        }, {
+                              "type": "also-asked",
+                              "page": 1,
+                           "section": "main",
+                          "position": 1,
+                          "question": "What does foo mean?",
+                            "answer": {
+                                            "heading": null,
+                                        "description": "(slang) Fool, foolish person. Wiktionary. (slang) Alternative spelling of foo (short form of fool) Wiktionary.",
+                                                "url": "https://www.yourdictionary.com/foo#:~:text=(slang)%20Fool%2C%20foolish%20person,Wiktionary",
+                                              "title": "Foo Definition & Meaning - YourDictionary",
+                                               "site": "YourDictionary",
+                                         "visibleUrl": "https://www.yourdictionary.com › foo"
+                                      }
+                        }, {
+                              "type": "also-asked",
+                              "page": 1,
+                           "section": "main",
+                          "position": 2,
+                          "question": "What is the English word Foo?",
+                            "answer": {
+                                            "heading": null,
+                                        "description": "noun (1) ˈfü(ˌ)fü plural -s. slang. : fool, ninny.",
+                                                "url": "https://www.merriam-webster.com/dictionary/foo-foo#:~:text=1%20of%202-,noun%20(1),%3A%20fool%2C%20ninny",
+                                              "title": "Foo-foo Definition & Meaning - Merriam-Webster",
+                                               "site": "Merriam-Webster",
+                                         "visibleUrl": "https://www.merriam-webster.com › dictionary › foo-foo"
+                                      }
+                        }, {
+                              "type": "also-asked",
+                              "page": 1,
+                           "section": "main",
+                          "position": 3,
+                          "question": "Why do people use Foo?",
+                            "answer": {
+                                            "heading": null,
+                                        "description": "Foo is a placeholder term commonly used in programming to represent an undefined or generic object, function, or variable.Jul 16, 2023",
+                                                "url": "https://makemeaprogrammer.com/what-is-foo-in-programming/#:~:text=Foo%20is%20a%20placeholder%20term,object%2C%20function%2C%20or%20variable.",
+                                              "title": "What Is Foo in Programming? - Make Me a Programmer",
+                                               "site": "Make Me a Programmer",
+                                         "visibleUrl": "https://makemeaprogrammer.com › what-is-foo-in-progr..."
+                                      }
+                        }, {
+                          "[Remaining People also ask results here]"
+                        }, {
+                              "type": "also-searched",
+                              "page": 1,
+                           "section": "bottom",
+                          "position": 1,
+                               "url": "https://www.google.com/search?sca_esv=7f94d02cc2bb7a85&sca_upv=1&q=Dave+Grohl&stick=H4sIAAAAAAAAAOMwVGI0-MXIsIGF4RULFxeHfq6-gZGFafIrFm4uThDHMKUiLRkulWRYVQXnpJQVFsI5llm5FnCOWW6WCZxjbpyOUGZSlFyEMNvIoKgKzksxtDTOWMTK5ZJYlqrgXpSfkXOLTZKh-2mPcWB8SME7leaDUof2LHlq8nPd7DLvVYs4xAJS8wtyUhUSc4rzFYpTE4uSMxTS8osAI_QNztIAAAA&sa=X&ved=2ahUKEwi1vO_B_5yIAxV8ElkFHRySAR4Qs9oBKAB6BAhkEAk",
+                             "query": "Dave Grohl"
+                        }, {
+                              "type": "also-searched",
+                              "page": 1,
+                           "section": "bottom",
+                          "position": 2,
+                               "url": "https://www.google.com/search?sca_esv=7f94d02cc2bb7a85&sca_upv=1&q=Taylor+Hawkins&stick=H4sIAAAAAAAAAOMwVGI0_MXIsIGF4RULFxeHfq6-gZGFafIrFm4uThDHMKUiLRkulWRYVQXnpJQVFsI5llm5FnCOWW6WCZxjbpyOUGZSlFyEMNvIoKgKzksxtDTOWMTKF5JYmZNfpOCRWJ6dmVd8i02Softpj3FgfEjBO5Xmg1KH9ix5avJz3ewy71WLOMQCUvMLclIVEnOK8xWKUxOLkjMU0vKLAL7S69nWAAAA&sa=X&ved=2ahUKEwi1vO_B_5yIAxV8ElkFHRySAR4Qs9oBKAB6BAhkEA4",
+                             "query": "Taylor Hawkins"
+                        }, {
+                              "type": "also-searched",
+                              "page": 1,
+                           "section": "bottom",
+                          "position": 3,
+                               "url": "https://www.google.com/search?sca_esv=7f94d02cc2bb7a85&sca_upv=1&q=Nirvana+(band)&stick=H4sIAAAAAAAAAOMwVGI0-sXIsIGF4RULFxeHfq6-gZGFafIrFm4uThDHMKUiLRkulWRYVQXnpJQVFsI5llm5FnCOWW6WCZxjbpyOUGZSlFyEMNvIoKgKzksxtDTOWMTK55dZVJaYl6igkZSYl6J5i02Softpj3FgfEjBO5Xmg1KH9ix5avJz3ewy71WLOMQCUvMLclIVEnOK8xWKUxOLkjMU0vKLAJ7k8YDWAAAA&sa=X&ved=2ahUKEwi1vO_B_5yIAxV8ElkFHRySAR4Qs9oBKAB6BAhkEBM",
+                             "query": "Nirvana"
+                        }, {
+                          "[Remaining results here]"
+                        }]
+}
+```
+
+## Additional examples
+
+```bash
+$ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"                                      \
+          'https://beta.api.joinmassive.com/search?terms=foo+bar+baz&serps=2&engine=bing'
+```
+
+```bash
+$ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"                                                                          \
+          'https://beta.api.joinmassive.com/search?terms=%22foo+bar+baz%22&serps=10&engine=duckduckgo&country=us&format=json'
+```
