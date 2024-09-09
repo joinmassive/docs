@@ -29,3 +29,29 @@ Here’s an example request that uses the [common Curl command](https://curl.se/
 $ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"                             \
           'https://beta.api.joinmassive.com/superagent?url=https://example.com/'
 ```
+
+### Response format
+
+Page responses are returned as rendered HTML.
+
+## Additional examples
+
+```bash
+$ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"                                                        \
+          'https://beta.api.joinmassive.com/superagent?url=https://example.com/&device=blackberry+playbook'
+```
+
+```bash
+$ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"                                        \
+          'https://beta.api.joinmassive.com/superagent?url=https://example.com/&country=us'
+```
+
+```bash
+$ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"                                          \
+          'https://beta.api.joinmassive.com/superagent?url=https://example.com/&expiration=0'
+```
+
+```bash
+$ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"                                            \
+          'https://beta.api.joinmassive.com/superagent?url=https://example.com/&session=foobar'
+```
