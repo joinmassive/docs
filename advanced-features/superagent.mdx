@@ -30,6 +30,24 @@ $ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"                            
           'https://beta.api.joinmassive.com/superagent?url=https://example.com/'
 ```
 
+### Request parameters
+
+Required and optional parameters can be added in a
+[standard query string](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_is_a_URL#parameters).
+The keys and values that Massive supports are as follows:
+
+| Key           | Required | Value                                                                                                                                                                                                                                                                         |
+| :------------ | :------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `url`         | ✅       | The URL of the page to request; any special characters require [URL encoding](https://developer.mozilla.org/en-US/docs/Glossary/Percent-encoding)                                                                                                                             |
+| `device`      | ⬜       | The name as returned by the [devices endpoint](#device-emulation) of the device to emulate requesting from (these names are case insensitive but required to include form- or URL-encoded spaces and punctuation marks); device emulation is unused by default                |
+| `country`     | ⬜       | The [two-letter ISO code](https://www.iso.org/obp/ui/#search/code) of the country to browse from (these codes are case insensitive); a random country will be used by default                                                                                                 |
+| `subdivision` | ⬜       | The alphanumeric second part (proceeding the separator) of a [first-level subdivision code](https://www.iso.org/obp/ui/#search/code) in the (prerequisite) country to browse from (these codes are case insensitive); a random subdivision will be used by default            |
+| `city`        | ⬜       | The [commonly spelled name](https://www.geonames.org/) of the city in the (prerequisite) country to browse from (these names are temporarily case sensitive and required to include form- or URL-encoded spaces and punctuation marks); a random city will be used by default |
+| `mode`        | ⬜       | The synchronous or asynchronous timing of when to retrieve a response, `sync` or `async` (see [details below](#asynchronous-mode)); `sync` is the default mode                                                                                                                |
+| `expiration`  | ⬜       | The maximum age of a cached response in days to accept, where `0` will disable caching; `1` is the default number of days                                                                                                                                                     |
+| `session`     | ⬜       | Any unique identifier of up to 255 characters (regardless of character encoding); Massive will make best efforts to route requests in the same session to the same egress node                                                                                                |
+| `subaccount`  | ⬜       | Any unique identifier of up to 255 characters (regardless of character encoding); Massive will bill requests made from subaccounts separately                                                                                                                                 |
+
 ### Response specification
 
 Pages are returned in their rendered HTML.
