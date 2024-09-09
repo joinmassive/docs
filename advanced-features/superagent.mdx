@@ -30,9 +30,9 @@ $ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"                            
           'https://beta.api.joinmassive.com/superagent?url=https://example.com/'
 ```
 
-### Response format
+### Response specification
 
-Page responses are returned as rendered HTML.
+Pages are returned in their rendered HTML.
 
 ## Additional examples
 
@@ -52,6 +52,6 @@ $ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"                            
 ```
 
 ```bash
-$ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"                                            \
-          'https://beta.api.joinmassive.com/superagent?url=https://example.com/&session=foobar'
+$ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"                                                        \
+          'https://beta.api.joinmassive.com/superagent?url=https://example.com/&session=foo&subaccount=bar'
 ```
