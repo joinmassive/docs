@@ -1,0 +1,31 @@
+---
+title: 'Superagent service'
+description: 'Unblock difficult-to-crawl websites'
+---
+
+## Usage
+
+The superagent service browses intelligently on your behalf, rendering JavaScript, solving
+[CAPTCHAs](https://www.ibm.com/topics/captcha), and retrying failed requests along the way. The
+service has a RESTful interface that accepts `GET` requests at
+**https://&#8203;beta.api.joinmassive.com/superagent**.
+
+Webpages are retrieved in real time by default or can be queued up for
+[later retrieval](#asynchronous-mode). Up to **120 seconds** is granted per real-time API request to
+accommodate CAPTCHA-solving, multiple retries, and other mitigations.
+
+### Authentication
+
+You can access the service by including
+[your secret API token](https://partners.joinmassive.com/profile) in an `Authorization` header:
+
+```http
+Authorization: Bearer [Insert API token here]
+```
+
+Here’s an example request that uses the [common Curl command](https://curl.se/):
+
+```bash
+$ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"                             \
+          'https://beta.api.joinmassive.com/superagent?url=https://example.com/'
+```
