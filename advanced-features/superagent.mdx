@@ -97,13 +97,13 @@ The response, if ready, will be returned in the
 [same format as a synchronous response](#response-specification); otherwise, a JSON status message
 will be returned.
 
-A `retrieving` status indicates that the fetch is in progress:
+A `retrieving` status indicates that the request is in progress:
 
 ```json
 { "status": "retrieving" }
 ```
 
-A `failed` status indicates that the fetch was unsuccessful and the request should be retried:
+A `failed` status indicates that the request was unsuccessful and should be retried:
 
 ```json
 { "status": "failed" }
