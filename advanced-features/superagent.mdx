@@ -48,6 +48,68 @@ The keys and values that Massive supports are as follows:
 | `session`     | ⬜       | Any unique identifier of up to 255 characters (regardless of character encoding); Massive will make best efforts to route requests in the same session to the same egress node                                                                                                |
 | `subaccount`  | ⬜       | Any unique identifier of up to 255 characters (regardless of character encoding); Massive will bill requests made from subaccounts separately                                                                                                                                 |
 
+### Device emulation
+
+The `device` parameter lets you fetch device-specific responses. For a list of supported devices,
+make a request with your API token and no parameters to
+**https://&#8203;beta.api.joinmassive.com/superagent/devices**:
+
+```bash
+$ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"            \
+          'https://beta.api.joinmassive.com/superagent/devices'
+```
+
+The API will return JSON that contains an alphabetized array of device names:
+
+```json
+[
+  "Blackberry PlayBook",
+  "Blackberry PlayBook landscape",
+  "BlackBerry Z30",
+  "[Remaining device names here]"
+]
+```
+
+### Asynchronous mode
+
+A request that includes the `mode=async` key-value pair will be satisfied asynchronously:
+
+```bash
+$ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"                                        \
+          'https://beta.api.joinmassive.com/superagent?url=https://example.com/&mode=async'
+```
+
+The API will provide a JSON job identifier in return:
+
+```json
+{ "id": "1851dab8-4619-409f-893f-47dd3a180bc3" }
+```
+
+The job response or status can be requested at any time thereafter by passing a token and the
+identifier to **https://&#8203;beta.api.joinmassive.com/superagent/results**:
+
+```bash
+$ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"                                                    \
+          'https://beta.api.joinmassive.com/superagent/results?id=1851dab8-4619-409f-893f-47dd3a180bc3'
+```
+
+If ready, the response will be returned in the
+[same format as a synchronous response](#response-specification); otherwise, a JSON status message
+will be returned.
+
+A `retrieving` status indicates that the page request is in progress:
+
+```json
+{ "status": "retrieving" }
+```
+
+A `failed` status indicates that the page request was unsuccessful and the API request should be
+retried:
+
+```json
+{ "status": "failed" }
+```
+
 ### Response specification
 
 Pages are returned in their rendered HTML.
