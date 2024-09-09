@@ -5,14 +5,14 @@ description: 'Unblock difficult-to-crawl websites'
 
 ## Usage
 
-The superagent service browses intelligently on your behalf, rendering JavaScript, solving
+The “superagent” service browses intelligently on your behalf, rendering JavaScript, solving
 [CAPTCHAs](https://www.ibm.com/topics/captcha), and retrying failed requests along the way. The
 service has a RESTful interface that accepts `GET` requests at
 **https://&#8203;beta.api.joinmassive.com/superagent**.
 
 Webpages are retrieved in real time by default or can be queued up for
-[later retrieval](#asynchronous-mode). Up to **120 seconds** is granted per real-time API request to
-accommodate CAPTCHA-solving, multiple retries, and other mitigations.
+[later retrieval](#asynchronous-mode). Up to **120 seconds** is allotted per real-time API request
+to accommodate CAPTCHA-solving, multiple retries, and other mitigations.
 
 ### Authentication
 
