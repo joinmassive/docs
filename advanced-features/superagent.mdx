@@ -79,7 +79,7 @@ $ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"                            
           'https://beta.api.joinmassive.com/superagent?url=https://example.com/&mode=async'
 ```
 
-The API will provide a JSON job identifier in return:
+In return, the API will provide a JSON job identifier:
 
 ```json
 { "id": "1851dab8-4619-409f-893f-47dd3a180bc3" }
@@ -93,18 +93,17 @@ $ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"                            
           'https://beta.api.joinmassive.com/superagent/results?id=1851dab8-4619-409f-893f-47dd3a180bc3'
 ```
 
-If ready, the response will be returned in the
+The response, if ready, will be returned in the
 [same format as a synchronous response](#response-specification); otherwise, a JSON status message
 will be returned.
 
-A `retrieving` status indicates that the page request is in progress:
+A `retrieving` status indicates that the fetch is in progress:
 
 ```json
 { "status": "retrieving" }
 ```
 
-A `failed` status indicates that the page request was unsuccessful and the API request should be
-retried:
+A `failed` status indicates that the fetch was unsuccessful and the request should be retried:
 
 ```json
 { "status": "failed" }
