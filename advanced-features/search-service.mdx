@@ -6,10 +6,11 @@ description: 'Extract live results from popular search engines'
 ## Usage
 
 The search service has a RESTful interface that accepts `GET` requests at
-**https://&#8203;beta.api.joinmassive.com/search**. Searches are performed in real time by default
-or can be queued up for [later retrieval](#asynchronous-mode). Real-time searches take an average of
-a few seconds but may require multiple retries, in which case up to **120 seconds** is allocated per
-API request.
+**https://&#8203;beta.api.joinmassive.com/search**.
+
+Searches are performed in real time by default or can be queued up for
+[later retrieval](#asynchronous-mode). Real-time searches take an average of a few seconds but may
+require multiple retries, in which case up to **120 seconds** is allocated per API request.
 
 ### Authentication
 
@@ -80,7 +81,7 @@ $ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"                     \
           'https://beta.api.joinmassive.com/search?terms=foo&mode=async'
 ```
 
-The API will return JSON that contains a job identifier:
+In this case, the API will return JSON that contains a job identifier:
 
 ```json
 { "id": "1851dab8-4619-409f-893f-47dd3a180bc3" }
