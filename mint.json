@@ -119,8 +119,9 @@
     }
   ],
   "footerSocials": {
-    "x": "https://x.com/joinmassive",
-    "github": "https://github.com/magicinternet",
-    "linkedin": "https://www.linkedin.com/company/joinmassive"
-  }
+    "github": "https://github.com/joinmassive",
+    "linkedin": "https://www.linkedin.com/company/11871328/admin/dashboard/",
+    "x": "https://x.com/joinmassive"
+  },
+  "isWhiteLabeled": true
 }
