@@ -8,7 +8,7 @@ description: 'Extract live results from popular search engines'
 The search service has a RESTful interface that accepts `GET` requests at
 **https://&#8203;beta.api.joinmassive.com/search**.
 
-Searches are performed in real time by default or can be queued up for
+Searches are performed in real time by default or can be queued for
 [later retrieval](#asynchronous-mode). Real-time searches take an average of a few seconds but may
 require multiple retries, in which case up to **120 seconds** is allocated per API request.
 
@@ -39,7 +39,7 @@ The keys and values that Massive supports are as follows:
 | `terms`       | ✅       | The broad or exact word or phrase to query (e.g., `foo bar baz` or `"foo bar baz"`); the terms require [form or URL encoding](https://developer.mozilla.org/en-US/docs/Glossary/Percent-encoding) (with any space character being replaced by a `+` character or `%20` sequence)          |
 | `serps`       | ⬜       | The number of results pages to retrieve, from `1` to `15` inclusive; `1` is the default count                                                                                                                                                                                             |
 | `engine`      | ⬜       | The search engine to use, `google`, `bing`, or `duckduckgo`; `google` is the default engine                                                                                                                                                                                               |
-| `device`      | ⬜       | **[Google only]** The name as returned by the [devices endpoint](#device-emulation) of the device to emulate searching on (these names are case insensitive but required to include form- or URL-encoded spaces and punctuation marks); device emulation is unused by default             |
+| `device`      | ⬜       | **[Google only]** The name as returned by the [devices endpoint](#device-emulation) of the device to emulate searching on (these names are case insensitive but must include form- or URL-encoded spaces and punctuation marks); device emulation is unused by default                    |
 | `country`     | ⬜       | The [two-letter ISO code](https://www.iso.org/obp/ui/#search/code) of the country to search from (these codes are case insensitive); a random country will be used by default                                                                                                             |
 | `subdivision` | ⬜       | The alphanumeric second part (proceeding the separator) of a [first-level subdivision code](https://www.iso.org/obp/ui/#search/code) in the (prerequisite) country to search from (these codes are case insensitive); a random subdivision will be used by default                        |
 | `city`        | ⬜       | The [commonly spelled name](https://www.geonames.org/) of the city in the (prerequisite) country to search from (these names are temporarily case sensitive and required to include form- or URL-encoded spaces and punctuation marks); a random city will be used by default             |
@@ -61,7 +61,7 @@ $ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"        \
           'https://beta.api.joinmassive.com/search/devices'
 ```
 
-The response will be an alphabetized JSON array of device names:
+The API will return JSON that contains an alphabetized array of device names:
 
 ```json
 [
@@ -74,17 +74,17 @@ The response will be an alphabetized JSON array of device names:
 
 ### Asynchronous mode
 
-A request that includes the `mode=async` key-value pair will be satisfied asynchronously:
+A search request that includes the `mode=async` key-value pair will be satisfied asynchronously:
 
 ```bash
 $ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"                     \
           'https://beta.api.joinmassive.com/search?terms=foo&mode=async'
 ```
 
-In this case, the API will return JSON that contains a job identifier:
+In response, the API will provide a JSON job identifier:
 
 ```json
-{ "id": "1851dab8-4619-409f-893f-47dd3a180bc3" }
+{ "id": "078fd246-f0f7-44a0-aabb-cadd7b12454f" }
 ```
 
 The job results or status can be requested at any time thereafter by passing a token and the
@@ -92,10 +92,10 @@ identifier to **https://&#8203;beta.api.joinmassive.com/search/results**:
 
 ```bash
 $ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"                                                \
-          'https://beta.api.joinmassive.com/search/results?id=1851dab8-4619-409f-893f-47dd3a180bc3'
+          'https://beta.api.joinmassive.com/search/results?id=078fd246-f0f7-44a0-aabb-cadd7b12454f'
 ```
 
-If the results are ready, they’ll be returned in the
+The results, if ready, will be returned in the
 [same format as synchronous results](#response-format); otherwise, a JSON status message will be
 returned.
 
