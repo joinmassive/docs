@@ -69,27 +69,38 @@
       ]
     },
     {
-      "group": "Advanced Features",
+      "group": "Data API",
       "pages": [
-        "advanced-features/serp-api",
-        "advanced-features/reporting-api"
-      ]
-    },
-    {
-      "group": "Reseller API",
-      "pages": [
-        "reseller-api-reference/reseller-api-introduction",
-        "reseller-api-reference/reseller-api-authentication",
-        "reseller-api-reference/reseller-api-quickstart",
-        "reseller-api-reference/create-new-account",
-        "reseller-api-reference/get-account",
-        "reseller-api-reference/get-list-of-existing-accounts",
-        "reseller-api-reference/update-account",
-        "reseller-api-reference/disable-account",
-        "reseller-api-reference/enable-account",
-        "reseller-api-reference/allocate-traffic-for-an-account",
-        "reseller-api-reference/get-account-usage",
-        "reseller-api-reference/get-the-allocation-list"
+        {
+          "group": "Reseller",
+          "pages": [
+            "api/reseller/introduction",
+            "api/reseller/authentication",
+            "api/reseller/quickstart",
+            {
+              "group": "API reference",
+              "pages": [
+                "api/reseller/reference/create-account",
+                "api/reseller/reference/get-account",
+                "api/reseller/reference/get-all-accounts",
+                "api/reseller/reference/update-account",
+                "api/reseller/reference/disable-account",
+                "api/reseller/reference/enable-account",
+                "api/reseller/reference/allocate-bandwidth-to-account",
+                "api/reseller/reference/get-account-usage",
+                "api/reseller/reference/get-account-allocations"
+              ]
+            }
+          ]
+        },
+        {
+          "group": "Beta endpoints",
+          "pages": [
+            "api/beta/search",
+            "api/beta/superagent",
+            "api/beta/reporting"
+          ]
+        }
       ]
     },
     {
