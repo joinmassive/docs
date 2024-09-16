@@ -81,14 +81,14 @@
               "group": "API reference",
               "pages": [
                 "api/reseller/reference/create-account",
+                "api/reseller/reference/allocate-bandwidth-to-account",
                 "api/reseller/reference/get-account",
                 "api/reseller/reference/get-all-accounts",
+                "api/reseller/reference/get-account-allocations",
+                "api/reseller/reference/get-account-usage",
                 "api/reseller/reference/update-account",
                 "api/reseller/reference/disable-account",
-                "api/reseller/reference/enable-account",
-                "api/reseller/reference/allocate-bandwidth-to-account",
-                "api/reseller/reference/get-account-usage",
-                "api/reseller/reference/get-account-allocations"
+                "api/reseller/reference/enable-account"
               ]
             }
           ]
