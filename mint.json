@@ -73,6 +73,8 @@
       "pages": [
         {
           "group": "For resellers",
+          "icon": "users",
+          "iconType": "light",
           "pages": [
             "api/reseller/introduction",
             "api/reseller/authentication",
@@ -95,6 +97,8 @@
         },
         {
           "group": "Beta endpoints",
+          "icon": "flask",
+          "iconType": "light",
           "pages": [
             "api/beta/search",
             "api/beta/superagent",
@@ -110,6 +114,8 @@
         "sdk/quickstart",
         {
           "group": "Desktop",
+          "icon": "desktop",
+          "iconType": "light",
           "pages": [
             "sdk/desktop",
             "sdk/desktop-windows",
@@ -119,6 +125,8 @@
         },
         {
           "group": "Mobile & smart TV",
+          "icon": "mobile",
+          "iconType": "light",
           "pages": [
             "sdk/mobile-and-smart-tv",
             "sdk/mobile-android",
