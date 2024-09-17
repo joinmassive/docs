@@ -72,7 +72,7 @@
       "group": "Data API",
       "pages": [
         {
-          "group": "Reseller",
+          "group": "For resellers",
           "pages": [
             "api/reseller/introduction",
             "api/reseller/authentication",
