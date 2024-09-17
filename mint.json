@@ -76,21 +76,21 @@
           "icon": "users",
           "iconType": "light",
           "pages": [
-            "api/reseller/introduction",
-            "api/reseller/authentication",
-            "api/reseller/quickstart",
+            "api/resellers/introduction",
+            "api/resellers/authentication",
+            "api/resellers/quickstart",
             {
               "group": "API reference",
               "pages": [
-                "api/reseller/reference/create-account",
-                "api/reseller/reference/allocate-bandwidth-to-account",
-                "api/reseller/reference/get-account",
-                "api/reseller/reference/get-all-accounts",
-                "api/reseller/reference/get-account-allocations",
-                "api/reseller/reference/get-account-usage",
-                "api/reseller/reference/update-account",
-                "api/reseller/reference/disable-account",
-                "api/reseller/reference/enable-account"
+                "api/resellers/reference/create-account",
+                "api/resellers/reference/allocate-bandwidth-to-account",
+                "api/resellers/reference/get-account",
+                "api/resellers/reference/get-all-accounts",
+                "api/resellers/reference/get-account-allocations",
+                "api/resellers/reference/get-account-usage",
+                "api/resellers/reference/update-account",
+                "api/resellers/reference/disable-account",
+                "api/resellers/reference/enable-account"
               ]
             }
           ]
