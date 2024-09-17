@@ -100,7 +100,25 @@
           "icon": "flask",
           "iconType": "light",
           "pages": [
-            "api/beta/search",
+            {
+              "group": "Search results",
+              "icon": "google",
+              "iconType": "light",
+              "pages": [
+                "api/beta/search/usage",
+                {
+                  "group": "API reference",
+                  "pages": [
+                    {
+                      "group": "Google",
+                      "pages": [
+                        "api/beta/search/reference/google/todo"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
             "api/beta/superagent",
             "api/beta/reporting"
           ]
