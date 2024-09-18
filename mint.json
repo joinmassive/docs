@@ -71,7 +71,7 @@
     {
       "group": "Advanced Features",
       "pages": [
-        "advanced-features/serp-api",
+        "advanced-features/search-service",
         "advanced-features/reporting-api"
       ]
     },
