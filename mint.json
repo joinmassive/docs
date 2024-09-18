@@ -102,7 +102,7 @@
           "pages": [
             {
               "group": "Search results",
-              "icon": "google",
+              "icon": "magnifying-glass",
               "iconType": "light",
               "pages": [
                 "api/beta/search/usage",
