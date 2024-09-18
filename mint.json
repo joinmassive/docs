@@ -65,7 +65,7 @@
         "residential-proxy-reference/samples/python",
         "residential-proxy-reference/samples/scrapy",
         "residential-proxy-reference/samples/ruby",
-        "residential-proxy-reference/samples/.net"
+        "residential-proxy-reference/samples/dotnet"
       ]
     },
     {
