@@ -568,7 +568,7 @@
             },
             "started_at": {
               "type": "integer",
-              "description": "The time in Unix seconds at which the account was first used.",
+              "description": "The time in Unix seconds at which the account was created.",
               "example": 1708526022
             },
             "updated_at": {
