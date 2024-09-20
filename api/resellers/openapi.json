@@ -11,8 +11,43 @@
     ],
     "paths": {
       "/accounts": {
+        "get": {
+          "summary": "Get all accounts",
+          "description": "Retrieve previously created accounts.",
+          "security": [
+            {
+              "api-key": []
+            }
+          ],
+          "operationId": "getAccounts",
+          "responses": {
+            "200": {
+              "description": "The list of existing accounts.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Account"
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "$ref": "#/components/responses/UnauthorizedError"
+            },
+            "500": {
+              "$ref": "#/components/responses/InternalServerError"
+            }
+          },
+          "tags": [
+            "reading"
+          ]
+        },
         "post": {
-          "summary": "Create new account",
+          "summary": "Create account",
+          "description": "Provision a new subaccount.",
           "security": [
             {
               "api-key": []
@@ -29,7 +64,7 @@
                     "username": {
                       "type": "string",
                       "description": "The account username.",
-                      "example": "johndoe@reseller.com"
+                      "example": "johndoe@example.com"
                     },
                     "password": {
                       "type": "string",
@@ -38,7 +73,7 @@
                     },
                     "limit": {
                       "type": "integer",
-                      "description": "The initial allocated traffic allowance in bytes.",
+                      "description": "The initial bandwidth allocation in bytes.",
                       "example": 1000000
                     }
                   }
@@ -48,7 +83,7 @@
           },
           "responses": {
             "201": {
-              "description": "User was created successfully.",
+              "description": "The account was created successfully.",
               "content": {
                 "application/json": {
                   "schema": {
@@ -71,40 +106,7 @@
             }
           },
           "tags": [
-            "Managing Accounts"
-          ]
-        },
-        "get": {
-          "summary": "Get list of existing accounts",
-          "security": [
-            {
-              "api-key": []
-            }
-          ],
-          "operationId": "getAccounts",
-          "responses": {
-            "200": {
-              "description": "List of users",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/components/schemas/Account"
-                    }
-                  }
-                }
-              }
-            },
-            "401": {
-              "$ref": "#/components/responses/UnauthorizedError"
-            },
-            "500": {
-              "$ref": "#/components/responses/InternalServerError"
-            }
-          },
-          "tags": [
-            "Managing Accounts"
+            "creation"
           ]
         }
       },
