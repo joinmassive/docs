@@ -12,14 +12,17 @@
     "paths": {
       "/accounts": {
         "get": {
+          "operationId": "getAccounts",
           "summary": "Get all accounts",
           "description": "Retrieve previously created accounts.",
+          "tags": [
+            "reading"
+          ],
           "security": [
             {
               "api-key": []
             }
           ],
-          "operationId": "getAccounts",
           "responses": {
             "200": {
               "description": "The list of existing accounts.",
@@ -40,20 +43,20 @@
             "500": {
               "$ref": "#/components/responses/InternalServerError"
             }
-          },
-          "tags": [
-            "reading"
-          ]
+          }
         },
         "post": {
+          "operationId": "createAccount",
           "summary": "Create account",
           "description": "Provision a new subaccount.",
+          "tags": [
+            "creation"
+          ],
           "security": [
             {
               "api-key": []
             }
           ],
-          "operationId": "createAccount",
           "requestBody": {
             "required": true,
             "content": {
@@ -83,7 +86,7 @@
           },
           "responses": {
             "201": {
-              "description": "The account was created successfully.",
+              "description": "The account was successfully created.",
               "content": {
                 "application/json": {
                   "schema": {
@@ -104,10 +107,7 @@
             "500": {
               "$ref": "#/components/responses/InternalServerError"
             }
-          },
-          "tags": [
-            "creation"
-          ]
+          }
         }
       },
       "/accounts/{id}": {
@@ -204,7 +204,7 @@
                     },
                     "limit": {
                       "type": "integer",
-                      "description": "The new bandwidth in bytes allocated to the account (which cannot be lower than the existing bandwidth allocation).",
+                      "description": "The new bandwidth in bytes allocated to the account, which cannot be lower than the existing bandwidth allocation.",
                       "example": 1000000
                     }
                   }
@@ -214,7 +214,7 @@
           },
           "responses": {
             "200": {
-              "description": "The account was updated successfully.",
+              "description": "The account was successfully updated.",
               "content": {
                 "application/json": {
                   "schema": {
