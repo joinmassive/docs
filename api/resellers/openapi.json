@@ -706,7 +706,7 @@
           }
         },
         "AccountNotFound": {
-          "description": "The specified account doesn’t exist.",
+          "description": "The specified account is nonexistent.",
           "content": {
             "application/json": {
               "schema": {
