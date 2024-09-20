@@ -73,7 +73,7 @@
                     },
                     "limit": {
                       "type": "integer",
-                      "description": "The initial bandwidth allocation in bytes.",
+                      "description": "The initial bandwidth in bytes allocated to the account.",
                       "example": 1000000
                     }
                   }
