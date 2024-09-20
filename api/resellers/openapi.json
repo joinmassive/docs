@@ -554,7 +554,7 @@
             },
             "limit": {
               "type": "integer",
-              "description": "The amount of bandwidth in bytes allocated to the account.",
+              "description": "The bandwidth in bytes allocated to the account.",
               "example": 1000000
             },
             "status": {
@@ -574,7 +574,7 @@
             },
             "limit_reached": {
               "type": "boolean",
-              "description": "Whether or not the bandwidth allocation has been exhausted.",
+              "description": "Whether or not the bandwidth allocated to the account has been exhausted.",
               "example": false
             }
           }
@@ -632,12 +632,12 @@
             },
             "usage": {
               "type": "integer",
-              "description": "The amount of bandwidth in bytes used by the account so far",
+              "description": "The bandwidth in bytes consumed by the account so far",
               "example": 12345
             },
             "limit": {
               "type": "integer",
-              "description": "The amount of bandwidth in bytes allocated to the account.",
+              "description": "The bandwidth in bytes allocated to the account.",
               "example": 1000000
             }
           }
