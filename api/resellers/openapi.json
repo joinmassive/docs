@@ -112,12 +112,17 @@
       },
       "/accounts/{id}": {
         "get": {
+          "operationId": "getAccount",
           "summary": "Get account",
+          "description": "Retrieve a specific account.",
+          "tags": [
+            "reading"
+          ],
           "parameters": [
             {
               "name": "id",
-              "description": "The id of the account.",
               "in": "path",
+              "description": "The ID of the account.",
               "required": true,
               "schema": {
                 "type": "string"
@@ -129,10 +134,9 @@
               "api-key": []
             }
           ],
-          "operationId": "getAccount",
           "responses": {
             "200": {
-              "description": "The account corresponding to the id provided",
+              "description": "The account corresponding to the provided ID.",
               "content": {
                 "application/json": {
                   "schema": {
@@ -147,23 +151,29 @@
             "401": {
               "$ref": "#/components/responses/UnauthorizedError"
             },
+            "403": {
+              "$ref": "#/components/responses/ForbiddenError"
+            },
             "404": {
               "$ref": "#/components/responses/AccountNotFound"
             },
             "500": {
               "$ref": "#/components/responses/InternalServerError"
             }
-          },
-          "tags": [
-            "Managing Accounts"
-          ]
+          }
         },
         "put": {
+          "operationId": "updateAccount",
           "summary": "Update account",
+          "description": "Modify the settings of an account.",
+          "tags": [
+            "updating"
+          ],
           "parameters": [
             {
               "name": "id",
               "in": "path",
+              "description": "The ID of the account.",
               "required": true,
               "schema": {
                 "type": "string"
@@ -175,7 +185,6 @@
               "api-key": []
             }
           ],
-          "operationId": "updateAccount",
           "requestBody": {
             "required": true,
             "content": {
@@ -185,17 +194,18 @@
                   "properties": {
                     "username": {
                       "type": "string",
-                      "description": "The account username.",
-                      "example": "johndoe@reseller.com"
+                      "description": "The new account username.",
+                      "example": "johndoe@example.com"
                     },
                     "password": {
                       "type": "string",
-                      "description": "The account password.",
+                      "description": "The new account password.",
                       "example": "secret"
                     },
                     "limit": {
                       "type": "integer",
-                      "description": "The updated allocated traffic allowance in bytes (cannot be lower than existing)."
+                      "description": "The new bandwidth in bytes allocated to the account (which cannot be lower than the existing bandwidth allocation).",
+                      "example": 1000000
                     }
                   }
                 }
@@ -204,7 +214,7 @@
           },
           "responses": {
             "200": {
-              "description": "User was updated successfully.",
+              "description": "The account was updated successfully.",
               "content": {
                 "application/json": {
                   "schema": {
@@ -231,10 +241,7 @@
             "500": {
               "$ref": "#/components/responses/InternalServerError"
             }
-          },
-          "tags": [
-            "Managing Accounts"
-          ]
+          }
         }
       },
       "/accounts/{id}/enable": {
