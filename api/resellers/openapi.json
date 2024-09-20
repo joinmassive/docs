@@ -654,8 +654,8 @@
         }
       },
       "responses": {
-        "ForbiddenError": {
-          "description": "Operation forbidden",
+        "BadRequestError": {
+          "description": "The request was invalid (see the error message for details).",
           "content": {
             "application/json": {
               "schema": {
@@ -664,7 +664,7 @@
                   "error": {
                     "type": "string",
                     "description": "The error message.",
-                    "example": "Forbidden"
+                    "example": "Invalid request: Account ID not provided"
                   }
                 }
               }
@@ -672,7 +672,7 @@
           }
         },
         "UnauthorizedError": {
-          "description": "Operation not authorized",
+          "description": "The request was unauthenticated.",
           "content": {
             "application/json": {
               "schema": {
@@ -688,8 +688,8 @@
             }
           }
         },
-        "InternalServerError": {
-          "description": "Internal Server error",
+        "ForbiddenError": {
+          "description": "The operation is unauthorized.",
           "content": {
             "application/json": {
               "schema": {
@@ -698,15 +698,15 @@
                   "error": {
                     "type": "string",
                     "description": "The error message.",
-                    "example": "Internal server error"
+                    "example": "Forbidden"
                   }
                 }
               }
             }
           }
         },
-        "BadRequestError": {
-          "description": "The request is invalid (more details can be found in the error message in the body).",
+        "AccountNotFound": {
+          "description": "The specified account doesn’t exist.",
           "content": {
             "application/json": {
               "schema": {
@@ -715,7 +715,7 @@
                   "error": {
                     "type": "string",
                     "description": "The error message.",
-                    "example": "Invalid request: <details>"
+                    "example": "Account not found"
                   }
                 }
               }
@@ -723,7 +723,7 @@
           }
         },
         "DuplicateUsernameError": {
-          "description": "User with provided username exists already, please provide a different username.",
+          "description": "An account with the provided username exists already.",
           "content": {
             "application/json": {
               "schema": {
@@ -739,8 +739,8 @@
             }
           }
         },
-        "AccountNotFound": {
-          "description": "AccountNotFound",
+        "InternalServerError": {
+          "description": "An internal server error occurred.",
           "content": {
             "application/json": {
               "schema": {
@@ -749,7 +749,7 @@
                   "error": {
                     "type": "string",
                     "description": "The error message.",
-                    "example": "Account not found"
+                    "example": "Internal server error"
                   }
                 }
               }
