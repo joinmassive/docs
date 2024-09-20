@@ -246,11 +246,17 @@
       },
       "/accounts/{id}/enable": {
         "post": {
+          "operationId": "enableAccount",
           "summary": "Enable account",
+          "description": "Re-activate a disabled account.",
+          "tags": [
+            "updating"
+          ],
           "parameters": [
             {
               "name": "id",
               "in": "path",
+              "description": "The account UUID.",
               "required": true,
               "schema": {
                 "type": "string"
@@ -262,10 +268,9 @@
               "api-key": []
             }
           ],
-          "operationId": "enableAccount",
           "responses": {
             "200": {
-              "description": "User was enabled successfully.",
+              "description": "The account was successfully enabled.",
               "content": {
                 "application/json": {
                   "schema": {
@@ -289,19 +294,22 @@
             "500": {
               "$ref": "#/components/responses/InternalServerError"
             }
-          },
-          "tags": [
-            "Enabling/Disabling Account"
-          ]
+          }
         }
       },
       "/accounts/{id}/disable": {
         "post": {
+          "operationId": "disableAccount",
           "summary": "Disable account",
+          "description": "Deactivate an account.",
+          "tags": [
+            "updating"
+          ],
           "parameters": [
             {
               "name": "id",
               "in": "path",
+              "description": "The account UUID.",
               "required": true,
               "schema": {
                 "type": "string"
@@ -313,10 +321,9 @@
               "api-key": []
             }
           ],
-          "operationId": "disableAccount",
           "responses": {
             "200": {
-              "description": "User was disabled successfully.",
+              "description": "The account was successfully disabled.",
               "content": {
                 "application/json": {
                   "schema": {
@@ -340,10 +347,7 @@
             "500": {
               "$ref": "#/components/responses/InternalServerError"
             }
-          },
-          "tags": [
-            "Enabling/Disabling Account"
-          ]
+          }
         }
       },
       "/accounts/{id}/usage": {
