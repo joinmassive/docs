@@ -57,7 +57,7 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/genericAccountResponseOK"
+                    "$ref": "#/components/schemas/AccountOkResponse"
                   }
                 }
               }
@@ -95,7 +95,7 @@
                   "schema": {
                     "type": "array",
                     "items": {
-                      "$ref": "#/components/schemas/account"
+                      "$ref": "#/components/schemas/Account"
                     }
                   }
                 }
@@ -139,7 +139,7 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/account"
+                    "$ref": "#/components/schemas/Account"
                   }
                 }
               }
@@ -211,7 +211,7 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/genericAccountResponseOK"
+                    "$ref": "#/components/schemas/AccountOkResponse"
                   }
                 }
               }
@@ -265,7 +265,7 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/genericAccountResponseOK"
+                    "$ref": "#/components/schemas/AccountOkResponse"
                   }
                 }
               }
@@ -316,7 +316,7 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/genericAccountResponseOK"
+                    "$ref": "#/components/schemas/AccountOkResponse"
                   }
                 }
               }
@@ -381,7 +381,7 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/usageResponseOK"
+                    "$ref": "#/components/schemas/UsageOkResponse"
                   }
                 }
               }
@@ -448,7 +448,7 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/putAllocationsResponseOK"
+                    "$ref": "#/components/schemas/PostAllocationsOkResponse"
                   }
                 }
               }
@@ -498,7 +498,7 @@
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/getAllocationsResponseOK"
+                    "$ref": "#/components/schemas/GetAllocationsOkResponse"
                   }
                 }
               }
@@ -534,121 +534,121 @@
         }
       },
       "schemas": {
-        "genericAccountResponseOK": {
+        "Account": {
           "type": "object",
           "properties": {
             "id": {
               "type": "string",
-              "description": "The account ID (uuid).",
-              "example": "57ed834f-f6f6-47d4-ab23-5674d7866b32"
-            }
-          }
-        },
-        "usageResponseOK": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string",
-              "description": "The account ID (uuid).",
-              "example": "57ed834f-f6f6-47d4-ab23-5674d7866b32"
-            },
-            "usage": {
-              "type": "integer",
-              "description": "The amount of bytes of traffic used so far by the account",
-              "example": 12345
-            },
-            "limit": {
-              "type": "integer",
-              "description": "The allocated traffic allowance in bytes.",
-              "example": 1000000
-            }
-          }
-        },
-        "getAllocationsResponseOK": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "created_at": {
-                "type": "integer",
-                "description": "The time in unix seconds at which the allocation was made.",
-                "example": 1708526022
-              },
-              "limit": {
-                "type": "integer",
-                "description": "The allocated traffic in bytes.",
-                "example": 1000000
-              }
-            }
-          }
-        },
-        "putAllocationsResponseOK": {
-          "type": "object",
-          "properties": {
-            "created_at": {
-              "type": "integer",
-              "description": "The time in unix seconds at which the allocation was made.",
-              "example": 1708526022
-            },
-            "limit": {
-              "type": "integer",
-              "description": "The allocated traffic in bytes.",
-              "example": 1000000
-            }
-          }
-        },
-        "errorResponse": {
-          "type": "object",
-          "properties": {
-            "error": {
-              "type": "string",
-              "description": "The error message.",
-              "example": "Account id not provided"
-            }
-          }
-        },
-        "account": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string",
-              "description": "The account ID (uuid).",
+              "description": "The account UUID.",
               "example": "57ed834f-f6f6-47d4-ab23-5674d7866b32"
             },
             "username": {
               "type": "string",
               "description": "The account username.",
-              "example": "johndoe@reseller.com"
+              "example": "johndoe@example.com"
             },
             "password": {
               "type": "string",
               "description": "The account password.",
               "example": "secret"
             },
+            "limit": {
+              "type": "integer",
+              "description": "The amount of bandwidth in bytes allocated to the account.",
+              "example": 1000000
+            },
             "status": {
               "type": "string",
-              "description": "The account status (credentials enabled/disabled).",
+              "description": "The account status, whether enabled or disabled.",
               "example": "enabled"
-            },
-            "limit_reached": {
-              "type": "boolean",
-              "description": "The account limit reached status.",
-              "example": false
             },
             "started_at": {
               "type": "integer",
-              "description": "The time in unix seconds at which the account was started.",
+              "description": "The time in Unix seconds at which the account was first used.",
               "example": 1708526022
             },
             "updated_at": {
               "type": "integer",
-              "description": "The time in unix seconds at which the account was updated.",
+              "description": "The time in Unix seconds at which the account was last updated.",
               "example": 1708528022
+            },
+            "limit_reached": {
+              "type": "boolean",
+              "description": "Whether or not the bandwidth allocation has been exhausted.",
+              "example": false
+            }
+          }
+        },
+        "AccountOkResponse": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "The account UUID.",
+              "example": "57ed834f-f6f6-47d4-ab23-5674d7866b32"
+            }
+          }
+        },
+        "GetAllocationsOkResponse": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "limit": {
+                "type": "integer",
+                "description": "The bandwidth allocation in bytes.",
+                "example": 1000000
+              },
+              "created_at": {
+                "type": "integer",
+                "description": "The time in Unix seconds at which the allocation was made.",
+                "example": 1708526022
+              }
+            }
+          }
+        },
+        "PostAllocationsOkResponse": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "description": "The bandwidth allocation in bytes.",
+              "example": 1000000
+            },
+            "created_at": {
+              "type": "integer",
+              "description": "The time in Unix seconds at which the allocation was made.",
+              "example": 1708526022
+            }
+          }
+        },
+        "UsageOkResponse": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "The account UUID.",
+              "example": "57ed834f-f6f6-47d4-ab23-5674d7866b32"
+            },
+            "usage": {
+              "type": "integer",
+              "description": "The amount of bandwidth in bytes used by the account so far",
+              "example": 12345
             },
             "limit": {
               "type": "integer",
-              "description": "The allocated traffic in bytes.",
+              "description": "The amount of bandwidth in bytes allocated to the account.",
               "example": 1000000
+            }
+          }
+        },
+        "ErrorResponse": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "string",
+              "description": "The error message.",
+              "example": "Account ID not provided"
             }
           }
         }
