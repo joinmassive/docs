@@ -420,78 +420,18 @@
         }
       },
       "/accounts/{id}/allocations": {
-        "post": {
-          "summary": "Allocate traffic for an account",
-          "parameters": [
-            {
-              "name": "id",
-              "in": "path",
-              "required": true,
-              "schema": {
-                "type": "string"
-              }
-            }
-          ],
-          "security": [
-            {
-              "api-key": []
-            }
-          ],
-          "operationId": "allocate",
-          "requestBody": {
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "limit": {
-                      "type": "integer",
-                      "description": "The amount of bytes to allocate (cannot be 0)."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "responses": {
-            "200": {
-              "description": "The allocation that was just made for the account.",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/PostAllocationsOkResponse"
-                  }
-                }
-              }
-            },
-            "400": {
-              "$ref": "#/components/responses/BadRequestError"
-            },
-            "401": {
-              "$ref": "#/components/responses/UnauthorizedError"
-            },
-            "403": {
-              "$ref": "#/components/responses/ForbiddenError"
-            },
-            "404": {
-              "$ref": "#/components/responses/AccountNotFound"
-            },
-            "500": {
-              "$ref": "#/components/responses/InternalServerError"
-            }
-          },
-          "tags": [
-            "Allocations"
-          ]
-        },
         "get": {
-          "summary": "Get the allocation list",
-          "description": "Get the list of allocations made via the put endpoint for the account.",
+          "operationId": "getAccountAllocations",
+          "summary": "Get account allocations",
+          "description": "Retrieve bandwidth allocations for the account.",
+          "tags": [
+            "reading"
+          ],
           "parameters": [
             {
               "name": "id",
               "in": "path",
+              "description": "The account UUID.",
               "required": true,
               "schema": {
                 "type": "string"
@@ -503,10 +443,9 @@
               "api-key": []
             }
           ],
-          "operationId": "getAllocations",
           "responses": {
             "200": {
-              "description": "A list of the allocations made for the account.",
+              "description": "The list of allocations made to the account.",
               "content": {
                 "application/json": {
                   "schema": {
@@ -530,10 +469,75 @@
             "500": {
               "$ref": "#/components/responses/InternalServerError"
             }
-          },
+          }
+        },
+        "post": {
+          "operationId": "allocateBandwidth",
+          "summary": "Allocate bandwidth to account",
+          "description": "Grant bandwidth to an account.",
           "tags": [
-            "Allocations"
-          ]
+            "updating"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "The account UUID.",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "security": [
+            {
+              "api-key": []
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "limit": {
+                      "type": "integer",
+                      "description": "The (nonzero) bandwidth in bytes to allocate to the account.",
+                      "example": 1000000
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "The bandwidth that was successfully allocated to the account.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PostAllocationsOkResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "$ref": "#/components/responses/BadRequestError"
+            },
+            "401": {
+              "$ref": "#/components/responses/UnauthorizedError"
+            },
+            "403": {
+              "$ref": "#/components/responses/ForbiddenError"
+            },
+            "404": {
+              "$ref": "#/components/responses/AccountNotFound"
+            },
+            "500": {
+              "$ref": "#/components/responses/InternalServerError"
+            }
+          }
         }
       }
     },
