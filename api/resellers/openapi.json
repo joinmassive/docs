@@ -473,7 +473,7 @@
         },
         "post": {
           "operationId": "allocateBandwidth",
-          "summary": "Allocate account bandwidth",
+          "summary": "Allocate bandwidth",
           "description": "Grant bandwidth to an account.",
           "tags": [
             "updating"
