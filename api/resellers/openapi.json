@@ -371,7 +371,7 @@
             {
               "name": "from",
               "in": "query",
-              "description": "The time in Unix seconds from which to calculate the bandwidth usage.",
+              "description": "The time in Unix seconds from which to report bandwidth usage.",
               "schema": {
                 "type": "string"
               }
@@ -379,7 +379,7 @@
             {
               "name": "to",
               "in": "query",
-              "description": "The time in Unix seconds up to which to calculate the bandwidth usage.",
+              "description": "The time in Unix seconds until which to report bandwidth usage.",
               "schema": {
                 "type": "string"
               }
@@ -392,7 +392,7 @@
           ],
           "responses": {
             "200": {
-              "description": "The bandwidth in bytes consumed by the account.",
+              "description": "The bandwidth consumed by the account during the time range.",
               "content": {
                 "application/json": {
                   "schema": {
