@@ -12,7 +12,7 @@
     "paths": {
       "/accounts": {
         "get": {
-          "operationId": "getAccounts",
+          "operationId": "getAllAccounts",
           "summary": "Get all accounts",
           "description": "Retrieve previously created accounts.",
           "tags": [
@@ -136,7 +136,7 @@
           ],
           "responses": {
             "200": {
-              "description": "The account with the specified ID.",
+              "description": "The account with the provided ID.",
               "content": {
                 "application/json": {
                   "schema": {
@@ -204,7 +204,7 @@
                     },
                     "limit": {
                       "type": "integer",
-                      "description": "The new bandwidth in bytes allocated to the account, which cannot be lower than the existing bandwidth allocation.",
+                      "description": "The new bandwidth in bytes allocated to the account (which cannot be less than the existing bandwidth allocation).",
                       "example": 1000000
                     }
                   }
@@ -582,7 +582,7 @@
             },
             "limit_reached": {
               "type": "boolean",
-              "description": "Whether or not the bandwidth allocated to the account has been exhausted.",
+              "description": "Whether or not all the bandwidth allocated to the account has been consumed.",
               "example": false
             }
           }
@@ -640,7 +640,7 @@
             },
             "usage": {
               "type": "integer",
-              "description": "The bandwidth in bytes consumed by the account so far",
+              "description": "The bandwidth in bytes consumed by the account.",
               "example": 12345
             },
             "limit": {
@@ -731,7 +731,7 @@
           }
         },
         "DuplicateUsernameError": {
-          "description": "An account with the provided username exists already.",
+          "description": "The provided username is already in use.",
           "content": {
             "application/json": {
               "schema": {
