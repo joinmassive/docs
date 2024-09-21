@@ -83,12 +83,12 @@
               "group": "API reference",
               "pages": [
                 "api/resellers/reference/create-account",
-                "api/resellers/reference/allocate-bandwidth-to-account",
-                "api/resellers/reference/get-account",
                 "api/resellers/reference/get-all-accounts",
+                "api/resellers/reference/get-account",
                 "api/resellers/reference/get-account-allocations",
                 "api/resellers/reference/get-account-usage",
                 "api/resellers/reference/update-account",
+                "api/resellers/reference/allocate-bandwidth",
                 "api/resellers/reference/disable-account",
                 "api/resellers/reference/enable-account"
               ]
