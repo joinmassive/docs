@@ -423,7 +423,7 @@
         "get": {
           "operationId": "getAccountAllocations",
           "summary": "Get account allocations",
-          "description": "Retrieve bandwidth allocations for the account.",
+          "description": "Retrieve bandwidth allocations made to the account.",
           "tags": [
             "reading"
           ],
@@ -445,7 +445,7 @@
           ],
           "responses": {
             "200": {
-              "description": "The list of allocations made to the account.",
+              "description": "The list of bandwidth allocations.",
               "content": {
                 "application/json": {
                   "schema": {
@@ -513,7 +513,7 @@
           },
           "responses": {
             "200": {
-              "description": "The bandwidth that was successfully allocated to the account.",
+              "description": "The bandwidth that was allocated to the account.",
               "content": {
                 "application/json": {
                   "schema": {
@@ -617,7 +617,7 @@
               },
               "created_at": {
                 "type": "integer",
-                "description": "The time in Unix seconds at which the allocation was made.",
+                "description": "The time in Unix seconds at which the bandwidth allocation was made.",
                 "example": 1708526022
               }
             }
@@ -633,7 +633,7 @@
             },
             "created_at": {
               "type": "integer",
-              "description": "The time in Unix seconds at which the allocation was made.",
+              "description": "The time in Unix seconds at which the bandwidth allocation was made.",
               "example": 1708526022
             }
           }
