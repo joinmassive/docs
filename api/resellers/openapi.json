@@ -14,7 +14,7 @@
         "get": {
           "operationId": "getAllAccounts",
           "summary": "Get all accounts",
-          "description": "Retrieve previously created accounts.",
+          "description": "Retrieve the previously created accounts.",
           "tags": [
             "reading"
           ],
@@ -204,7 +204,7 @@
                     },
                     "limit": {
                       "type": "integer",
-                      "description": "The new bandwidth in bytes allocated to the account (which cannot be less than the existing bandwidth allocation).",
+                      "description": "The new bandwidth in bytes to allocate to the account (which cannot be less than the existing bandwidth allocation).",
                       "example": 1000000
                     }
                   }
@@ -301,7 +301,7 @@
         "post": {
           "operationId": "disableAccount",
           "summary": "Disable account",
-          "description": "Deactivate an account.",
+          "description": "Deactivate an enabled account.",
           "tags": [
             "updating"
           ],
@@ -354,7 +354,7 @@
         "get": {
           "operationId": "getAccountUsage",
           "summary": "Get account usage",
-          "description": "Retrieve the bandwidth consumed by the account.",
+          "description": "Retrieve the bandwidth consumed by an account.",
           "tags": [
             "reading"
           ],
@@ -371,7 +371,7 @@
             {
               "name": "from",
               "in": "query",
-              "description": "The time in Unix seconds from which to get bandwidth usage.",
+              "description": "The time in Unix seconds from which to get the bandwidth usage.",
               "schema": {
                 "type": "string"
               }
@@ -379,7 +379,7 @@
             {
               "name": "to",
               "in": "query",
-              "description": "The time in Unix seconds until which to get bandwidth usage.",
+              "description": "The time in Unix seconds until which to get the bandwidth usage.",
               "schema": {
                 "type": "string"
               }
@@ -392,7 +392,7 @@
           ],
           "responses": {
             "200": {
-              "description": "The bandwidth consumed by the account for the provided time period.",
+              "description": "The bandwidth consumed by the account during the provided time period.",
               "content": {
                 "application/json": {
                   "schema": {
@@ -423,7 +423,7 @@
         "get": {
           "operationId": "getAccountAllocations",
           "summary": "Get account allocations",
-          "description": "Retrieve bandwidth allocations made to the account.",
+          "description": "Retrieve the bandwidth allocations made to an account.",
           "tags": [
             "reading"
           ],
@@ -722,7 +722,7 @@
           }
         },
         "AccountNotFound": {
-          "description": "The specified account is nonexistent.",
+          "description": "The specified account cannot be found.",
           "content": {
             "application/json": {
               "schema": {
