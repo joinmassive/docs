@@ -1,629 +1,613 @@
 {
-    "openapi": "3.0.1",
-    "info": {
-      "title": "Proxy resellers endpoint",
-      "version": "v1"
-    },
-    "servers": [
-      {
-        "url": "https://api-network.joinmassive.com/resellers"
-      }
-    ],
-    "paths": {
-      "/accounts": {
-        "get": {
-          "operationId": "getAllAccounts",
-          "summary": "Get all accounts",
-          "description": "Retrieve the previously created accounts.",
-          "tags": [
-            "reading"
-          ],
-          "security": [
-            {
-              "api-key": []
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "The list of existing accounts.",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/components/schemas/Account"
-                    }
-                  }
-                }
-              }
-            },
-            "401": {
-              "$ref": "#/components/responses/UnauthorizedError"
-            },
-            "500": {
-              "$ref": "#/components/responses/InternalServerError"
-            }
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Proxy resellers endpoint",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "https://api-network.joinmassive.com/resellers"
+    }
+  ],
+  "paths": {
+    "/accounts": {
+      "get": {
+        "operationId": "getAllAccounts",
+        "summary": "Get all accounts",
+        "description": "Retrieve the previously created accounts.",
+        "tags": [
+          "reading"
+        ],
+        "security": [
+          {
+            "api-key": []
           }
-        },
-        "post": {
-          "operationId": "createAccount",
-          "summary": "Create account",
-          "description": "Provision a new subaccount.",
-          "tags": [
-            "creation"
-          ],
-          "security": [
-            {
-              "api-key": []
-            }
-          ],
-          "requestBody": {
-            "required": true,
+        ],
+        "responses": {
+          "200": {
+            "description": "The list of existing accounts.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "username": {
-                      "type": "string",
-                      "description": "The account username.",
-                      "example": "johndoe@example.com"
-                    },
-                    "password": {
-                      "type": "string",
-                      "description": "The account password.",
-                      "example": "secret"
-                    },
-                    "limit": {
-                      "type": "integer",
-                      "description": "The initial bandwidth in bytes allocated to the account.",
-                      "example": 1000000
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "responses": {
-            "201": {
-              "description": "The account was successfully created.",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/AccountOkResponse"
-                  }
-                }
-              }
-            },
-            "400": {
-              "$ref": "#/components/responses/BadRequestError"
-            },
-            "401": {
-              "$ref": "#/components/responses/UnauthorizedError"
-            },
-            "409": {
-              "$ref": "#/components/responses/DuplicateUsernameError"
-            },
-            "500": {
-              "$ref": "#/components/responses/InternalServerError"
-            }
-          }
-        }
-      },
-      "/accounts/{id}": {
-        "get": {
-          "operationId": "getAccount",
-          "summary": "Get account",
-          "description": "Retrieve a specific account.",
-          "tags": [
-            "reading"
-          ],
-          "parameters": [
-            {
-              "name": "id",
-              "in": "path",
-              "description": "The account UUID.",
-              "required": true,
-              "schema": {
-                "type": "string"
-              }
-            }
-          ],
-          "security": [
-            {
-              "api-key": []
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "The account with the provided ID.",
-              "content": {
-                "application/json": {
-                  "schema": {
+                  "type": "array",
+                  "items": {
                     "$ref": "#/components/schemas/Account"
                   }
                 }
               }
-            },
-            "400": {
-              "$ref": "#/components/responses/BadRequestError"
-            },
-            "401": {
-              "$ref": "#/components/responses/UnauthorizedError"
-            },
-            "403": {
-              "$ref": "#/components/responses/ForbiddenError"
-            },
-            "404": {
-              "$ref": "#/components/responses/AccountNotFound"
-            },
-            "500": {
-              "$ref": "#/components/responses/InternalServerError"
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "post": {
+        "operationId": "createAccount",
+        "summary": "Create account",
+        "description": "Provision a new subaccount.",
+        "tags": [
+          "creation"
+        ],
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "The account username.",
+                    "example": "johndoe@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "The account password.",
+                    "example": "secret"
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "description": "The initial bandwidth in bytes allocated to the account.",
+                    "example": 1000000
+                  }
+                }
+              }
             }
           }
         },
-        "put": {
-          "operationId": "updateAccount",
-          "summary": "Update account",
-          "description": "Modify the settings of an account.",
-          "tags": [
-            "updating"
-          ],
-          "parameters": [
-            {
-              "name": "id",
-              "in": "path",
-              "description": "The account UUID.",
-              "required": true,
-              "schema": {
-                "type": "string"
-              }
-            }
-          ],
-          "security": [
-            {
-              "api-key": []
-            }
-          ],
-          "requestBody": {
-            "required": true,
+        "responses": {
+          "201": {
+            "description": "The account was successfully created.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "username": {
-                      "type": "string",
-                      "description": "The new account username.",
-                      "example": "johndoe@example.com"
-                    },
-                    "password": {
-                      "type": "string",
-                      "description": "The new account password.",
-                      "example": "secret"
-                    },
-                    "limit": {
-                      "type": "integer",
-                      "description": "The new bandwidth in bytes to allocate to the account (which cannot be less than the existing bandwidth allocation).",
-                      "example": 1000000
-                    }
-                  }
+                  "$ref": "#/components/schemas/AccountOkResponse"
                 }
               }
             }
           },
-          "responses": {
-            "200": {
-              "description": "The account was successfully updated.",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/AccountOkResponse"
-                  }
-                }
-              }
-            },
-            "400": {
-              "$ref": "#/components/responses/BadRequestError"
-            },
-            "401": {
-              "$ref": "#/components/responses/UnauthorizedError"
-            },
-            "403": {
-              "$ref": "#/components/responses/ForbiddenError"
-            },
-            "404": {
-              "$ref": "#/components/responses/AccountNotFound"
-            },
-            "409": {
-              "$ref": "#/components/responses/DuplicateUsernameError"
-            },
-            "500": {
-              "$ref": "#/components/responses/InternalServerError"
-            }
-          }
-        }
-      },
-      "/accounts/{id}/allocations": {
-        "get": {
-          "operationId": "getAccountAllocations",
-          "summary": "Get account allocations",
-          "description": "Retrieve the bandwidth allocations made to an account.",
-          "tags": [
-            "reading"
-          ],
-          "parameters": [
-            {
-              "name": "id",
-              "in": "path",
-              "description": "The account UUID.",
-              "required": true,
-              "schema": {
-                "type": "string"
-              }
-            }
-          ],
-          "security": [
-            {
-              "api-key": []
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "The list of bandwidth allocations.",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/GetAllocationsOkResponse"
-                  }
-                }
-              }
-            },
-            "400": {
-              "$ref": "#/components/responses/BadRequestError"
-            },
-            "401": {
-              "$ref": "#/components/responses/UnauthorizedError"
-            },
-            "403": {
-              "$ref": "#/components/responses/ForbiddenError"
-            },
-            "404": {
-              "$ref": "#/components/responses/AccountNotFound"
-            },
-            "500": {
-              "$ref": "#/components/responses/InternalServerError"
-            }
-          }
-        },
-        "post": {
-          "operationId": "allocateBandwidth",
-          "summary": "Allocate bandwidth",
-          "description": "Grant bandwidth to an account.",
-          "tags": [
-            "updating"
-          ],
-          "parameters": [
-            {
-              "name": "id",
-              "in": "path",
-              "description": "The account UUID.",
-              "required": true,
-              "schema": {
-                "type": "string"
-              }
-            }
-          ],
-          "security": [
-            {
-              "api-key": []
-            }
-          ],
-          "requestBody": {
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "limit": {
-                      "type": "integer",
-                      "description": "The (nonzero) bandwidth in bytes to allocate to the account.",
-                      "example": 1000000
-                    }
-                  }
-                }
-              }
-            }
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
           },
-          "responses": {
-            "200": {
-              "description": "The bandwidth that was allocated to the account.",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/PostAllocationsOkResponse"
-                  }
-                }
-              }
-            },
-            "400": {
-              "$ref": "#/components/responses/BadRequestError"
-            },
-            "401": {
-              "$ref": "#/components/responses/UnauthorizedError"
-            },
-            "403": {
-              "$ref": "#/components/responses/ForbiddenError"
-            },
-            "404": {
-              "$ref": "#/components/responses/AccountNotFound"
-            },
-            "500": {
-              "$ref": "#/components/responses/InternalServerError"
-            }
-          }
-        }
-      },
-      "/accounts/{id}/enable": {
-        "post": {
-          "operationId": "enableAccount",
-          "summary": "Enable account",
-          "description": "Re-activate a disabled account.",
-          "tags": [
-            "updating"
-          ],
-          "parameters": [
-            {
-              "name": "id",
-              "in": "path",
-              "description": "The account UUID.",
-              "required": true,
-              "schema": {
-                "type": "string"
-              }
-            }
-          ],
-          "security": [
-            {
-              "api-key": []
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "The account was successfully enabled.",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/AccountOkResponse"
-                  }
-                }
-              }
-            },
-            "400": {
-              "$ref": "#/components/responses/BadRequestError"
-            },
-            "401": {
-              "$ref": "#/components/responses/UnauthorizedError"
-            },
-            "403": {
-              "$ref": "#/components/responses/ForbiddenError"
-            },
-            "404": {
-              "$ref": "#/components/responses/AccountNotFound"
-            },
-            "500": {
-              "$ref": "#/components/responses/InternalServerError"
-            }
-          }
-        }
-      },
-      "/accounts/{id}/disable": {
-        "post": {
-          "operationId": "disableAccount",
-          "summary": "Disable account",
-          "description": "Deactivate an enabled account.",
-          "tags": [
-            "updating"
-          ],
-          "parameters": [
-            {
-              "name": "id",
-              "in": "path",
-              "description": "The account UUID.",
-              "required": true,
-              "schema": {
-                "type": "string"
-              }
-            }
-          ],
-          "security": [
-            {
-              "api-key": []
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "The account was successfully disabled.",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/AccountOkResponse"
-                  }
-                }
-              }
-            },
-            "400": {
-              "$ref": "#/components/responses/BadRequestError"
-            },
-            "401": {
-              "$ref": "#/components/responses/UnauthorizedError"
-            },
-            "403": {
-              "$ref": "#/components/responses/ForbiddenError"
-            },
-            "404": {
-              "$ref": "#/components/responses/AccountNotFound"
-            },
-            "500": {
-              "$ref": "#/components/responses/InternalServerError"
-            }
-          }
-        }
-      },
-      "/accounts/{id}/usage": {
-        "get": {
-          "operationId": "getAccountUsage",
-          "summary": "Get account usage",
-          "description": "Retrieve the bandwidth consumed by an account.",
-          "tags": [
-            "reading"
-          ],
-          "parameters": [
-            {
-              "name": "id",
-              "in": "path",
-              "description": "The account UUID.",
-              "required": true,
-              "schema": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "from",
-              "in": "query",
-              "description": "The time in Unix seconds from which to get the bandwidth usage.",
-              "schema": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "to",
-              "in": "query",
-              "description": "The time in Unix seconds until which to get the bandwidth usage.",
-              "schema": {
-                "type": "string"
-              }
-            }
-          ],
-          "security": [
-            {
-              "api-key": []
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "The bandwidth consumed by the account during the provided time period.",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/UsageOkResponse"
-                  }
-                }
-              }
-            },
-            "400": {
-              "$ref": "#/components/responses/BadRequestError"
-            },
-            "401": {
-              "$ref": "#/components/responses/UnauthorizedError"
-            },
-            "403": {
-              "$ref": "#/components/responses/ForbiddenError"
-            },
-            "404": {
-              "$ref": "#/components/responses/AccountNotFound"
-            },
-            "500": {
-              "$ref": "#/components/responses/InternalServerError"
-            }
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "409": {
+            "$ref": "#/components/responses/DuplicateUsernameError"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
     },
-    "components": {
-      "securitySchemes": {
-        "api-key": {
-          "type": "apiKey",
-          "name": "x-api-key",
-          "in": "header"
+    "/accounts/{id}": {
+      "get": {
+        "operationId": "getAccount",
+        "summary": "Get account",
+        "description": "Retrieve a specific account.",
+        "tags": [
+          "reading"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The account UUID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The account with the provided ID.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Account"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          },
+          "404": {
+            "$ref": "#/components/responses/AccountNotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
         }
       },
-      "schemas": {
-        "Account": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string",
-              "description": "The account UUID.",
-              "example": "57ed834f-f6f6-47d4-ab23-5674d7866b32"
-            },
-            "username": {
-              "type": "string",
-              "description": "The account username.",
-              "example": "johndoe@example.com"
-            },
-            "password": {
-              "type": "string",
-              "description": "The account password.",
-              "example": "secret"
-            },
-            "limit": {
-              "type": "integer",
-              "description": "The bandwidth in bytes allocated to the account.",
-              "example": 1000000
-            },
-            "status": {
-              "type": "string",
-              "description": "The account status, whether enabled or disabled.",
-              "example": "enabled"
-            },
-            "started_at": {
-              "type": "integer",
-              "description": "The time in Unix seconds at which the account was created.",
-              "example": 1708526022
-            },
-            "updated_at": {
-              "type": "integer",
-              "description": "The time in Unix seconds at which the account was last updated.",
-              "example": 1708528022
-            },
-            "limit_reached": {
-              "type": "boolean",
-              "description": "Whether or not all the bandwidth allocated to the account has been consumed.",
-              "example": false
+      "put": {
+        "operationId": "updateAccount",
+        "summary": "Update account",
+        "description": "Modify the settings of an account.",
+        "tags": [
+          "updating"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The account UUID.",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
           }
-        },
-        "AccountOkResponse": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string",
-              "description": "The account UUID.",
-              "example": "57ed834f-f6f6-47d4-ab23-5674d7866b32"
-            }
+        ],
+        "security": [
+          {
+            "api-key": []
           }
-        },
-        "GetAllocationsOkResponse": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "limit": {
-                "type": "integer",
-                "description": "The bandwidth allocation in bytes.",
-                "example": 1000000
-              },
-              "created_at": {
-                "type": "integer",
-                "description": "The time in Unix seconds at which the bandwidth allocation was made.",
-                "example": 1708526022
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "The new account username.",
+                    "example": "johndoe@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "The new account password.",
+                    "example": "secret"
+                  },
+                  "limit": {
+                    "type": "integer",
+                    "description": "The new bandwidth in bytes to allocate to the account (which cannot be less than the existing bandwidth allocation).",
+                    "example": 1000000
+                  }
+                }
               }
             }
           }
         },
-        "PostAllocationsOkResponse": {
+        "responses": {
+          "200": {
+            "description": "The account was successfully updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountOkResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          },
+          "404": {
+            "$ref": "#/components/responses/AccountNotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/DuplicateUsernameError"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/accounts/{id}/allocations": {
+      "get": {
+        "operationId": "getAccountAllocations",
+        "summary": "Get account allocations",
+        "description": "Retrieve the bandwidth allocations made to an account.",
+        "tags": [
+          "reading"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The account UUID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The list of bandwidth allocations.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllocationsOkResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          },
+          "404": {
+            "$ref": "#/components/responses/AccountNotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "post": {
+        "operationId": "allocateBandwidth",
+        "summary": "Allocate bandwidth",
+        "description": "Grant bandwidth to an account.",
+        "tags": [
+          "updating"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The account UUID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "limit": {
+                    "type": "integer",
+                    "description": "The (nonzero) bandwidth in bytes to allocate to the account.",
+                    "example": 1000000
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The bandwidth that was allocated to the account.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostAllocationsOkResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          },
+          "404": {
+            "$ref": "#/components/responses/AccountNotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/accounts/{id}/enable": {
+      "post": {
+        "operationId": "enableAccount",
+        "summary": "Enable account",
+        "description": "Re-activate a disabled account.",
+        "tags": [
+          "updating"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The account UUID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The account was successfully enabled.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountOkResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          },
+          "404": {
+            "$ref": "#/components/responses/AccountNotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/accounts/{id}/disable": {
+      "post": {
+        "operationId": "disableAccount",
+        "summary": "Disable account",
+        "description": "Deactivate an enabled account.",
+        "tags": [
+          "updating"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The account UUID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The account was successfully disabled.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountOkResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          },
+          "404": {
+            "$ref": "#/components/responses/AccountNotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    },
+    "/accounts/{id}/usage": {
+      "get": {
+        "operationId": "getAccountUsage",
+        "summary": "Get account usage",
+        "description": "Retrieve the bandwidth consumed by an account.",
+        "tags": [
+          "reading"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The account UUID.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "description": "The time in Unix seconds from which to get the bandwidth usage.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "description": "The time in Unix seconds until which to get the bandwidth usage.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The bandwidth consumed by the account during the provided time period.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsageOkResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          },
+          "404": {
+            "$ref": "#/components/responses/AccountNotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "api-key": {
+        "type": "apiKey",
+        "name": "x-api-key",
+        "in": "header"
+      }
+    },
+    "schemas": {
+      "Account": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The account UUID.",
+            "example": "57ed834f-f6f6-47d4-ab23-5674d7866b32"
+          },
+          "username": {
+            "type": "string",
+            "description": "The account username.",
+            "example": "johndoe@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "The account password.",
+            "example": "secret"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "The bandwidth in bytes allocated to the account.",
+            "example": 1000000
+          },
+          "status": {
+            "type": "string",
+            "description": "The account status, whether enabled or disabled.",
+            "example": "enabled"
+          },
+          "started_at": {
+            "type": "integer",
+            "description": "The time in Unix seconds at which the account was created.",
+            "example": 1708526022
+          },
+          "updated_at": {
+            "type": "integer",
+            "description": "The time in Unix seconds at which the account was last updated.",
+            "example": 1708528022
+          },
+          "limit_reached": {
+            "type": "boolean",
+            "description": "Whether or not all the bandwidth allocated to the account has been consumed.",
+            "example": false
+          }
+        }
+      },
+      "AccountOkResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The account UUID.",
+            "example": "57ed834f-f6f6-47d4-ab23-5674d7866b32"
+          }
+        }
+      },
+      "GetAllocationsOkResponse": {
+        "type": "array",
+        "items": {
           "type": "object",
           "properties": {
             "limit": {
@@ -637,136 +621,151 @@
               "example": 1708526022
             }
           }
-        },
-        "UsageOkResponse": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string",
-              "description": "The account UUID.",
-              "example": "57ed834f-f6f6-47d4-ab23-5674d7866b32"
-            },
-            "usage": {
-              "type": "integer",
-              "description": "The bandwidth in bytes consumed by the account.",
-              "example": 12345
-            },
-            "limit": {
-              "type": "integer",
-              "description": "The bandwidth in bytes allocated to the account.",
-              "example": 1000000
-            }
+        }
+      },
+      "PostAllocationsOkResponse": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "description": "The bandwidth allocation in bytes.",
+            "example": 1000000
+          },
+          "created_at": {
+            "type": "integer",
+            "description": "The time in Unix seconds at which the bandwidth allocation was made.",
+            "example": 1708526022
           }
-        },
-        "ErrorResponse": {
-          "type": "object",
-          "properties": {
-            "error": {
-              "type": "string",
-              "description": "The error message.",
-              "example": "Account ID not provided"
+        }
+      },
+      "UsageOkResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The account UUID.",
+            "example": "57ed834f-f6f6-47d4-ab23-5674d7866b32"
+          },
+          "usage": {
+            "type": "integer",
+            "description": "The bandwidth in bytes consumed by the account.",
+            "example": 12345
+          },
+          "limit": {
+            "type": "integer",
+            "description": "The bandwidth in bytes allocated to the account.",
+            "example": 1000000
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "The error message.",
+            "example": "Account ID not provided"
+          }
+        }
+      }
+    },
+    "responses": {
+      "BadRequestError": {
+        "description": "The request was invalid (see the error message for details).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "description": "The error message.",
+                  "example": "Invalid request: Account ID not provided"
+                }
+              }
             }
           }
         }
       },
-      "responses": {
-        "BadRequestError": {
-          "description": "The request was invalid (see the error message for details).",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "error": {
-                    "type": "string",
-                    "description": "The error message.",
-                    "example": "Invalid request: Account ID not provided"
-                  }
+      "UnauthorizedError": {
+        "description": "The request was unauthenticated.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "description": "The error message.",
+                  "example": "Unauthorized"
                 }
               }
             }
           }
-        },
-        "UnauthorizedError": {
-          "description": "The request was unauthenticated.",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "error": {
-                    "type": "string",
-                    "description": "The error message.",
-                    "example": "Unauthorized"
-                  }
+        }
+      },
+      "ForbiddenError": {
+        "description": "The operation is unauthorized.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "description": "The error message.",
+                  "example": "Forbidden"
                 }
               }
             }
           }
-        },
-        "ForbiddenError": {
-          "description": "The operation is unauthorized.",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "error": {
-                    "type": "string",
-                    "description": "The error message.",
-                    "example": "Forbidden"
-                  }
+        }
+      },
+      "AccountNotFound": {
+        "description": "The specified account cannot be found.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "description": "The error message.",
+                  "example": "Account not found"
                 }
               }
             }
           }
-        },
-        "AccountNotFound": {
-          "description": "The specified account cannot be found.",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "error": {
-                    "type": "string",
-                    "description": "The error message.",
-                    "example": "Account not found"
-                  }
+        }
+      },
+      "DuplicateUsernameError": {
+        "description": "The provided username is already in use.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "description": "The error message.",
+                  "example": "Duplicate username"
                 }
               }
             }
           }
-        },
-        "DuplicateUsernameError": {
-          "description": "The provided username is already in use.",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "error": {
-                    "type": "string",
-                    "description": "The error message.",
-                    "example": "Duplicate username"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "InternalServerError": {
-          "description": "An internal server error occurred.",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "error": {
-                    "type": "string",
-                    "description": "The error message.",
-                    "example": "Internal server error"
-                  }
+        }
+      },
+      "InternalServerError": {
+        "description": "An internal server error occurred.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string",
+                  "description": "The error message.",
+                  "example": "Internal server error"
                 }
               }
             }
@@ -775,3 +774,4 @@
       }
     }
   }
+}
