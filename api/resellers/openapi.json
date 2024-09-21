@@ -352,11 +352,26 @@
       },
       "/accounts/{id}/usage": {
         "get": {
+          "operationId": "getAccountUsage",
           "summary": "Get account usage",
+          "description": "Retrieve the bandwidth consumed by the account.",
+          "tags": [
+            "reading"
+          ],
           "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "The account UUID.",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
             {
               "name": "from",
               "in": "query",
+              "description": "The time in Unix seconds from which to calculate the bandwidth usage.",
               "schema": {
                 "type": "string"
               }
@@ -364,14 +379,7 @@
             {
               "name": "to",
               "in": "query",
-              "schema": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "id",
-              "in": "path",
-              "required": true,
+              "description": "The time in Unix seconds up to which to calculate the bandwidth usage.",
               "schema": {
                 "type": "string"
               }
@@ -382,10 +390,9 @@
               "api-key": []
             }
           ],
-          "operationId": "getAccountUsage",
           "responses": {
             "200": {
-              "description": "The currently used traffic for the account.",
+              "description": "The bandwidth in bytes consumed by the account.",
               "content": {
                 "application/json": {
                   "schema": {
@@ -409,10 +416,7 @@
             "500": {
               "$ref": "#/components/responses/InternalServerError"
             }
-          },
-          "tags": [
-            "Usage"
-          ]
+          }
         }
       },
       "/accounts/{id}/allocations": {
