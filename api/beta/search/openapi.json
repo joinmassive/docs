@@ -152,15 +152,11 @@
           },
           "sitelinks": {
             "type": "array",
-            "items": {
-              "type": { "$ref": "#/components/schemas/Link" }
-            }
+            "items": { "$ref": "#/components/schemas/Link" }
           },
           "images": {
             "type": "array",
-            "items": {
-              "type": { "$ref": "#/components/schemas/Image" }
-            }
+            "items": { "$ref": "#/components/schemas/Image" }
           }
         },
         "required": [
@@ -217,9 +213,7 @@
           },
           "sitelinks": {
             "type": "array",
-            "items": {
-              "type": { "$ref": "#/components/schemas/Sitelink" }
-            }
+            "items": { "$ref": "#/components/schemas/Sitelink" }
           }
         },
         "required": [
