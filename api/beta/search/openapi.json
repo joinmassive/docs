@@ -13,7 +13,7 @@
   "paths": {
     "/": {
       "get": {
-        "summary": "Get search results",
+        "summary": "Get results",
         "description": "Retrieve real-time search results or queue results for later retrieval.",
         "responses": {
           "200": {
@@ -50,10 +50,10 @@
     "/devices": {
       "get": {
         "summary": "Get devices",
-        "description": "Retrieve a list of supported smartphone and tablet devices.",
+        "description": "Retrieve a list of supported device names.",
         "responses": {
           "200": {
-            "description": "The list of smartphone and tablet devices.",
+            "description": "The list of device names.",
             "content": {
               "application/json": {
                 "schema": {
