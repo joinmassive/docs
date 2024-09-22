@@ -55,17 +55,19 @@
         "residential-proxy-reference/device-type-targeting",
         "residential-proxy-reference/accounting",
         "residential-proxy-reference/usage-restrictions",
-        "residential-proxy-reference/error-types"
-      ]
-    },
-    {
-      "group": "Sample Integrations",
-      "pages": [
-        "residential-proxy-reference/samples/puppeteer",
-        "residential-proxy-reference/samples/python",
-        "residential-proxy-reference/samples/scrapy",
-        "residential-proxy-reference/samples/ruby",
-        "residential-proxy-reference/samples/dotnet"
+        "residential-proxy-reference/error-types",
+        {
+          "group": "Sample integrations",
+          "icon": "code",
+          "iconType": "light",
+          "pages": [
+            "residential-proxy-reference/samples/puppeteer",
+            "residential-proxy-reference/samples/python",
+            "residential-proxy-reference/samples/scrapy",
+            "residential-proxy-reference/samples/ruby",
+            "residential-proxy-reference/samples/dotnet"
+          ]
+        }
       ]
     },
     {
