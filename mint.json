@@ -41,31 +41,31 @@
     {
       "group": "Get Started",
       "pages": [
-        "residential-proxy-reference/introduction",
-        "residential-proxy-reference/start",
-        "residential-proxy-reference/authentication"
+        "network/introduction",
+        "network/start",
+        "network/authentication"
       ]
     },
     {
       "group": "Proxy Configuration",
       "pages": [
-        "residential-proxy-reference/routing",
-        "residential-proxy-reference/geotargeting",
-        "residential-proxy-reference/sticky-sessions",
-        "residential-proxy-reference/device-type-targeting",
-        "residential-proxy-reference/accounting",
-        "residential-proxy-reference/usage-restrictions",
-        "residential-proxy-reference/error-types",
+        "network/routing",
+        "network/geotargeting",
+        "network/sticky-sessions",
+        "network/device-type-targeting",
+        "network/accounting",
+        "network/usage-restrictions",
+        "network/error-types",
         {
           "group": "Sample integrations",
           "icon": "code",
           "iconType": "light",
           "pages": [
-            "residential-proxy-reference/samples/puppeteer",
-            "residential-proxy-reference/samples/python",
-            "residential-proxy-reference/samples/scrapy",
-            "residential-proxy-reference/samples/ruby",
-            "residential-proxy-reference/samples/dotnet"
+            "network/samples/puppeteer",
+            "network/samples/python",
+            "network/samples/scrapy",
+            "network/samples/ruby",
+            "network/samples/dotnet"
           ]
         }
       ]
