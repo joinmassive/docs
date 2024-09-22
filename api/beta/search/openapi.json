@@ -17,21 +17,14 @@
         "description": "Retrieve real-time search results or queue results for later retrieval.",
         "responses": {
           "200": {
-            "description": "The search results",
+            "description": "The search results or a job identifier",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Results"
-                }
-              }
-            }
-          },
-          "202": {
-            "description": "A job identifier",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Job"
+                  "oneOf": [
+                    { "$ref": "#/components/schemas/Results" },
+                    { "$ref": "#/components/schemas/Job" }
+                  ]
                 }
               }
             }
