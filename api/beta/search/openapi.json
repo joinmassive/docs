@@ -303,7 +303,7 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "The identifier to retrieve a queued job with",
+            "description": "The identifier to retrieve a queued search with",
             "example": "078fd246-f0f7-44a0-aabb-cadd7b12454f"
           }
         },
@@ -315,7 +315,7 @@
         "properties": {
           "status": {
             "type": "string",
-            "description": "The status of a queued job",
+            "description": "The status of a queued search",
             "example": "retrieving"
           }
         },
