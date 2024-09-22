@@ -42,7 +42,7 @@
       "group": "Get Started",
       "pages": [
         "residential-proxy-reference/introduction",
-        "residential-proxy-reference/quickstart",
+        "residential-proxy-reference/start",
         "residential-proxy-reference/authentication"
       ]
     },
@@ -78,7 +78,7 @@
           "pages": [
             "api/resellers/introduction",
             "api/resellers/authentication",
-            "api/resellers/quickstart",
+            "api/resellers/start",
             {
               "group": "API reference",
               "icon": "book",
@@ -123,7 +123,7 @@
       "group": "Monetization SDK",
       "pages": [
         "sdk/introduction",
-        "sdk/quickstart",
+        "sdk/start",
         {
           "group": "Desktop",
           "icon": "desktop",
