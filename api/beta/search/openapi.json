@@ -80,6 +80,7 @@
     "schemas": {
       "Results": {
         "type": "object",
+        "summary": "Search results",
         "properties": {
           "query": {
             "type": "string",
@@ -110,6 +111,7 @@
       },
       "Organic": {
         "type": "object",
+        "summary": "Organic result",
         "properties": {
           "type": {
             "type": "string",
@@ -192,6 +194,7 @@
       },
       "OrganicWithSitelinks": {
         "type": "object",
+        "summary": "Organic result with sitelinks",
         "properties": {
           "type": {
             "type": "string",
@@ -245,6 +248,7 @@
       },
       "Link": {
         "type": "object",
+        "summary": "Link element",
         "properties": {
           "position": {
             "type": "integer",
@@ -263,6 +267,7 @@
       },
       "Image": {
         "type": "object",
+        "summary": "Image element",
         "properties": {
           "position": {
             "type": "integer",
@@ -281,6 +286,7 @@
       },
       "Sitelink": {
         "type": "object",
+        "summary": "Sitelink element",
         "properties": {
           "position": {
             "type": "integer"
