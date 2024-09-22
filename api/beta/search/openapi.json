@@ -66,10 +66,7 @@
                   "type": "array",
                   "items": { "type": "string" },
                   "example": [
-                    "BlackBerry Z30",
-                    "BlackBerry Z30 landscape",
-                    "Galaxy Note 3",
-                    "[Remaining device names]"
+                    "BlackBerry Z30", "BlackBerry Z30 landscape", "Galaxy Note 3", "<string>"
                   ]
                 }
               }
