@@ -321,6 +321,7 @@
         "properties": {
           "status": {
             "type": "string",
+            "enum": ["retrieving", "failed"],
             "description": "The status of a queued search",
             "example": "retrieving"
           }

@@ -575,7 +575,8 @@
           },
           "status": {
             "type": "string",
-            "description": "The account status, whether enabled or disabled",
+            "enum": ["enabled", "disabled"],
+            "description": "The account status",
             "example": "enabled"
           },
           "started_at": {
