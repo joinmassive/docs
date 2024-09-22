@@ -581,12 +581,12 @@
           },
           "started_at": {
             "type": "integer",
-            "description": "The time in Unix seconds at which the account was created",
+            "description": "The time in Unix seconds when the account was created",
             "example": 1708526022
           },
           "updated_at": {
             "type": "integer",
-            "description": "The time in Unix seconds at which the account was last updated",
+            "description": "The time in Unix seconds when the account was last updated",
             "example": 1708528022
           },
           "limit_reached": {
@@ -618,7 +618,7 @@
             },
             "created_at": {
               "type": "integer",
-              "description": "The time in Unix seconds at which the bandwidth allocation was made",
+              "description": "The time in Unix seconds when the bandwidth allocation was made",
               "example": 1708526022
             }
           }
@@ -634,7 +634,7 @@
           },
           "created_at": {
             "type": "integer",
-            "description": "The time in Unix seconds at which the bandwidth allocation was made",
+            "description": "The time in Unix seconds when the bandwidth allocation was made",
             "example": 1708526022
           }
         }
