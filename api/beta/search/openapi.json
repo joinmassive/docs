@@ -1,0 +1,295 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Search results",
+    "description": "Extract live results from popular search engines.",
+    "version": "1.0.0-beta"
+  },
+  "servers": [
+    {
+      "url": "https://beta.api.joinmassive.com/search"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Get search results",
+        "description": "Retrieve real-time search results or queue results for later retrieval.",
+        "responses": {
+          "200": {
+            "description": "The search results or a job identifier.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Results"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/results": {
+      "get": {
+        "summary": "Get async results",
+        "description": "Retrieve the results or status of a queued job.",
+        "responses": {
+          "200": {
+            "description": "The job results or status.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Results"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/devices": {
+      "get": {
+        "summary": "Get devices",
+        "description": "Retrieve a list of supported smartphone and tablet devices.",
+        "responses": {
+          "200": {
+            "description": "The list of smartphone and tablet devices.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Results"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Results": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "example": "foo"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                { "$ref": "#/components/schemas/Organic" },
+                { "$ref": "#/components/schemas/OrganicWithSitelinks" }
+              ],
+              "discriminator": {
+                "propertyName": "type"
+              }
+            }
+          },
+          "resultsCount": {
+            "type": "integer",
+            "example": 43
+          },
+          "approxResultsCount": {
+            "type": "integer",
+            "example": 255000000
+          }
+        },
+        "required": ["query", "results", "resultsCount"]
+      },
+      "Organic": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["organic"]
+          },
+          "page": {
+            "type": "integer",
+            "example": 1
+          },
+          "section": {
+            "type": "string",
+            "example": "main"
+          },
+          "feature": {
+            "type": "integer",
+            "example": 1
+          },
+          "position": {
+            "type": "integer",
+            "example": 1
+          },
+          "url": {
+            "type": "string",
+            "example": "https://foofighters.com/"
+          },
+          "title": {
+            "type": "string",
+            "example": "Foo Fighters"
+          },
+          "site": {
+            "type": "string",
+            "example": "Foo Fighters"
+          },
+          "visibleUrl": {
+            "type": "string",
+            "example": "https://foofighters.com"
+          },
+          "date": {
+            "type": "string"
+          },
+          "snippet": {
+            "type": "string",
+            "example": "Official website of Foo Fighters."
+          },
+          "rating": {
+            "type": "number"
+          },
+          "votes": {
+            "type": "integer"
+          },
+          "sitelinks": {
+            "type": "array",
+            "items": {
+              "type": { "$ref": "#/components/schemas/Link" }
+            }
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": { "$ref": "#/components/schemas/Image" }
+            }
+          }
+        },
+        "required": [
+          "type",
+          "page",
+          "section",
+          "feature",
+          "position",
+          "url",
+          "title",
+          "site",
+          "visibleUrl",
+          "date",
+          "snippet",
+          "rating",
+          "votes",
+          "sitelinks",
+          "images"
+        ]
+      },
+      "OrganicWithSitelinks": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["organic-with-sitelinks"]
+          },
+          "page": {
+            "type": "integer"
+          },
+          "section": {
+            "type": "string"
+          },
+          "feature": {
+            "type": "integer"
+          },
+          "position": {
+            "type": "integer"
+          },
+          "url": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "site": {
+            "type": "string"
+          },
+          "visibleUrl": {
+            "type": "string"
+          },
+          "snippet": {
+            "type": "string"
+          },
+          "sitelinks": {
+            "type": "array",
+            "items": {
+              "type": { "$ref": "#/components/schemas/Sitelink" }
+            }
+          }
+        },
+        "required": [
+          "type",
+          "page",
+          "section",
+          "feature",
+          "position",
+          "url",
+          "title",
+          "site",
+          "visibleUrl",
+          "snippet",
+          "sitelinks"
+        ]
+      },
+      "Link": {
+        "type": "object",
+        "properties": {
+          "position": {
+            "type": "integer",
+            "example": 1
+          },
+          "url": {
+            "type": "string",
+            "example": "https://foofighters.com/tour-dates/"
+          },
+          "title": {
+            "type": "string",
+            "example": "Tour Dates"
+          }
+        },
+        "required": ["position", "url", "title"]
+      },
+      "Image": {
+        "type": "object",
+        "properties": {
+          "position": {
+            "type": "integer",
+            "example": 1
+          },
+          "source": {
+            "type": "string",
+            "example": "[Image data]"
+          },
+          "altText": {
+            "type": "string",
+            "example": "foo from en.wikipedia.org"
+          }
+        },
+        "required": ["position", "source", "altText"]
+      },
+      "Sitelink": {
+        "type": "object",
+        "properties": {
+          "position": {
+            "type": "integer"
+          },
+          "url": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "snippet": {
+            "type": "string"
+          }
+        },
+        "required": ["position", "url", "title", "snippet"]
+      }
+    }
+  }
+}

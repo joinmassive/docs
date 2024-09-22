@@ -112,7 +112,9 @@
                     {
                       "group": "Google",
                       "pages": [
-                        "api/beta/search/reference/google/todo"
+                        "api/beta/search/reference/google/search",
+                        "api/beta/search/reference/google/results",
+                        "api/beta/search/reference/google/devices"
                       ]
                     }
                   ]
