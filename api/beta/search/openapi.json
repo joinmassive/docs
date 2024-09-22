@@ -7,11 +7,11 @@
   },
   "servers": [
     {
-      "url": "https://beta.api.joinmassive.com/search"
+      "url": "https://beta.api.joinmassive.com"
     }
   ],
   "paths": {
-    "/": {
+    "/search": {
       "get": {
         "summary": "Get results",
         "description": "Retrieve real-time search results or queue results for later retrieval.",
@@ -32,7 +32,7 @@
         }
       }
     },
-    "/results": {
+    "/search/results": {
       "get": {
         "summary": "Get async results",
         "description": "Retrieve the results or status of a queued job.",
@@ -53,7 +53,7 @@
         }
       }
     },
-    "/devices": {
+    "/search/devices": {
       "get": {
         "summary": "Get devices",
         "description": "Retrieve a list of supported device names.",
