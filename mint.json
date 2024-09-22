@@ -109,14 +109,9 @@
                 {
                   "group": "API reference",
                   "pages": [
-                    {
-                      "group": "Google",
-                      "pages": [
-                        "api/beta/search/reference/google/search",
-                        "api/beta/search/reference/google/results",
-                        "api/beta/search/reference/google/devices"
-                      ]
-                    }
+                    "api/beta/search/reference/search",
+                    "api/beta/search/reference/search-results",
+                    "api/beta/search/reference/search-devices"
                   ]
                 }
               ]
