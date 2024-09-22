@@ -81,6 +81,8 @@
             "api/resellers/quickstart",
             {
               "group": "API reference",
+              "icon": "book",
+              "iconType": "light",
               "pages": [
                 "api/resellers/reference/create-account",
                 "api/resellers/reference/get-all-accounts",
@@ -103,6 +105,8 @@
             "api/beta/search/usage",
             {
               "group": "API reference",
+              "icon": "book",
+              "iconType": "light",
               "pages": [
                 "api/beta/search/reference/search",
                 "api/beta/search/reference/search-results",
