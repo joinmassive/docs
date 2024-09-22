@@ -43,7 +43,19 @@
       "pages": [
         "network/introduction",
         "network/start",
-        "network/authentication"
+        "network/authentication",
+        {
+          "group": "Sample code",
+          "icon": "code",
+          "iconType": "light",
+          "pages": [
+            "network/samples/puppeteer",
+            "network/samples/python",
+            "network/samples/scrapy",
+            "network/samples/ruby",
+            "network/samples/dotnet"
+          ]
+        }
       ]
     },
     {
@@ -55,19 +67,7 @@
         "network/device-type-targeting",
         "network/accounting",
         "network/usage-restrictions",
-        "network/error-handling",
-        {
-          "group": "Sample integrations",
-          "icon": "code",
-          "iconType": "light",
-          "pages": [
-            "network/samples/puppeteer",
-            "network/samples/python",
-            "network/samples/scrapy",
-            "network/samples/ruby",
-            "network/samples/dotnet"
-          ]
-        }
+        "network/error-handling"
       ]
     },
     {
