@@ -55,7 +55,7 @@
         "network/device-type-targeting",
         "network/accounting",
         "network/usage-restrictions",
-        "network/error-responses",
+        "network/error-handling",
         {
           "group": "Sample integrations",
           "icon": "code",
