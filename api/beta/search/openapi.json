@@ -21,7 +21,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Results"
+                  "oneOf": [
+                    { "$ref": "#/components/schemas/Results" },
+                    { "$ref": "#/components/schemas/Job" }
+                  ]
                 }
               }
             }
@@ -39,7 +42,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Results"
+                  "oneOf": [
+                    { "$ref": "#/components/schemas/Results" },
+                    { "$ref": "#/components/schemas/Status" }
+                  ]
                 }
               }
             }
@@ -57,7 +63,14 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Results"
+                  "type": "array",
+                  "items": { "type": "string" },
+                  "example": [
+                    "BlackBerry Z30",
+                    "BlackBerry Z30 landscape",
+                    "Galaxy Note 3",
+                    "[Remaining device names]"
+                  ]
                 }
               }
             }
@@ -286,6 +299,30 @@
           }
         },
         "required": ["position", "url", "title", "snippet"]
+      },
+      "Job": {
+        "type": "object",
+        "summary": "Search job",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The identifier to retrieve a queued job with",
+            "example": "078fd246-f0f7-44a0-aabb-cadd7b12454f"
+          }
+        },
+        "required": ["id"]
+      },
+      "Status": {
+        "type": "object",
+        "summary": "Job status",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "The status of a queued job",
+            "example": "retrieving"
+          }
+        },
+        "required": ["status"]
       }
     }
   }
