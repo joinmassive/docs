@@ -96,30 +96,23 @@
           ]
         },
         {
-          "group": "Beta endpoints",
-          "icon": "flask",
+          "group": "Search results (beta)",
+          "icon": "magnifying-glass",
           "iconType": "light",
           "pages": [
+            "api/beta/search/usage",
             {
-              "group": "Search results",
-              "icon": "magnifying-glass",
-              "iconType": "light",
+              "group": "API reference",
               "pages": [
-                "api/beta/search/usage",
-                {
-                  "group": "API reference",
-                  "pages": [
-                    "api/beta/search/reference/search",
-                    "api/beta/search/reference/search-results",
-                    "api/beta/search/reference/search-devices"
-                  ]
-                }
+                "api/beta/search/reference/search",
+                "api/beta/search/reference/search-results",
+                "api/beta/search/reference/search-devices"
               ]
-            },
-            "api/beta/superagent",
-            "api/beta/reporting"
+            }
           ]
-        }
+        },
+        "api/beta/superagent",
+        "api/beta/reporting"
       ]
     },
     {
