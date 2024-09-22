@@ -138,17 +138,20 @@
             "example": "https://foofighters.com"
           },
           "date": {
-            "type": "string"
+            "oneOf": [{ "type": "string" }, { "type": "null" }],
+            "example": null
           },
           "snippet": {
             "type": "string",
             "example": "Official website of Foo Fighters."
           },
           "rating": {
-            "type": "number"
+            "oneOf": [{ "type": "number" }, { "type": "null" }],
+            "example": null
           },
           "votes": {
-            "type": "integer"
+            "oneOf": [{ "type": "integer" }, { "type": "null" }],
+            "example": null
           },
           "sitelinks": {
             "type": "array",
