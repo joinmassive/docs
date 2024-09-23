@@ -7,12 +7,12 @@
   },
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#F77C69",
-    "light": "#FE9C92",
-    "dark": "#C73C1C",
+    "primary": "#f77c69",
+    "light": "#fe9c92",
+    "dark": "#c73c1c",
     "anchors": {
-      "from": "#F77C69",
-      "to": "#AD2E12"
+      "from": "#f77c69",
+      "to": "#ad2e12"
     }
   },
   "topbarLinks": [
@@ -63,11 +63,11 @@
       "pages": [
         "network/routing",
         "network/geotargeting",
-        "network/sticky-sessions",
-        "network/device-type-targeting",
+        "network/sessions",
+        "network/devices",
         "network/accounting",
-        "network/usage-restrictions",
-        "network/error-handling"
+        "network/restrictions",
+        "network/errors"
       ]
     },
     {
