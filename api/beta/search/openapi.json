@@ -20,6 +20,12 @@
           "200": {
             "description": "The search results or a job identifier.",
             "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string",
+                  "example": "<string>"
+                }
+              },
               "application/json": {
                 "schema": {
                   "oneOf": [{
