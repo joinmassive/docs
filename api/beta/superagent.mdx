@@ -1,8 +1,8 @@
 ---
-title: 'Superagent (unblocker) [beta]'
-icon: 'unlock'
-iconType: 'light'
-description: 'Crawl difficult-to-automate websites'
+title: Superagent (unblocker) [beta]
+icon: unlock
+iconType: light
+description: Crawl difficult-to-automate websites.
 ---
 
 ## Usage
@@ -10,7 +10,7 @@ description: 'Crawl difficult-to-automate websites'
 The “superagent” service browses intelligently on your behalf, rendering JavaScript, solving
 [CAPTCHAs](https://www.ibm.com/topics/captcha), and retrying failed requests along the way. The
 service has a RESTful interface that accepts `GET` requests at
-**https://&#8203;beta.api.joinmassive.com/superagent**.
+**https://&zwj;beta.api.joinmassive.com/superagent**.
 
 Webpages are retrieved in real time by default or can be queued for
 [later retrieval](#asynchronous-mode). Up to **120 seconds** is allotted per real-time API request
@@ -54,7 +54,7 @@ The keys and values that Massive supports are as follows:
 
 The `device` parameter lets you fetch device-specific content. For a list of supported devices, make
 a request with your API token and no parameters to
-**https://&#8203;beta.api.joinmassive.com/superagent/devices**:
+**https://&zwj;beta.api.joinmassive.com/superagent/devices**:
 
 ```bash
 $ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"            \
@@ -88,7 +88,7 @@ In response, the API will provide a JSON job identifier:
 ```
 
 The page content or job status can be requested at any time thereafter by passing a token and the
-identifier to **https://&#8203;beta.api.joinmassive.com/superagent/content**:
+identifier to **https://&zwj;beta.api.joinmassive.com/superagent/content**:
 
 ```bash
 $ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"                                                    \

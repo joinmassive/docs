@@ -1,18 +1,19 @@
 ---
-title: 'Accounting'
-icon: 'calculator'
-iconType: 'light'
-description: 'If you prefer to segregate requests for your customer invoicing or internal accounting, subaccounts can be provided.'
+title: Accounting
+icon: calculator
+iconType: light
+description: 'Provide subaccount names if you prefer to segregate requests for your customer
+invoicing or internal accounting.'
 ---
 
-| Key         | Value                                                                                                                     | Examples             |
-|-------------|---------------------------------------------------------------------------------------------------------------------------|----------------------|
-| subaccount  | Any unique identifier of up to 255 characters (regardless of character encoding); Massive will bill requests made from subaccounts separately | user@mail.com, user1 |
+| Key          | Value                                                                                                                                         | Example values                                        |
+| :----------- | :---------------------------------------------------------------------------------------------------------------------------------------------| :---------------------------------------------------- |
+| `subaccount` | Any unique identifier of up to 255 characters (regardless of character encoding); Massive will bill requests made from subaccounts separately | `customer@example.com`, `fredfoobar`, `jenny-8675309` |
 
-Example:
+#### Example request
 
 ```bash
 curl -x https://network.joinmassive.com:65535 \
-     -U '{PROXY_USERNAME}-subaccount-customer@example.com:{API_KEY}' \
+     -U '[PROXY USERNAME]-subaccount-customer@example.com:[API TOKEN]' \
      https://cloudflare.com/cdn-cgi/trace
 ```

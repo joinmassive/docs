@@ -1,14 +1,14 @@
 ---
-title: 'Usage'
-icon: 'lightbulb'
-iconType: 'light'
-description: 'Extract live results from popular search engines'
+title: Usage
+icon: lightbulb
+iconType: light
+description: Extract live results from popular search engines.
 ---
 
 ## Introduction
 
 The search service has a RESTful interface that accepts `GET` requests at
-**https://&#8203;beta.api.joinmassive.com/search**.
+**https://&zwj;beta.api.joinmassive.com/search**.
 
 Searches are performed in real time by default or can be queued for
 [later retrieval](#asynchronous-mode). Real-time searches take an average of a few seconds but may
@@ -59,7 +59,7 @@ The keys and values that Massive supports are as follows:
 The `device` parameter (which is currently limited to Google searches) lets you fetch
 device-specific results, rather than the default desktop results. For a list of supported smartphone
 and tablet devices, make a request with your API token and no parameters to
-**https://&#8203;beta.api.joinmassive.com/search/devices**:
+**https://&zwj;beta.api.joinmassive.com/search/devices**:
 
 ```bash
 $ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"        \
@@ -93,7 +93,7 @@ In response, the API will provide a JSON job identifier:
 ```
 
 The job results or status can be requested at any time thereafter by passing a token and the
-identifier to **https://&#8203;beta.api.joinmassive.com/search/results**:
+identifier to **https://&zwj;beta.api.joinmassive.com/search/results**:
 
 ```bash
 $ curl -H "Authorization: Bearer $MASSIVE_API_TOKEN"                                                \
