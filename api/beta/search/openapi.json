@@ -5,11 +5,12 @@
     "description": "Extract live results from popular search engines.",
     "version": "1.0.0-beta"
   },
-  "servers": [
-    {
-      "url": "https://beta.api.joinmassive.com"
-    }
-  ],
+  "servers": [{
+    "url": "https://beta.api.joinmassive.com"
+  }],
+  "security": [{
+    "bearerAuth": []
+  }],
   "paths": {
     "/search": {
       "get": {
@@ -21,10 +22,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    { "$ref": "#/components/schemas/Results" },
-                    { "$ref": "#/components/schemas/Job" }
-                  ]
+                  "oneOf": [{
+                    "$ref": "#/components/schemas/Results"
+                  }, {
+                    "$ref": "#/components/schemas/Job"
+                  }]
                 }
               }
             }
@@ -42,10 +44,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    { "$ref": "#/components/schemas/Results" },
-                    { "$ref": "#/components/schemas/Status" }
-                  ]
+                  "oneOf": [{
+                    "$ref": "#/components/schemas/Results"
+                  }, {
+                    "$ref": "#/components/schemas/Status"
+                  }]
                 }
               }
             }
@@ -64,7 +67,9 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": { "type": "string" },
+                  "items": {
+                    "type": "string"
+                  },
                   "example": [
                     "BlackBerry Z30", "BlackBerry Z30 landscape", "Galaxy Note 3", "<string>"
                   ]
@@ -77,6 +82,12 @@
     }
   },
   "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
     "schemas": {
       "Results": {
         "type": "object",
@@ -89,10 +100,11 @@
           "results": {
             "type": "array",
             "items": {
-              "oneOf": [
-                { "$ref": "#/components/schemas/Organic" },
-                { "$ref": "#/components/schemas/OrganicWithSitelinks" }
-              ],
+              "oneOf": [{
+                "$ref": "#/components/schemas/Organic"
+              }, {
+                "$ref": "#/components/schemas/OrganicWithSitelinks"
+              }],
               "discriminator": {
                 "propertyName": "type"
               }
@@ -167,11 +179,15 @@
           },
           "sitelinks": {
             "type": "array",
-            "items": { "$ref": "#/components/schemas/Link" }
+            "items": {
+              "$ref": "#/components/schemas/Link"
+            }
           },
           "images": {
             "type": "array",
-            "items": { "$ref": "#/components/schemas/Image" }
+            "items": {
+              "$ref": "#/components/schemas/Image"
+            }
           }
         },
         "required": [
@@ -229,7 +245,9 @@
           },
           "sitelinks": {
             "type": "array",
-            "items": { "$ref": "#/components/schemas/Sitelink" }
+            "items": {
+              "$ref": "#/components/schemas/Sitelink"
+            }
           }
         },
         "required": [
