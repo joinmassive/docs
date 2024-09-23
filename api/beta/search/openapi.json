@@ -67,6 +67,15 @@
                 }
               }
             }
+          },
+          "400": {
+            "$ref": "#/components/responses/paramsError"
+          },
+          "401": {
+            "$ref": "#/components/responses/authenticationError"
+          },
+          "403": {
+            "$ref": "#/components/responses/authorizationError"
           }
         }
       }
@@ -91,6 +100,12 @@
                 }
               }
             }
+          },
+          "400": {
+            "$ref": "#/components/responses/paramsError"
+          },
+          "401": {
+            "$ref": "#/components/responses/authenticationError"
           }
         }
       }
