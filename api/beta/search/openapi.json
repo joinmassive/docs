@@ -327,7 +327,7 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "The identifier to retrieve a queued search with",
+            "description": "The identifier to retrieve a queued search with.",
             "example": "078fd246-f0f7-44a0-aabb-cadd7b12454f"
           }
         },
@@ -340,7 +340,7 @@
           "status": {
             "type": "string",
             "enum": ["retrieving", "failed"],
-            "description": "The status of a queued search",
+            "description": "The status of a queued search.",
             "example": "retrieving"
           }
         },
