@@ -18,7 +18,7 @@
         "description": "Retrieve real-time search results or queue results for later retrieval.",
         "responses": {
           "200": {
-            "description": "The search results or a job identifier",
+            "description": "The search results or a job identifier.",
             "content": {
               "application/json": {
                 "schema": {
@@ -40,7 +40,7 @@
         "description": "Retrieve the results or status of a queued job.",
         "responses": {
           "200": {
-            "description": "The job results or status",
+            "description": "The job results or status.",
             "content": {
               "application/json": {
                 "schema": {
@@ -62,7 +62,7 @@
         "description": "Retrieve a list of supported device names.",
         "responses": {
           "200": {
-            "description": "The list of device names",
+            "description": "The list of device names.",
             "content": {
               "application/json": {
                 "schema": {

@@ -25,7 +25,7 @@
         ],
         "responses": {
           "200": {
-            "description": "The list of existing accounts",
+            "description": "The list of existing accounts.",
             "content": {
               "application/json": {
                 "schema": {
@@ -66,17 +66,17 @@
                 "properties": {
                   "username": {
                     "type": "string",
-                    "description": "The account username",
+                    "description": "The account username.",
                     "example": "johndoe@example.com"
                   },
                   "password": {
                     "type": "string",
-                    "description": "The account password",
+                    "description": "The account password.",
                     "example": "secret"
                   },
                   "limit": {
                     "type": "integer",
-                    "description": "The initial bandwidth in bytes allocated to the account",
+                    "description": "The initial bandwidth in bytes allocated to the account.",
                     "example": 1000000
                   }
                 }
@@ -122,7 +122,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "The account UUID",
+            "description": "The account UUID.",
             "required": true,
             "schema": {
               "type": "string"
@@ -136,7 +136,7 @@
         ],
         "responses": {
           "200": {
-            "description": "The account with the provided ID",
+            "description": "The account with the provided ID.",
             "content": {
               "application/json": {
                 "schema": {
@@ -173,7 +173,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "The account UUID",
+            "description": "The account UUID.",
             "required": true,
             "schema": {
               "type": "string"
@@ -194,17 +194,17 @@
                 "properties": {
                   "username": {
                     "type": "string",
-                    "description": "The new account username",
+                    "description": "The new account username.",
                     "example": "johndoe@example.com"
                   },
                   "password": {
                     "type": "string",
-                    "description": "The new account password",
+                    "description": "The new account password.",
                     "example": "secret"
                   },
                   "limit": {
                     "type": "integer",
-                    "description": "The new bandwidth in bytes to allocate to the account (which cannot be less than the existing bandwidth allocation)",
+                    "description": "The new bandwidth in bytes to allocate to the account (which cannot be less than the existing bandwidth allocation).",
                     "example": 1000000
                   }
                 }
@@ -256,7 +256,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "The account UUID",
+            "description": "The account UUID.",
             "required": true,
             "schema": {
               "type": "string"
@@ -270,7 +270,7 @@
         ],
         "responses": {
           "200": {
-            "description": "The list of bandwidth allocations",
+            "description": "The list of bandwidth allocations.",
             "content": {
               "application/json": {
                 "schema": {
@@ -307,7 +307,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "The account UUID",
+            "description": "The account UUID.",
             "required": true,
             "schema": {
               "type": "string"
@@ -328,7 +328,7 @@
                 "properties": {
                   "limit": {
                     "type": "integer",
-                    "description": "The (nonzero) bandwidth in bytes to allocate to the account",
+                    "description": "The (nonzero) bandwidth in bytes to allocate to the account.",
                     "example": 1000000
                   }
                 }
@@ -338,7 +338,7 @@
         },
         "responses": {
           "200": {
-            "description": "The bandwidth that was allocated to the account",
+            "description": "The bandwidth that was allocated to the account.",
             "content": {
               "application/json": {
                 "schema": {
@@ -377,7 +377,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "The account UUID",
+            "description": "The account UUID.",
             "required": true,
             "schema": {
               "type": "string"
@@ -430,7 +430,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "The account UUID",
+            "description": "The account UUID.",
             "required": true,
             "schema": {
               "type": "string"
@@ -483,7 +483,7 @@
           {
             "name": "id",
             "in": "path",
-            "description": "The account UUID",
+            "description": "The account UUID.",
             "required": true,
             "schema": {
               "type": "string"
@@ -492,7 +492,7 @@
           {
             "name": "from",
             "in": "query",
-            "description": "The time in Unix seconds from which to get the bandwidth usage",
+            "description": "The time in Unix seconds from which to get the bandwidth usage.",
             "schema": {
               "type": "string"
             }
@@ -500,7 +500,7 @@
           {
             "name": "to",
             "in": "query",
-            "description": "The time in Unix seconds until which to get the bandwidth usage",
+            "description": "The time in Unix seconds until which to get the bandwidth usage.",
             "schema": {
               "type": "string"
             }
@@ -513,7 +513,7 @@
         ],
         "responses": {
           "200": {
-            "description": "The bandwidth consumed by the account during the provided time period",
+            "description": "The bandwidth consumed by the account during the provided time period.",
             "content": {
               "application/json": {
                 "schema": {
@@ -555,43 +555,43 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "The account UUID",
+            "description": "The account UUID.",
             "example": "57ed834f-f6f6-47d4-ab23-5674d7866b32"
           },
           "username": {
             "type": "string",
-            "description": "The account username",
+            "description": "The account username.",
             "example": "johndoe@example.com"
           },
           "password": {
             "type": "string",
-            "description": "The account password",
+            "description": "The account password.",
             "example": "secret"
           },
           "limit": {
             "type": "integer",
-            "description": "The bandwidth in bytes allocated to the account",
+            "description": "The bandwidth in bytes allocated to the account.",
             "example": 1000000
           },
           "status": {
             "type": "string",
             "enum": ["enabled", "disabled"],
-            "description": "The account status",
+            "description": "The account status.",
             "example": "enabled"
           },
           "started_at": {
             "type": "integer",
-            "description": "The time in Unix seconds when the account was created",
+            "description": "The time in Unix seconds when the account was created.",
             "example": 1708526022
           },
           "updated_at": {
             "type": "integer",
-            "description": "The time in Unix seconds when the account was last updated",
+            "description": "The time in Unix seconds when the account was last updated.",
             "example": 1708528022
           },
           "limit_reached": {
             "type": "boolean",
-            "description": "Whether or not all the bandwidth allocated to the account has been consumed",
+            "description": "Whether or not all the bandwidth allocated to the account has been consumed.",
             "example": false
           }
         }
@@ -601,7 +601,7 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "The account UUID",
+            "description": "The account UUID.",
             "example": "57ed834f-f6f6-47d4-ab23-5674d7866b32"
           }
         }
@@ -613,12 +613,12 @@
           "properties": {
             "limit": {
               "type": "integer",
-              "description": "The bandwidth allocation in bytes",
+              "description": "The bandwidth allocation in bytes.",
               "example": 1000000
             },
             "created_at": {
               "type": "integer",
-              "description": "The time in Unix seconds when the bandwidth allocation was made",
+              "description": "The time in Unix seconds when the bandwidth allocation was made.",
               "example": 1708526022
             }
           }
@@ -629,12 +629,12 @@
         "properties": {
           "limit": {
             "type": "integer",
-            "description": "The bandwidth allocation in bytes",
+            "description": "The bandwidth allocation in bytes.",
             "example": 1000000
           },
           "created_at": {
             "type": "integer",
-            "description": "The time in Unix seconds when the bandwidth allocation was made",
+            "description": "The time in Unix seconds when the bandwidth allocation was made.",
             "example": 1708526022
           }
         }
@@ -644,17 +644,17 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "The account UUID",
+            "description": "The account UUID.",
             "example": "57ed834f-f6f6-47d4-ab23-5674d7866b32"
           },
           "usage": {
             "type": "integer",
-            "description": "The bandwidth in bytes consumed by the account",
+            "description": "The bandwidth in bytes consumed by the account.",
             "example": 12345
           },
           "limit": {
             "type": "integer",
-            "description": "The bandwidth in bytes allocated to the account",
+            "description": "The bandwidth in bytes allocated to the account.",
             "example": 1000000
           }
         }
@@ -664,7 +664,7 @@
         "properties": {
           "error": {
             "type": "string",
-            "description": "The error message",
+            "description": "The error message.",
             "example": "Account ID not provided"
           }
         }
@@ -680,7 +680,7 @@
               "properties": {
                 "error": {
                   "type": "string",
-                  "description": "The error message",
+                  "description": "The error message.",
                   "example": "Invalid request: Account ID not provided"
                 }
               }
@@ -697,7 +697,7 @@
               "properties": {
                 "error": {
                   "type": "string",
-                  "description": "The error message",
+                  "description": "The error message.",
                   "example": "Unauthorized"
                 }
               }
@@ -714,7 +714,7 @@
               "properties": {
                 "error": {
                   "type": "string",
-                  "description": "The error message",
+                  "description": "The error message.",
                   "example": "Forbidden"
                 }
               }
@@ -731,7 +731,7 @@
               "properties": {
                 "error": {
                   "type": "string",
-                  "description": "The error message",
+                  "description": "The error message.",
                   "example": "Account not found"
                 }
               }
@@ -748,7 +748,7 @@
               "properties": {
                 "error": {
                   "type": "string",
-                  "description": "The error message",
+                  "description": "The error message.",
                   "example": "Duplicate username"
                 }
               }
@@ -765,7 +765,7 @@
               "properties": {
                 "error": {
                   "type": "string",
-                  "description": "The error message",
+                  "description": "The error message.",
                   "example": "Internal server error"
                 }
               }
