@@ -6,14 +6,14 @@ description: 'Provide subaccount names if you prefer to segregate requests for y
 invoicing or internal accounting.'
 ---
 
-| Key          | Value                                                                                                                                         | Example values                                        |
-| :----------- | :---------------------------------------------------------------------------------------------------------------------------------------------| :---------------------------------------------------- |
-| `subaccount` | Any unique identifier of up to 255 characters (regardless of character encoding); Massive will bill requests made from subaccounts separately | `customer@example.com`, `fredfoobar`, `jenny-8675309` |
+| Key          | Value                                                                                                                                         | Example values                                                |
+| :----------- | :---------------------------------------------------------------------------------------------------------------------------------------------| :------------------------------------------------------------ |
+| `subaccount` | Any unique identifier of up to 255 characters (regardless of character encoding); Massive will bill requests made from subaccounts separately | `customer@example.com`<br />`fredfoobar`<br />`jenny-8675309` |
 
-#### Example request
+**Example request**
 
 ```bash
 curl -x https://network.joinmassive.com:65535 \
-     -U '[PROXY USERNAME]-subaccount-customer@example.com:[API TOKEN]' \
+     -U '[PROXY USERNAME]-subaccount-customer@example.com:[PROXY TOKEN]' \
      https://cloudflare.com/cdn-cgi/trace
 ```
