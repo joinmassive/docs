@@ -17,7 +17,11 @@
   },
   "topbarLinks": [
     {
-      "name": "Support",
+      "name": "Blog",
+      "url": "https://www.joinmassive.com/blog"
+    },
+    {
+      "name": "Help",
       "url": "https://joinmassive.atlassian.net/servicedesk/customer/portal/2/group/2/create/10"
     }
   ],
@@ -25,21 +29,9 @@
     "name": "Dashboard",
     "url": "https://partners.joinmassive.com"
   },
-  "anchors": [
-    {
-      "name": "Blog",
-      "icon": "newspaper",
-      "url": "https://www.joinmassive.com/blog"
-    },
-    {
-      "name": "Support",
-      "icon": "ticket",
-      "url": "https://joinmassive.atlassian.net/servicedesk/customer/portal/2/group/2/create/10"
-    }
-  ],
   "navigation": [
     {
-      "group": "Get Started",
+      "group": "Getting started",
       "pages": [
         "network/introduction",
         "network/start",
