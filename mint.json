@@ -2,8 +2,8 @@
   "$schema": "https://mintlify.com/schema.json",
   "name": "Documentation",
   "logo": {
-    "dark": "/logo/dark.svg",
-    "light": "/logo/light.svg"
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
   },
   "favicon": "/favicon.svg",
   "colors": {
@@ -15,134 +15,126 @@
       "to": "#ad2e12"
     }
   },
-  "topbarLinks": [
-    {
-      "name": "Blog",
-      "url": "https://www.joinmassive.com/blog"
-    },
-    {
-      "name": "Help",
-      "url": "https://joinmassive.atlassian.net/servicedesk/customer/portal/2/group/2/create/10"
-    }
-  ],
+  "topbarLinks": [{
+    "name": "Blog",
+    "url": "https://www.joinmassive.com/blog"
+  }, {
+    "name": "Help",
+    "url": "https://joinmassive.atlassian.net/servicedesk/customer/portal/2/group/2/create/10"
+  }],
   "topbarCtaButton": {
     "name": "Dashboard",
-    "url": "https://partners.joinmassive.com"
+    "url": "https://partners.joinmassive.com/"
   },
-  "navigation": [
-    {
-      "group": "Getting started",
-      "pages": [
-        "network/introduction",
-        "network/start",
-        "network/authentication",
-        {
-          "group": "Sample code",
-          "icon": "code",
-          "iconType": "light",
-          "pages": [
-            "network/samples/puppeteer",
-            "network/samples/python",
-            "network/samples/scrapy",
-            "network/samples/ruby",
-            "network/samples/dotnet"
-          ]
-        }
-      ]
-    },
-    {
-      "group": "Proxy Configuration",
-      "pages": [
-        "network/routing",
-        "network/geotargeting",
-        "network/sessions",
-        "network/devices",
-        "network/accounting",
-        "network/restrictions",
-        "network/errors"
-      ]
-    },
-    {
-      "group": "Data API",
-      "pages": [
-        {
-          "group": "For resellers",
-          "icon": "users",
-          "iconType": "light",
-          "pages": [
-            "api/resellers/introduction",
-            "api/resellers/authentication",
-            "api/resellers/start",
-            {
-              "group": "API reference",
-              "icon": "book",
-              "iconType": "light",
-              "pages": [
-                "api/resellers/reference/create-account",
-                "api/resellers/reference/get-all-accounts",
-                "api/resellers/reference/get-account",
-                "api/resellers/reference/get-account-allocations",
-                "api/resellers/reference/get-account-usage",
-                "api/resellers/reference/update-account",
-                "api/resellers/reference/allocate-bandwidth",
-                "api/resellers/reference/disable-account",
-                "api/resellers/reference/enable-account"
-              ]
-            }
-          ]
-        },
-        {
-          "group": "Search results (beta)",
-          "icon": "magnifying-glass",
-          "iconType": "light",
-          "pages": [
-            "api/beta/search/usage",
-            {
-              "group": "API reference",
-              "icon": "book",
-              "iconType": "light",
-              "pages": [
-                "api/beta/search/reference/search",
-                "api/beta/search/reference/search-results",
-                "api/beta/search/reference/search-devices"
-              ]
-            }
-          ]
-        },
-        "api/beta/superagent",
-        "api/beta/reporting"
-      ]
-    },
-    {
-      "group": "Monetization SDK",
-      "pages": [
-        "sdk/introduction",
-        "sdk/start",
-        {
-          "group": "Desktop",
-          "icon": "desktop",
-          "iconType": "light",
-          "pages": [
-            "sdk/desktop",
-            "sdk/desktop-windows",
-            "sdk/desktop-mac-objective-c",
-            "sdk/desktop-mac-swift"
-          ]
-        },
-        {
-          "group": "Mobile & smart TV",
-          "icon": "mobile",
-          "iconType": "light",
-          "pages": [
-            "sdk/mobile-and-smart-tv",
-            "sdk/mobile-android",
-            "sdk/tv-fire",
-            "sdk/mobile-ios"
-          ]
-        }
-      ]
-    }
-  ],
+  "navigation": [{
+    "group": "Getting started",
+    "pages": [
+      "network/introduction",
+      "network/start",
+      "network/authentication",
+      {
+        "group": "Sample code",
+        "icon": "code",
+        "iconType": "light",
+        "pages": [
+          "network/samples/puppeteer",
+          "network/samples/python",
+          "network/samples/scrapy",
+          "network/samples/ruby",
+          "network/samples/dotnet"
+        ]
+      }
+    ]
+  }, {
+    "group": "Proxy Configuration",
+    "pages": [
+      "network/routing",
+      "network/geotargeting",
+      "network/sessions",
+      "network/devices",
+      "network/accounting",
+      "network/restrictions",
+      "network/errors"
+    ]
+  }, {
+    "group": "Data API",
+    "pages": [
+      {
+        "group": "For resellers",
+        "icon": "users",
+        "iconType": "light",
+        "pages": [
+          "api/resellers/introduction",
+          "api/resellers/authentication",
+          "api/resellers/start",
+          {
+            "group": "API reference",
+            "icon": "book",
+            "iconType": "light",
+            "pages": [
+              "api/resellers/reference/create-account",
+              "api/resellers/reference/get-all-accounts",
+              "api/resellers/reference/get-account",
+              "api/resellers/reference/get-account-allocations",
+              "api/resellers/reference/get-account-usage",
+              "api/resellers/reference/update-account",
+              "api/resellers/reference/allocate-bandwidth",
+              "api/resellers/reference/disable-account",
+              "api/resellers/reference/enable-account"
+            ]
+          }
+        ]
+      },
+      {
+        "group": "Search results (beta)",
+        "icon": "magnifying-glass",
+        "iconType": "light",
+        "pages": [
+          "api/beta/search/usage",
+          {
+            "group": "API reference",
+            "icon": "book",
+            "iconType": "light",
+            "pages": [
+              "api/beta/search/reference/search",
+              "api/beta/search/reference/search-results",
+              "api/beta/search/reference/search-devices"
+            ]
+          }
+        ]
+      },
+      "api/beta/superagent",
+      "api/beta/reporting"
+    ]
+  }, {
+    "group": "Monetization SDK",
+    "pages": [
+      "sdk/introduction",
+      "sdk/start",
+      {
+        "group": "Desktop",
+        "icon": "desktop",
+        "iconType": "light",
+        "pages": [
+          "sdk/desktop",
+          "sdk/desktop-windows",
+          "sdk/desktop-mac-objective-c",
+          "sdk/desktop-mac-swift"
+        ]
+      },
+      {
+        "group": "Mobile & smart TV",
+        "icon": "mobile",
+        "iconType": "light",
+        "pages": [
+          "sdk/mobile-and-smart-tv",
+          "sdk/mobile-android",
+          "sdk/tv-fire",
+          "sdk/mobile-ios"
+        ]
+      }
+    ]
+  }],
   "footerSocials": {
     "github": "https://github.com/joinmassive",
     "linkedin": "https://www.linkedin.com/company/11871328/admin/dashboard/",
