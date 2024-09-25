@@ -1,0 +1,10 @@
+.py-1\.5 {
+  padding-top: .25rem;
+  padding-bottom: .25rem;
+}
+
+@media (min-width: 1024px) {
+  .lg\:mt-8 {
+    margin-top: 1rem;
+  }
+}
