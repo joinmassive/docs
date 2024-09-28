@@ -128,7 +128,6 @@
           "schema": {
             "type": "integer",
             "minimum": 0,
-            "maximum": 1,
             "default": 1
           }
         }, {
@@ -343,7 +342,6 @@
           "expiration": {
             "type": "integer",
             "minimum": 0,
-            "maximum": 1,
             "description": "The maximum age of accepted cached results.",
             "example": 1
           }
