@@ -163,12 +163,12 @@
           },
           "pageCount": {
             "type": "integer",
-            "description": "The number of requested results pages.",
+            "description": "The number of retrieved results pages.",
             "example": 1
           },
           "pageSize": {
             "type": ["integer", "null"],
-            "description": "The number of requested results per page.",
+            "description": "The number of retrieved results per page.",
             "example": null
           },
           "device": {
