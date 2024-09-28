@@ -16,6 +16,129 @@
       "get": {
         "summary": "Get results",
         "description": "Retrieve real-time search results or queue results for later retrieval.",
+        "parameters": [{
+          "name": "terms",
+          "in": "query",
+          "description": "The broad or exact word or phrase to query (e.g., `foo bar baz` or `\"foo bar baz\"`); the terms require [form or URL encoding](https://developer.mozilla.org/en-US/docs/Glossary/Percent-encoding) (with any space character being replaced by a `+` character or `%20` sequence).",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }, {
+          "name": "serps",
+          "in": "query",
+          "description": "The number of results pages to retrieve.",
+          "schema": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10,
+            "default": 1
+          }
+        }, {
+          "name": "size",
+          "in": "query",
+          "description": "**[Google only]** The number of results per page to retrieve; page size is unset by default.",
+          "schema": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          }
+        }, {
+          "name": "offset",
+          "in": "query",
+          "description": "**[Google only]** The number of initial results to skip; results aren’t offset by default.",
+          "schema": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          }
+        }, {
+          "name": "engine",
+          "in": "query",
+          "description": "The search engine to use.",
+          "schema": {
+            "type": "string",
+            "enum": ["google", "bing", "duckduckgo"],
+            "default": "google"
+          }
+        }, {
+          "name": "device",
+          "in": "query",
+          "description": "**[Google only]** The name as returned by the [devices endpoint](search-devices) of the device to emulate searching on (these names are case insensitive but must include form- or URL-encoded spaces and punctuation marks); searching is done on a desktop browser by default.",
+          "schema": {
+            "type": "string"
+          }
+        }, {
+          "name": "country",
+          "in": "query",
+          "description": "The [two-letter ISO code](https://www.iso.org/obp/ui/#search/code) of the country to search from (these codes are case insensitive); a random country will be used by default.",
+          "schema": {
+            "type": "string"
+          }
+        }, {
+          "name": "subdivision",
+          "in": "query",
+          "description": "The alphanumeric second part (proceeding the separator) of a [first-level subdivision code](https://www.iso.org/obp/ui/#search/code) in the (prerequisite) country to search from (these codes are case insensitive); a random subdivision will be used by default.",
+          "schema": {
+            "type": "string"
+          }
+        }, {
+          "name": "city",
+          "in": "query",
+          "description": "The [commonly spelled name](https://www.geonames.org/) of the city in the (prerequisite) country to search from (these names are temporarily case sensitive and required to include form- or URL-encoded spaces and punctuation marks); a random city will be used by default.",
+          "schema": {
+            "type": "string"
+          }
+        }, {
+          "name": "uule",
+          "in": "query",
+          "description": "**[Google only]** The [proprietary encoded string](https://moz.com/blog/geolocation-the-ultimate-tip-to-emulate-local-search) for emulating the location to search from; if possible, the actual location will be searched from not emulated; location emulation is unused by default.",
+          "schema": {
+            "type": "string"
+          }
+        }, {
+          "name": "language",
+          "in": "query",
+          "description": "**[Google only]** The commonly spelled name, [two-letter ISO code](https://www.loc.gov/standards/iso639-2/php/code_list.php), or [Google code](https://www.google.com/advanced_search) of the language to search in (these names and codes are case insensitive but required to include form- or URL-encoded spaces and punctuation marks); the language is unset by default.",
+          "schema": {
+            "type": "string"
+          }
+        }, {
+          "name": "mode",
+          "in": "query",
+          "description": "The synchronous or asynchronous timing of when to retrieve results (see the [async endpoint](search-results)).",
+          "schema": {
+            "type": "string",
+            "enum": ["sync", "async"],
+            "default": "sync"
+          }
+        }, {
+          "name": "format",
+          "in": "query",
+          "description": "The format to output to.",
+          "schema": {
+            "type": "string",
+            "enum": ["html", "json"],
+            "default": "html"
+          }
+        }, {
+          "name": "expiration",
+          "in": "query",
+          "description": "The maximum age of cached results in days to accept, where `0` will disable caching.",
+          "schema": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 1
+          }
+        }, {
+          "name": "subaccount",
+          "in": "query",
+          "description": "Any unique identifier of up to 255 characters (regardless of character encoding); Massive will bill requests made from subaccounts separately.",
+          "schema": {
+            "type": "string"
+          }
+        }],
         "responses": {
           "200": {
             "description": "The search results or a job identifier.",
@@ -155,7 +278,7 @@
           "approxResultsCount": {
             "type": "integer",
             "minimum": 0,
-            "description": "The approximate number of indexed results.",
+            "description": "**[Google only]** The approximate number of indexed results.",
             "example": 255000000
           },
           "resultsOffset": {
@@ -163,7 +286,7 @@
             "minimum": 0,
             "maximum": 100,
             "nullable": true,
-            "description": "The number of skipped initial results.",
+            "description": "**[Google only]** The number of skipped initial results.",
             "example": null
           },
           "pageCount": {
@@ -178,13 +301,13 @@
             "minimum": 0,
             "maximum": 100,
             "nullable": true,
-            "description": "The number of retrieved results per page.",
+            "description": "**[Google only]** The number of retrieved results per page.",
             "example": null
           },
           "device": {
             "type": "string",
             "nullable": true,
-            "description": "The name of the emulated device.",
+            "description": "**[Google only]** The name of the emulated device.",
             "example": null
           },
           "country": {
@@ -208,13 +331,13 @@
           "uule": {
             "type": "string",
             "nullable": true,
-            "description": "The encoded string of the emulated location.",
+            "description": "**[Google only]** The encoded string of the emulated location.",
             "example": null
           },
           "language": {
             "type": "string",
             "nullable": true,
-            "description": "The name, ISO code, or Google code of the requested language.",
+            "description": "**[Google only]** The name, ISO code, or Google code of the requested language.",
             "example": null
           },
           "expiration": {
@@ -230,15 +353,10 @@
           "terms",
           "results",
           "resultsCount",
-          "resultsOffset",
           "pageCount",
-          "pageSize",
-          "device",
           "country",
           "subdivision",
           "city",
-          "uule",
-          "language",
           "expiration"
         ]
       },
