@@ -46,12 +46,12 @@
       }
     ]
   }, {
-    "group": "Proxy Configuration",
+    "group": "Proxy configuration",
     "pages": [
       "network/routing",
       "network/geotargeting",
-      "network/sessions",
       "network/devices",
+      "network/sessions",
       "network/accounting",
       "network/restrictions",
       "network/errors"
@@ -60,7 +60,7 @@
     "group": "Data API",
     "pages": [
       {
-        "group": "For resellers",
+        "group": "Reseller tools",
         "icon": "users",
         "iconType": "light",
         "pages": [
