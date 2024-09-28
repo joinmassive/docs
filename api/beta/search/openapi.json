@@ -175,6 +175,15 @@
       "get": {
         "summary": "Get async results",
         "description": "Retrieve the results or status of a queued job.",
+        "parameters": [{
+          "name": "id",
+          "in": "query",
+          "description": "The identifier returned by the [search endpoint](search) of the job results or status to retrieve.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }],
         "responses": {
           "200": {
             "description": "The job results or status.",
