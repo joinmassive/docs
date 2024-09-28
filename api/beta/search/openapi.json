@@ -174,11 +174,11 @@
     "/search/results": {
       "get": {
         "summary": "Get async results",
-        "description": "Retrieve the results or status of a queued job.",
+        "description": "Retrieve the results or status of a queued search.",
         "parameters": [{
           "name": "id",
           "in": "query",
-          "description": "The identifier returned by the [search endpoint](search) of the job results or status to retrieve.",
+          "description": "The identifier returned by the [search endpoint](search) of the queued search to retrieve.",
           "required": true,
           "schema": {
             "type": "string"
