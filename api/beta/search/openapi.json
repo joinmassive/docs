@@ -148,61 +148,79 @@
           },
           "resultsCount": {
             "type": "integer",
+            "minimum": 0,
             "description": "The number of parsed results.",
             "example": 43
           },
           "approxResultsCount": {
             "type": "integer",
+            "minimum": 0,
             "description": "The approximate number of indexed results.",
             "example": 255000000
           },
           "resultsOffset": {
-            "type": ["integer", "null"],
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100,
+            "nullable": true,
             "description": "The number of skipped initial results.",
             "example": null
           },
           "pageCount": {
             "type": "integer",
+            "minimum": 1,
+            "maximum": 10,
             "description": "The number of retrieved results pages.",
             "example": 1
           },
           "pageSize": {
-            "type": ["integer", "null"],
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100,
+            "nullable": true,
             "description": "The number of retrieved results per page.",
             "example": null
           },
           "device": {
-            "type": ["string", "null"],
+            "type": "string",
+            "nullable": true,
             "description": "The name of the emulated device.",
             "example": null
           },
           "country": {
-            "type": ["string", "null"],
+            "type": "string",
+            "nullable": true,
             "description": "The ISO code of the requested country.",
             "example": null
           },
           "subdivision": {
-            "type": ["string", "null"],
+            "type": "string",
+            "nullable": true,
             "description": "The partial ISO code of the requested subdivision.",
             "example": null
           },
           "city": {
-            "type": ["string", "null"],
+            "type": "string",
+            "nullable": true,
             "description": "The name of the requested city.",
             "example": null
           },
           "uule": {
-            "type": ["string", "null"],
+            "type": "string",
+            "nullable": true,
             "description": "The encoded string of the emulated location.",
             "example": null
           },
           "language": {
-            "type": ["string", "null"],
+            "type": "string",
+            "nullable": true,
             "description": "The name, ISO code, or Google code of the requested language.",
             "example": null
           },
           "expiration": {
             "type": "integer",
+            "minimum": 0,
+            "maximum": 1,
             "description": "The maximum age of accepted cached results.",
             "example": 1
           }
@@ -234,6 +252,8 @@
           },
           "page": {
             "type": "integer",
+            "minimum": 1,
+            "maximum": 10,
             "example": 1
           },
           "section": {
@@ -242,10 +262,12 @@
           },
           "feature": {
             "type": "integer",
+            "minimum": 1,
             "example": 1
           },
           "position": {
             "type": "integer",
+            "minimum": 1,
             "example": 1
           },
           "url": {
@@ -265,7 +287,8 @@
             "example": "https://foofighters.com"
           },
           "date": {
-            "type": ["string", "null"],
+            "type": "string",
+            "nullable": true,
             "example": null
           },
           "snippet": {
@@ -273,11 +296,16 @@
             "example": "Official website of Foo Fighters."
           },
           "rating": {
-            "type": ["number", "null"],
+            "type": "number",
+            "minimum": 0,
+            "maximum": 5,
+            "nullable": true,
             "example": null
           },
           "votes": {
-            "type": ["integer", "null"],
+            "type": "integer",
+            "minimum": 0,
+            "nullable": true,
             "example": null
           },
           "sitelinks": {
@@ -320,16 +348,20 @@
             "enum": ["organic-with-sitelinks"]
           },
           "page": {
-            "type": "integer"
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10
           },
           "section": {
             "type": "string"
           },
           "feature": {
-            "type": "integer"
+            "type": "integer",
+            "minimum": 1
           },
           "position": {
-            "type": "integer"
+            "type": "integer",
+            "minimum": 1
           },
           "url": {
             "type": "string"
@@ -373,6 +405,7 @@
         "properties": {
           "position": {
             "type": "integer",
+            "minimum": 1,
             "example": 1
           },
           "url": {
@@ -392,6 +425,7 @@
         "properties": {
           "position": {
             "type": "integer",
+            "minimum": 1,
             "example": 1
           },
           "source": {
@@ -410,7 +444,8 @@
         "summary": "Sitelink element",
         "properties": {
           "position": {
-            "type": "integer"
+            "type": "integer",
+            "minimum": 1
           },
           "url": {
             "type": "string"
