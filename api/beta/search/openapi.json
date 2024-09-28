@@ -25,6 +25,15 @@
             "type": "string"
           }
         }, {
+          "name": "engine",
+          "in": "query",
+          "description": "The search engine to use.",
+          "schema": {
+            "type": "string",
+            "enum": ["google", "bing", "duckduckgo"],
+            "default": "google"
+          }
+        }, {
           "name": "serps",
           "in": "query",
           "description": "The number of results pages to retrieve.",
@@ -51,15 +60,6 @@
             "type": "integer",
             "minimum": 0,
             "maximum": 100
-          }
-        }, {
-          "name": "engine",
-          "in": "query",
-          "description": "The search engine to use.",
-          "schema": {
-            "type": "string",
-            "enum": ["google", "bing", "duckduckgo"],
-            "default": "google"
           }
         }, {
           "name": "device",
