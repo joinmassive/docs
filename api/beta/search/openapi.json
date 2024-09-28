@@ -126,11 +126,11 @@
           "engine": {
             "type": "string",
             "enum": ["google"],
-            "description": "The search engine used."
+            "description": "The used search engine."
           },
           "terms": {
             "type": "string",
-            "description": "The broad or exact word or phrase queried.",
+            "description": "The queried word or phrase.",
             "example": "foo"
           },
           "results": {
@@ -148,62 +148,62 @@
           },
           "resultsCount": {
             "type": "integer",
-            "description": "The number of results parsed.",
+            "description": "The number of parsed results.",
             "example": 43
           },
           "approxResultsCount": {
             "type": "integer",
-            "description": "The number of results indexed.",
+            "description": "The number of indexed results.",
             "example": 255000000
           },
           "resultsOffset": {
             "type": ["integer", "null"],
-            "description": "The number of initial results skipped.",
+            "description": "The number of skipped initial results.",
             "example": null
           },
           "pageCount": {
             "type": "integer",
-            "description": "The number of results pages retrieved.",
+            "description": "The number of retrieved results pages.",
             "example": 1
           },
           "pageSize": {
             "type": ["integer", "null"],
-            "description": "The number of results per page retrieved.",
+            "description": "The number of retrieved results per page.",
             "example": null
           },
           "device": {
             "type": ["string", "null"],
-            "description": "The name of the emulated device searched on.",
+            "description": "The name of the emulated device.",
             "example": null
           },
           "country": {
             "type": ["string", "null"],
-            "description": "The ISO code of the country searched from.",
+            "description": "The ISO code of the searched-from country.",
             "example": null
           },
           "subdivision": {
             "type": ["string", "null"],
-            "description": "The partial ISO code of the subdivision searched from.",
+            "description": "The partial ISO code of the searched-from subdivision.",
             "example": null
           },
           "city": {
             "type": ["string", "null"],
-            "description": "The name of the city searched from.",
+            "description": "The name of the searched-from city.",
             "example": null
           },
           "uule": {
             "type": ["string", "null"],
-            "description": "The encoded string of the emulated location searched from.",
+            "description": "The encoded string of the emulated location.",
             "example": null
           },
           "language": {
             "type": ["string", "null"],
-            "description": "The name, ISO code, or Google code of the language searched in.",
+            "description": "The name, ISO code, or Google code of the searched-in language.",
             "example": null
           },
           "expiration": {
             "type": "integer",
-            "description": "The maximum age of cached results accepted.",
+            "description": "The maximum age of accepted cached results.",
             "example": 1
           }
         },
