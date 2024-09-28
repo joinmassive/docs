@@ -126,7 +126,7 @@
           "engine": {
             "type": "string",
             "enum": ["google"],
-            "description": "The used search engine."
+            "description": "The queried search engine."
           },
           "terms": {
             "type": "string",
@@ -153,7 +153,7 @@
           },
           "approxResultsCount": {
             "type": "integer",
-            "description": "The number of indexed results.",
+            "description": "The approximate number of indexed results.",
             "example": 255000000
           },
           "resultsOffset": {
@@ -163,12 +163,12 @@
           },
           "pageCount": {
             "type": "integer",
-            "description": "The number of retrieved results pages.",
+            "description": "The number of requested results pages.",
             "example": 1
           },
           "pageSize": {
             "type": ["integer", "null"],
-            "description": "The number of retrieved results per page.",
+            "description": "The number of requested results per page.",
             "example": null
           },
           "device": {
@@ -178,17 +178,17 @@
           },
           "country": {
             "type": ["string", "null"],
-            "description": "The ISO code of the searched-from country.",
+            "description": "The ISO code of the requested country.",
             "example": null
           },
           "subdivision": {
             "type": ["string", "null"],
-            "description": "The partial ISO code of the searched-from subdivision.",
+            "description": "The partial ISO code of the requested subdivision.",
             "example": null
           },
           "city": {
             "type": ["string", "null"],
-            "description": "The name of the searched-from city.",
+            "description": "The name of the requested city.",
             "example": null
           },
           "uule": {
@@ -198,7 +198,7 @@
           },
           "language": {
             "type": ["string", "null"],
-            "description": "The name, ISO code, or Google code of the searched-in language.",
+            "description": "The name, ISO code, or Google code of the requested language.",
             "example": null
           },
           "expiration": {
