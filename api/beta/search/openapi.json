@@ -122,15 +122,6 @@
             "default": "html"
           }
         }, {
-          "name": "expiration",
-          "in": "query",
-          "description": "The maximum age of cached results in days to accept, where `0` will disable caching.",
-          "schema": {
-            "type": "integer",
-            "minimum": 0,
-            "default": 1
-          }
-        }, {
           "name": "subaccount",
           "in": "query",
           "description": "Any unique identifier of up to 255 characters (regardless of character encoding); Massive will bill requests made from subaccounts separately.",
@@ -347,12 +338,6 @@
             "nullable": true,
             "description": "**[Google only]** The name, ISO code, or Google code of the requested language.",
             "example": null
-          },
-          "expiration": {
-            "type": "integer",
-            "minimum": 0,
-            "description": "The maximum age of accepted cached results.",
-            "example": 1
           }
         },
         "required": [
@@ -363,8 +348,7 @@
           "pageCount",
           "country",
           "subdivision",
-          "city",
-          "expiration"
+          "city"
         ]
       },
       "Organic": {
