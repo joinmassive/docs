@@ -367,6 +367,7 @@
           },
           "section": {
             "type": "string",
+            "enum": ["top", "left", "main", "bottom", "right"],
             "example": "main"
           },
           "feature": {
@@ -462,7 +463,8 @@
             "maximum": 10
           },
           "section": {
-            "type": "string"
+            "type": "string",
+            "enum": ["top", "left", "main", "bottom", "right"]
           },
           "feature": {
             "type": "integer",
