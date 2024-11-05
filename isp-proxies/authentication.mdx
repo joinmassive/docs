@@ -1,0 +1,35 @@
+---
+title: 'Authentication'
+description: 'We support HTTP and SOCKS5'
+---
+
+<Info>
+  **Attention:** Make sure to carefully check that your credentials and port number are correct for your auth type.
+</Info>
+
+## HTTP
+
+How to authenticate using HTTP.
+
+|             |                     |
+|-------------|---------------------|
+| HTTP Port  | 4080              |
+
+```bash
+curl --proxy http:/isp.joinmassive.com:4080 -U '{PROXY_USERNAME}:{API_KEY}' https://cloudflare.com/cdn-cgi/trace
+
+```
+
+## SOCKS5
+
+How to authenticate using SOCKS5.
+
+|             |                     |
+|-------------|---------------------|
+| SOCKS5 Port  | 4080                |
+
+```bash
+curl -x socks5h://isp.joinmassive.com:4080 -U '{PROXY_USERNAME}:{API_KEY}' https://www.cloudflare.com/cdn-cgi/trace
+```
+
+> **Note:** We support ports 33080 and 4080.

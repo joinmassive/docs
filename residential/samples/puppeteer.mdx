@@ -1,0 +1,24 @@
+---
+title: 'Puppeteer'
+description: 'Integrate the Massive Network into your Puppeteer workflows by setting the `--proxy-server` launch flag then calling a page object’s `authenticate` method:'
+---
+
+```javascript
+#!/usr/bin/env node
+const puppeteer = require('puppeteer');
+
+(async () => {
+  const browser = await puppeteer.launch({
+                    args: ['--proxy-server=https://network.joinmassive.com:65535']
+                  });
+  const page    = (await browser.pages())[0];
+
+  await page.authenticate({
+    username: '{PROXY_USERNAME},
+    password: '{API_KEY}'
+  });
+  await page.goto('https://cloudflare.com/cdn-cgi/trace'); // Insert your target URL here
+  console.log(await page.content());
+  browser.close();
+})();
+```

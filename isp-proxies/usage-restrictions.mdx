@@ -1,0 +1,23 @@
+---
+title: 'Usage restrictions'
+description: 'Some limitations apply to HTTP and SOCKS5 endpoints for ISP proxies.'
+---
+
+## General Restrictions
+- **No UDP Support:** UDP communication is restricted by default. [Contact support](support@joinmassive.com) if you require access.
+- **Limited Ports:** Only standard ports (80, 443) are available.
+    - Allowed: `http://example.com/`, `https://example.com/`
+    - Not Allowed: `http://example.com:8080`
+- **Content Policy:** The ISP proxy network is designed for activities falling within the legal framework of all jurisdictions. Requests targeting high-risk, offensive, harmful, or illegal content may be blocked.
+
+Requests blocked due to protocol, port, or content restrictions return a `452 Disallowed Content` error.
+
+## Restricted Domains
+We restrict access to content that is generally used to evade the law or site TOS policies. If you are getting blocked from accessing certain content that you have a legitimate reason to access, then [contact support](https://joinmassive.atlassian.net/servicedesk/customer/portal/2/group/2/create/13) to complete our KYC process to gain access.
+
+## Port 25
+`Port 25` is not opened on our ISP proxy network. Submit a request if this feature is necessary.
+
+## Request access
+
+ [Contact support](https://joinmassive.atlassian.net/servicedesk/customer/portal/2/group/2/create/13) if you have questions about our policies or want to complete KYC to gain access to content that is restricted by default.

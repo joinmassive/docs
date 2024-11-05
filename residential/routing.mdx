@@ -1,0 +1,26 @@
+---
+title: 'Request routing'
+description: 'Our robust proxy services allows for geotargeting, sticky sessions, device type targeting, and advanced accounting and reporting.'
+---
+
+Massive accepts extended user IDs that let you add targeting specifications to requests. Append a standard URL query string with routing parameters to your proxy username. You can combine routing parameters in any order.
+
+## Standard syntax
+
+Our proxy protocol uses `-` syntax to append routing parameters, which will used throughout our documentation.
+
+```bash
+curl -x https://network.joinmassive.com:65535 \
+     -U '{PROXY_USERNAME}-country-US-zipcode-10001:{API_KEY}' \
+     https://cloudflare.com/cdn-cgi/trace
+```
+
+## Alternative syntax
+
+The alternative syntax `?` + `=` + `&` is also supported.
+
+```bash
+curl -x https://network.joinmassive.com:65535 \
+     -U '{PROXY_USERNAME}?country=US&zipcode=10001:{API_KEY}' \
+     https://cloudflare.com/cdn-cgi/trace
+```
