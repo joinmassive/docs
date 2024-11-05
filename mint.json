@@ -1,11 +1,16 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Documentation",
+  "name": "Massive",
   "logo": {
     "dark": "/logo/dark.svg",
-    "light": "/logo/light.svg"
+    "light": "/logo/light.svg",
+    "href": "https://www.joinmassive.com"
   },
+  "layout": "sidenav",
   "favicon": "/favicon.svg",
+  "sidebar": {
+    "items": "container"
+  },
   "colors": {
     "primary": "#F77C69",
     "light": "#FE9C92",
@@ -25,6 +30,23 @@
     "name": "Dashboard",
     "url": "https://partners.joinmassive.com"
   },
+  "primaryTab": {
+    "name": "Residential"
+}, 
+  "tabs": [
+    {
+        "name": "ISP Proxies",
+        "url": "isp-proxies"
+    },
+    {
+        "name": "Advanced Features",
+        "url": "advanced-features"
+    },
+    {
+        "name": "Monetization SDK",
+        "url": "monetization-sdk"
+    }
+  ],
   "anchors": [
     {
       "name": "Blog",
@@ -41,38 +63,38 @@
     {
       "group": "Get Started",
       "pages": [
-        "residential-proxy-reference/introduction",
-        "residential-proxy-reference/quickstart",
-        "residential-proxy-reference/authentication"
+        "residential/introduction",
+        "residential/quickstart",
+        "residential/authentication"
       ]
     },
     {
       "group": "Proxy Configuration",
       "pages": [
-        "residential-proxy-reference/routing",
-        "residential-proxy-reference/geotargeting",
-        "residential-proxy-reference/sticky-sessions",
-        "residential-proxy-reference/device-type-targeting",
-        "residential-proxy-reference/accounting",
-        "residential-proxy-reference/usage-restrictions",
-        "residential-proxy-reference/error-types"
+        "residential/routing",
+        "residential/geotargeting",
+        "residential/sticky-sessions",
+        "residential/device-type-targeting",
+        "residential/accounting",
+        "residential/usage-restrictions",
+        "residential/error-types",
+        "residential/reporting-api"
       ]
     },
     {
       "group": "Sample Integrations",
       "pages": [
-        "residential-proxy-reference/samples/puppeteer",
-        "residential-proxy-reference/samples/python",
-        "residential-proxy-reference/samples/scrapy",
-        "residential-proxy-reference/samples/ruby",
-        "residential-proxy-reference/samples/.net"
+        "residential/samples/puppeteer",
+        "residential/samples/python",
+        "residential/samples/scrapy",
+        "residential/samples/ruby",
+        "residential/samples/.net"
       ]
     },
     {
       "group": "Advanced Features",
       "pages": [
-        "advanced-features/search-service",
-        "advanced-features/reporting-api"
+        "advanced-features/serp-api"
       ]
     },
     {
@@ -93,26 +115,42 @@
       ]
     },
     {
+      "group": "ISP Proxies",
+      "pages": [
+        "isp-proxies/introduction",
+        "isp-proxies/authentication"
+      ]
+    },
+    {
+      "group": "Proxy Configuration",
+      "pages": [
+        "isp-proxies/geotargeting",
+        "isp-proxies/sticky-sessions",
+        "isp-proxies/usage-restrictions",
+        "isp-proxies/error-types"
+      ]
+    },
+    {
       "group": "Monetization SDK",
       "pages": [
-        "sdk/introduction",
-        "sdk/quickstart",
+        "monetization-sdk/introduction",
+        "monetization-sdk/quickstart",
         {
           "group": "Desktop",
           "pages": [
-            "sdk/desktop",
-            "sdk/desktop-windows",
-            "sdk/desktop-mac-objective-c",
-            "sdk/desktop-mac-swift"
+            "monetization-sdk/desktop",
+            "monetization-sdk/desktop-windows",
+            "monetization-sdk/desktop-mac-objective-c",
+            "monetization-sdk/desktop-mac-swift"
           ]
         },
         {
           "group": "Mobile & smart TV",
           "pages": [
-            "sdk/mobile-and-smart-tv",
-            "sdk/mobile-android",
-            "sdk/tv-fire",
-            "sdk/mobile-ios"
+            "monetization-sdk/mobile-and-smart-tv",
+            "monetization-sdk/mobile-android",
+            "monetization-sdk/tv-fire",
+            "monetization-sdk/mobile-ios"
           ]
         }
       ]

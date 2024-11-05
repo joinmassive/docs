@@ -1,0 +1,13 @@
+---
+title: 'Error Types'
+description: 'Massive may respond with one of several common or custom error messages:'
+---
+
+| Status code | Reason phrase                    | Additional comments                                                                                                                                          |
+|-------------|----------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `400`       | Bad Request                      | Your request was malformed, most likely because of invalid routing parameters; see the response body for human-readable details                              |
+| `407`       | Proxy Authentication Required    | Your login email address, Massive API token, or both were incorrect                                                                                           |
+| `452`       | Disallowed Content               | The protocol, port, or content that you requested conflicts with Massive’s content policy; see the Link header for the entire policy                          |
+| `500`       | Internal server error            | Something went wrong on the serverside                                                                                                                        |
+| `502`       | Bad gateway                      | Massive was unable to find an appropriate node                                                                                                                |
+| `503`       | Service Unavailable              | Massive was unable to satisfy the geotargeting specifications or other elements of your request; or Massive network experiences high demand; see the response body for human-readable details |
