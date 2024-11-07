@@ -1,6 +1,6 @@
 ---
 title: 'Scrapy (for Python)'
-description: 'After installing Scrapy (`pip install scrapy`) and creating a project (`scrapy startproject [project name]`), you can connect to the Massive Network by saving code like that below to a file in the new `[project name]/[project name]/spiders` subdirectory then running `scrapy crawl demo` from the top-level `[project name]` directory (Scrapy doesn’t seem to support HTTPS proxy connections, but you can use the [network’s HTTP port](/authentication#http)):'
+description: 'After installing Scrapy (`pip install scrapy`) and creating a project (`scrapy startproject [project name]`), you can connect to the Massive Network by saving code like that below to a file in the new `[project name]/[project name]/spiders` subdirectory then running `scrapy crawl demo` from the top-level `[project name]` directory (Scrapy doesn’t seem to support HTTPS proxy connections, but you can use the [network’s HTTP port](/isp-proxies/authentication#http)):'
 ---
 
 ```python
@@ -17,8 +17,8 @@ class Demo(scrapy.Spider):
     username = '{PROXY_USERNAME}'
     password = '{API_KEY}'
     url      = 'https://cloudflare.com/cdn-cgi/trace' # Insert your target URL here
-    host     = 'network.joinmassive.com'
-    port     = 65534
+    host     = 'isp.joinmassive.com'
+    port     = 33080
     proxy    = f'http://{username}:{password}@{host}:{port}'
 
     yield scrapy.Request(url, callback=self.parse, meta={'proxy': proxy})

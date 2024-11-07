@@ -9,7 +9,7 @@ const puppeteer = require('puppeteer');
 
 (async () => {
   const browser = await puppeteer.launch({
-                    args: ['--proxy-server=https://network.joinmassive.com:65535']
+                    args: ['--proxy-server=https://isp.joinmassive.com:33080']
                   });
   const page    = (await browser.pages())[0];
 

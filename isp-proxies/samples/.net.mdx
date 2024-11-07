@@ -1,6 +1,6 @@
 ---
 title: '.NET (in C#)'
-description: '.NET integrations should connect to the [Massive Network’s HTTP port](/authentication#HTTP) `65534` because [.NET doesn’t broadly support HTTPS proxies yet](https://github.com/dotnet/runtime/pull/87638):'
+description: '.NET integrations should connect to the [Massive Network’s HTTP port](/isp-proxies/authentication#HTTP) `4080` because [.NET doesn’t broadly support HTTPS proxies yet](https://github.com/dotnet/runtime/pull/87638):'
 ---
 
 ```csharp
@@ -11,7 +11,7 @@ class Demo {
     string username = Uri.EscapeDataString("{PROXY_USERNAME}");
     string password = "{API_Key}";
     string url      = "https://cloudflare.com/cdn-cgi/trace"; // Insert your target URL here
-    string proxy    = "http://network.joinmassive.com:65534";
+    string proxy    = "http://isp.joinmassive.com:4080";
 
     HttpClientHandler   handler  = new() {
                                      Proxy                   = new WebProxy(proxy),

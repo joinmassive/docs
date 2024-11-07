@@ -131,6 +131,16 @@
       ]
     },
     {
+        "group": "Sample Integrations",
+        "pages": [
+          "isp-proxies/samples/puppeteer",
+          "isp-proxies/samples/python",
+          "isp-proxies/samples/scrapy",
+          "isp-proxies/samples/ruby",
+          "isp-proxies/samples/.net"
+        ]
+    },
+    {
       "group": "Monetization SDK",
       "pages": [
         "monetization-sdk/introduction",
