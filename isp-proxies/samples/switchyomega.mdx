@@ -1,0 +1,20 @@
+---
+title: '(Vanilla) Python'
+description: 'To connect to the Massive Network from Python, include your encoded credentials in the proxy address (this usage doesn’t risk leaking your API token to a shared history file per the caveat for Curl):'
+---
+
+```javascript
+#!/usr/bin/env python3
+import requests
+import urllib
+
+username = '{PROXY_USERNAME}'
+password = '{API_KEY}'
+url      = 'https://cloudflare.com/cdn-cgi/trace' # Insert your target URL here
+host     = 'isp.joinmassive.com'
+port     = 33080
+proxy    = f'https://{username}:{password}@{host}:{port}'
+response = requests.get(url, proxies={'http': proxy, 'https': proxy})
+
+print(response.content)
+```
