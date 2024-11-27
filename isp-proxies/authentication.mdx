@@ -11,12 +11,12 @@ description: 'We support HTTP, HTTPS, and SOCKS5'
 
 How to authenticate using HTTP.
 
-|             |                     |
-|-------------|---------------------|
-| HTTP Port  | 4080              |
+|           |      |
+| --------- | ---- |
+| HTTP Port | 8000 |
 
 ```bash
-curl --proxy http://isp.joinmassive.com:4080 -U '{PROXY_USERNAME}:{API_KEY}' https://cloudflare.com/cdn-cgi/trace
+curl --proxy http://isp.joinmassive.com:8000 -U '{PROXY_USERNAME}:{API_KEY}' https://cloudflare.com/cdn-cgi/trace
 
 ```
 
@@ -24,12 +24,12 @@ curl --proxy http://isp.joinmassive.com:4080 -U '{PROXY_USERNAME}:{API_KEY}' htt
 
 How to authenticate using HTTPS.
 
-|             |                     |
-|-------------|---------------------|
-| HTTPS Port  | 33080              |
+|            |      |
+| ---------- | ---- |
+| HTTPS Port | 4080 |
 
 ```bash
-curl --proxy https://isp.joinmassive.com:33080 -U '{PROXY_USERNAME}:{API_KEY}' https://cloudflare.com/cdn-cgi/trace
+curl --proxy https://isp.joinmassive.com:4080 -U '{PROXY_USERNAME}:{API_KEY}' https://cloudflare.com/cdn-cgi/trace
 
 ```
 
@@ -37,10 +37,10 @@ curl --proxy https://isp.joinmassive.com:33080 -U '{PROXY_USERNAME}:{API_KEY}' h
 
 How to authenticate using SOCKS5.
 
-|             |                     |
-|-------------|---------------------|
-| SOCKS5 Port  | 4080                |
+|             |      |
+| ----------- | ---- |
+| SOCKS5 Port | 8000 |
 
 ```bash
-curl -x socks5h://isp.joinmassive.com:4080 -U '{PROXY_USERNAME}:{API_KEY}' https://www.cloudflare.com/cdn-cgi/trace
+curl -x socks5h://isp.joinmassive.com:8000 -U '{PROXY_USERNAME}:{API_KEY}' https://www.cloudflare.com/cdn-cgi/trace
 ```
