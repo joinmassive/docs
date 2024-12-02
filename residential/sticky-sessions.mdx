@@ -18,7 +18,7 @@ curl -x https://network.joinmassive.com:65535 \
      https://cloudflare.com/cdn-cgi/trace
 ```
 
-* **Session TTL** defaults to 15 minutes but can be customized using the `sessionttl` parameter. For example, to set the TTL to 30 minutes:
+* Session TTL defaults to 15 minutes but can be customized using the `sessionttl` parameter. For example, to set the TTL to 30 minutes:
 
 ```bash
 curl -x https://network.joinmassive.com:65535 \
@@ -45,15 +45,17 @@ By default, when a sticky session fails, our algorithm attempts to find a new no
 Example of using undefined `sessionmode`, which defaults to `sessionmode-strict`:
 
 ```bash
-curl -x https://network.joinmassive.com:65535 -U '{PROXY_USERNAME}-session-123:{API_KEY}' https://cloudflare.com/cdn-cgi/trace
-
+curl -x https://network.joinmassive.com:65535 \
+     -U '{PROXY_USERNAME}-session-123:{API_KEY}' \
+     https://cloudflare.com/cdn-cgi/trace
 ```
 
 Example with `sessionmode-strict` explicitly defined:
 
 ```bash
-curl -x https://network.joinmassive.com:65535 -U '{PROXY_USERNAME}-session-123-sessionmode-strict:{API_KEY}' https://cloudflare.com/cdn-cgi/trace
-
+curl -x https://network.joinmassive.com:65535 \
+     -U '{PROXY_USERNAME}-session-123-sessionmode-strict:{API_KEY}' \
+     https://cloudflare.com/cdn-cgi/trace
 ```
 
 Alternatively, a sticky session can persist through an error by using `sessionmode-flex`, though this may increase error rate.
@@ -65,8 +67,9 @@ Alternatively, a sticky session can persist through an error by using `sessionmo
 Example with `sessionmode-flex`:
 
 ```bash
-curl -x https://network.joinmassive.com:65535 -U '{PROXY_USERNAME}-session-123-sessionmode-flex:{API_KEY}' https://cloudflare.com/cdn-cgi/trace
-
+curl -x https://network.joinmassive.com:65535 \
+     -U '{PROXY_USERNAME}-session-123-sessionmode-flex:{API_KEY}' \
+     https://cloudflare.com/cdn-cgi/trace
 ```
 
 ## Known issues
