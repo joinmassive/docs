@@ -1,12 +1,14 @@
 ---
-title: 'Sticky sessions'
-description: 'We support session persistence (AKA sticky sessions) with a TTL of 15 minutes.'
+title: "Sticky sessions"
+description: "We support session persistence (AKA sticky sessions) with a customizable TTL, defaulting to 15 minutes."
 ---
 
 ## Using sticky sessions
-| Key     | Value                                                                                                                     | TTL         | Examples          |
-|---------|---------------------------------------------------------------------------------------------------------------------------|-------------|-------------------|
-| session | Any unique identifier of up to 255 characters (regardless of character encoding); Massive will make best efforts to route requests in the same session to the same egress node | 15 minutes  | session42, 1234   |
+
+| Key        | Value                                                                                                                                                                          | TTL                                                    | Examples        |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------ | --------------- |
+| session    | Any unique identifier of up to 255 characters (regardless of character encoding); Massive will make best efforts to route requests in the same session to the same egress node | Default: 15 minutes (customizable with \`sessionttl\`) | session42, 1234 |
+| sessionttl | Customizable session TTL in minutes, up to 60 minutes                                                                                                                          | Default: 15 minutes                                    | 30, 60          |
 
 You can inject a session identifier, like a unique representation of your app or active task, to specify that multiple requests should originate from a single egress node (if available):
 
@@ -16,18 +18,27 @@ curl -x https://network.joinmassive.com:65535 \
      https://cloudflare.com/cdn-cgi/trace
 ```
 
-- Session TTL is 15 minutes. Every request with a session key prolongs the session and refreshes its TTL.
-- When a session identifier is specified and found the server will perform a request via the same node unless:
-  - TTL is expired.
-  - The request limit per minute for the node is exceeded.
-  - The node has gone offline.
-- If the session identifier is not found or the conditions above are not met, a new session is created with the specified ID and attached to the new node.
+* **Session TTL** defaults to 15 minutes but can be customized using the `sessionttl` parameter. For example, to set the TTL to 30 minutes:
 
-## Additional parameters 
+```bash
+curl -x https://network.joinmassive.com:65535 \
+     -U '{PROXY_USERNAME}-session-37-sessionttl-30:{API_KEY}' \
+     https://cloudflare.com/cdn-cgi/trace
+```
 
-| Key         |Value|
-|-------------|-----|
-| sessionmode | `strict`, `flex`|
+* When a session identifier is specified and found the server will perform a request via the same node unless:
+
+  * TTL is expired.
+
+  * The request limit per minute for the node is exceeded.
+
+  * The node has gone offline.
+
+* If the session identifier is not found or the conditions above are not met, a new session is created with the specified ID and attached to the new node.Additional parameters
+
+| Key         | Value            |
+| ----------- | ---------------- |
+| sessionmode | `strict`, `flex` |
 
 By default, when a sticky session fails, our algorithm attempts to find a new node to complete the request, attaching a new IP address to the sticky session. This behavior can be overwritten by specifying `sessionmode-flex`.
 
@@ -48,7 +59,7 @@ curl -x https://network.joinmassive.com:65535 -U '{PROXY_USERNAME}-session-123-s
 Alternatively, a sticky session can persist through an error by using `sessionmode-flex`, though this may increase error rate.
 
 <Info>
-**Attention:** The max number of errors is 15 until a new node is assigned to a sticky session.
+  **Attention:** The max number of errors is 15 until a new node is assigned to a sticky session.
 </Info>
 
 Example with `sessionmode-flex`:
@@ -63,7 +74,8 @@ curl -x https://network.joinmassive.com:65535 -U '{PROXY_USERNAME}-session-123-s
 When `session` is specified without geotargeting or use of one of our regional endpoints, the request may get cross routed, causing different IPs to be called during a sticky session depending on which server handles the request.
 
 Workarounds:
-1. Use regional endpoints https://us-network.joinmassive.com/ or https://eu-network.joinmassive.com/ 
+
+1. Use regional endpoints [https://us-network.joinmassive.com/](https://us-network.joinmassive.com/) or [https://eu-network.joinmassive.com/](https://eu-network.joinmassive.com/)
 
 ```bash
 curl -x https://us-network.joinmassive.com:65535 \
@@ -71,7 +83,7 @@ curl -x https://us-network.joinmassive.com:65535 \
      https://cloudflare.com/cdn-cgi/trace
 ```
 
-2. Use geotargeting
+1. Use geotargeting
 
 ```bash
 curl -x https://network.joinmassive.com:65535 \
