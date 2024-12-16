@@ -17,7 +17,6 @@ How to authenticate using HTTPS.
 
 ```bash
 curl --proxy https://network.joinmassive.com:65535 -U '{PROXY_USERNAME}:{API_KEY}' https://cloudflare.com/cdn-cgi/trace
-
 ```
 
 ## HTTP
@@ -26,11 +25,10 @@ How to authenticate using HTTP.
 
 |             |                     |
 |-------------|---------------------|
-| HTTP Port  | 65534                |
+| HTTP Port   | 65534               |
 
 ```bash
 curl --proxy http://network.joinmassive.com:65534 -U '{PROXY_USERNAME}:{API_KEY}' https://cloudflare.com/cdn-cgi/trace
-
 ```
 
 ## SOCKS5
@@ -39,7 +37,7 @@ How to authenticate using SOCKS5.
 
 |             |                     |
 |-------------|---------------------|
-| SOCKS5 Port  | 65533                |
+| SOCKS5 Port | 65533               |
 
 ```bash
 curl -x socks5h://network.joinmassive.com:65533 -U '{PROXY_USERNAME}:{API_KEY}' https://www.cloudflare.com/cdn-cgi/trace
