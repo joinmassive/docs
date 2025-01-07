@@ -57,6 +57,11 @@
       "name": "Support",
       "icon": "ticket",
       "url": "https://joinmassive.atlassian.net/servicedesk/customer/portal/2/group/2/create/10"
+    },
+    {
+      "name": "Knowledge Base",
+      "icon": "brain",
+      "url": "https://joinmassive.atlassian.net/servicedesk/customer/portals"
     }
   ],
   "navigation": [
