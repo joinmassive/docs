@@ -3,6 +3,7 @@ title: 'Mac (Swift)'
 description: 'Integrate Massive SDK into your Mac application with this guide.'
 icon: "apple"
 iconType: "brands"
+sidebarLink: true
 ---
 
 ## Example code
@@ -42,11 +43,11 @@ MSVInit(apiToken: apiToken, completion: { (massive: MSVNode?, error: Error?) -> 
 
 1.  Download the [latest SDK package][5].
 2.  Open the Xcode project you want to integrate the SDK into.
-3.  If your project navigator isn’t shown, go to **View** > **Navigators** >
+3.  If your project navigator isn't shown, go to **View** > **Navigators** >
     **Show Project Navigator**.
 4.  Open the SDK package and drag the `Massive.framework` bundle into the
     navigator.
-5.  If the **Copy items if needed** box and box for your app target aren’t
+5.  If the **Copy items if needed** box and box for your app target aren't
     checked, check them.
 6.  Press the **Finish** button.
 7.  In the implementation file for your app delegate, import the SDK:
@@ -155,9 +156,9 @@ Starts a Massive node, pending user opt-in, attributed to your API token.
 **`var userOptedIn: Bool { get set }`**
 
 The state of user opt-in. `true` allows computing resources to be
-opportunistically consumed; `false` doesn’t. Resource consumption is disallowed
+opportunistically consumed; `false` doesn't. Resource consumption is disallowed
 by default; the user must agree to easy-to-understand terms of the exchange
-you’re offering before you toggle this property on.
+you're offering before you toggle this property on.
 
 ---
 
@@ -171,8 +172,8 @@ The enablement state of resource consumption. `true` indicates usage is paused;
 **`var menuBarUsageShown: Bool { get set }`**
 
 The visibility state of menu-bar tooling. `true` adds charts representing
-resource consumption to the user’s menu bar; `false` removes them. Resource
-charts aren’t made available by default; they must be added to the menu bar by
+resource consumption to the user's menu bar; `false` removes them. Resource
+charts aren't made available by default; they must be added to the menu bar by
 toggling this property on or to your interface by calling the
 `createUsageViewController` method.
 
@@ -200,7 +201,7 @@ Re-enables resource consumption if disabled.
 **`func createUsageViewController() -> NSViewController`**
 
 Constructs a view controller with charts representing resource consumption that
-you can add to your app’s interface. Resource charts must be added to your
+you can add to your app's interface. Resource charts must be added to your
 interface by calling this method or to the menu bar by toggling the
 `menuBarUsageShown` property on.
 
