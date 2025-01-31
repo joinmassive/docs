@@ -4,17 +4,23 @@ description: 'Our ISP proxies support sticky sessions, allowing persistent IP co
 ---
 
 ## Using Sticky Sessions:
-| Key      | Value                          | Duration       | Examples           |
-|----------|--------------------------------|----------------|--------------------|
-| session  | Unique number starting from 0 | No expiration | 0, 1, 2   |
+
+| Key     | Value                                         | Duration      | Examples           |
+| ------- | --------------------------------------------- | ------------- | ------------------ |
+| session | Any unique identifier of up to 255 characters | No expiration | 0, abc, session123 |
 
 Add a session identifier to keep your requests on the same IP address:
+
 ```bash
 curl --proxy http://isp.joinmassive.com:4080 -U '{PROXY_USERNAME}-session-37:{API_KEY}' ip-api.com
 ```
 
 When using sticky sessions:
+
 1. The first request with a session ID linked to a specific IP address.
+
 2. All subsequent requests with the same session ID will use that same IP address.
+
 3. Sessions continue indefinitely unless the session identifier is changed.
+
 4. Requests that do not have a session ID will automatically be assigned a new IP address.
