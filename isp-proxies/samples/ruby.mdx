@@ -1,6 +1,6 @@
 ---
-title: 'Ruby'
-description: 'Ruby’s standard HTTP library doesn’t seem to support HTTPS proxy connections, so connect to the [Massive Network’s HTTP port](/isp-proxies/authentication#http) with Ruby:'
+title: "Ruby"
+description: "Ruby’s standard HTTP library doesn’t seem to support HTTPS proxy connections, so connect to the [Massive Network’s HTTP port](/isp-proxies/authentication#http) with Ruby:"
 ---
 
 ```javascript
@@ -9,7 +9,7 @@ const puppeteer = require('puppeteer');
 
 (async () => {
   const browser = await puppeteer.launch({
-                    args: ['--proxy-server=https://isp.joinmassive.com:33080']
+                    args: ['--proxy-server=https://isp.joinmassive.com:4080']
                   });
   const page    = (await browser.pages())[0];
 

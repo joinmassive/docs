@@ -1,6 +1,6 @@
 ---
-title: 'Puppeteer'
-description: 'Integrate the Massive Network into your Puppeteer workflows by setting the `--proxy-server` launch flag then calling a page object’s `authenticate` method:'
+title: "Puppeteer"
+description: "Integrate the Massive Network into your Puppeteer workflows by setting the `--proxy-server` launch flag then calling a page object’s `authenticate` method:"
 ---
 
 ```javascript
@@ -9,7 +9,7 @@ const puppeteer = require('puppeteer');
 
 (async () => {
   const browser = await puppeteer.launch({
-                    args: ['--proxy-server=https://isp.joinmassive.com:33080']
+                    args: ['--proxy-server=https://isp.joinmassive.com:4080']
                   });
   const page    = (await browser.pages())[0];
 
