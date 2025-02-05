@@ -1,0 +1,24 @@
+---
+title: "ASN identifier targeting"
+description: "You can target a request by an ASN number, a unique identification number that identifies a network or group of networks under a single routing policy on the internet."
+---
+
+| Key | Value                                                                    |
+| --- | ------------------------------------------------------------------------ |
+| asn | ASN numbers are used by various routing protocols. Value range: 0-65536. |
+
+Example using query parameters:
+
+```bash
+curl -x https://network.joinmassive.com:65535 \
+     -U '{PROXY_USERNAME}-asn-7018:{API_KEY}' \
+     https://cloudflare.com/cdn-cgi/trace
+```
+
+This parameter can be used in combination with all other options. The following request targets by  ASN  in United States:
+
+```bash
+curl -x https://network.joinmassive.com:65535 \
+     -U '{PROXY_USERNAME}-country-US-asn-7018:{API_KEY}' \
+     https://cloudflare.com/cdn-cgi/trace
+```
