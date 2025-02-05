@@ -80,6 +80,7 @@
         "residential/geotargeting",
         "residential/sticky-sessions",
         "residential/device-type-targeting",
+        "residential/asn-type-targeting",
         "residential/accounting",
         "residential/usage-restrictions",
         "residential/error-types",
