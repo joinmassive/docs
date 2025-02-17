@@ -1,0 +1,21 @@
+---
+title: 'Introduction'
+description: 'This guide will help you get started with the Reporting API in just a few minutes.'
+---
+
+# Getting started
+
+We’ll use `curl` for our API call examples. You could also consider a dedicated tool for developing API requests (like [Postman](https://www.postman.com/)).
+
+# Authenticate
+
+<Info>
+  The API key for the Reporting API is automatically enabled with access to the Residential Proxy.
+</Info>
+
+
+```bash
+curl --location 'https://api-network.joinmassive.com/reporting/v1/usage' \
+--header 'Content-Type: application/json' \
+--header 'x-api-key: {PROXY_PASSWORD}'
+```

@@ -1,0 +1,117 @@
+openapi: 3.0.1
+info:
+  title: Proxy Reporting API
+  version: "v1"
+  description: "API for reporting proxy stats"
+
+servers:
+  - url: https://api-network.joinmassive.com/reporting
+    description: Reporting domain
+security: []
+
+paths:
+  /v1/usage:
+    get:
+      summary: Get usage
+      description: |
+        Get usage data for the given time range.
+
+        If no time range is provided, returns usage for the past 7 days (including today).
+      operationId: getUsage
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - in: query
+          name: from
+          schema:
+            type: string
+          required: false
+          description: |
+            Start date to query usage (UTC). 
+
+            Maximum 31 days from current date. 
+
+            Must be less than 'to' date.
+          example: "2025-01-01"
+        - in: query
+          name: to
+          schema:
+            type: string
+          required: false
+          description: |
+            End data to query usage (UTC).
+
+            Must be greater than 'from' date.
+
+            Accepted formats: date, RFC3339.
+          example: "2025-01-01 or 2025-01-01T10:00:00Z"
+      responses:
+        "200":
+          description: Successfully retrieved usage
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UsageRecord"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "407":
+          $ref: "#/components/responses/ForbiddenError"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: x-api-key
+      in: header
+
+  schemas:
+    UsageRecord:
+      type: object
+      properties:
+        date:
+          type: string
+          description: Date for usage data
+          example: "2025-01-01"
+        total:
+          type: number
+          description: Total number of connections
+          example: 1000
+        successful:
+          type: number
+          description: The number of successful connections
+          example: 500
+        used_bytes:
+          type: number
+          description: The number of used bytes
+          example: 123456789
+    Error:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: "invalid request"
+  responses:
+    BadRequestError:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    ForbiddenError:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    InternalServerError:
+      description: Internal Server error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"

@@ -83,8 +83,7 @@
         "residential/asn-type-targeting",
         "residential/accounting",
         "residential/usage-restrictions",
-        "residential/error-types",
-        "residential/reporting-api"
+        "residential/error-types"
       ]
     },
     {
@@ -100,8 +99,17 @@
       ]
     },
     {
+      "group": "Reporting API",
+      "pages": [
+        "reporting-api-reference/reporting-api",
+        "reporting-api-reference/get-usage"
+      ]
+    },
+    {
       "group": "Advanced Features",
-      "pages": ["advanced-features/serp-api"]
+      "pages": [
+        "advanced-features/serp-api"
+      ]
     },
     {
       "group": "Reseller API",
@@ -122,11 +130,16 @@
     },
     {
       "group": "Others",
-      "pages": ["residential/usage-alerts"]
+      "pages": [
+        "residential/usage-alerts"
+      ]
     },
     {
       "group": "ISP Proxies",
-      "pages": ["isp-proxies/introduction", "isp-proxies/authentication"]
+      "pages": [
+        "isp-proxies/introduction",
+        "isp-proxies/authentication"
+      ]
     },
     {
       "group": "Proxy Configuration",
