@@ -121,6 +121,10 @@
       ]
     },
     {
+      "group": "Others",
+      "pages": ["residential/usage-alerts"]
+    },
+    {
       "group": "ISP Proxies",
       "pages": ["isp-proxies/introduction", "isp-proxies/authentication"]
     },
