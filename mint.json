@@ -32,19 +32,19 @@
   },
   "primaryTab": {
     "name": "Residential"
-}, 
+  },
   "tabs": [
     {
-        "name": "ISP Proxies",
-        "url": "isp-proxies"
+      "name": "ISP Proxies",
+      "url": "isp-proxies"
     },
     {
-        "name": "Advanced Features",
-        "url": "advanced-features"
+      "name": "Advanced Features",
+      "url": "advanced-features"
     },
     {
-        "name": "Monetization SDK",
-        "url": "monetization-sdk"
+      "name": "Monetization SDK",
+      "url": "monetization-sdk"
     }
   ],
   "anchors": [
@@ -101,9 +101,7 @@
     },
     {
       "group": "Advanced Features",
-      "pages": [
-        "advanced-features/serp-api"
-      ]
+      "pages": ["advanced-features/serp-api"]
     },
     {
       "group": "Reseller API",
@@ -124,10 +122,7 @@
     },
     {
       "group": "ISP Proxies",
-      "pages": [
-        "isp-proxies/introduction",
-        "isp-proxies/authentication"
-      ]
+      "pages": ["isp-proxies/introduction", "isp-proxies/authentication"]
     },
     {
       "group": "Proxy Configuration",
@@ -139,14 +134,14 @@
       ]
     },
     {
-        "group": "Sample Integrations",
-        "pages": [
-          "isp-proxies/samples/puppeteer",
-          "isp-proxies/samples/python",
-          "isp-proxies/samples/scrapy",
-          "isp-proxies/samples/ruby",
-          "isp-proxies/samples/.net"
-        ]
+      "group": "Sample Integrations",
+      "pages": [
+        "isp-proxies/samples/puppeteer",
+        "isp-proxies/samples/python",
+        "isp-proxies/samples/scrapy",
+        "isp-proxies/samples/ruby",
+        "isp-proxies/samples/.net"
+      ]
     },
     {
       "group": "Monetization SDK",
