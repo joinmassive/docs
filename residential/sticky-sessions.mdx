@@ -71,25 +71,3 @@ curl -x https://network.joinmassive.com:65535 \
      -U '{PROXY_USERNAME}-session-123-sessionmode-flex:{API_KEY}' \
      https://cloudflare.com/cdn-cgi/trace
 ```
-
-## Known issues
-
-When `session` is specified without geotargeting or use of one of our regional endpoints, the request may get cross routed, causing different IPs to be called during a sticky session depending on which server handles the request.
-
-Workarounds:
-
-1. Use regional endpoints [https://us-network.joinmassive.com/](https://us-network.joinmassive.com/) or [https://eu-network.joinmassive.com/](https://eu-network.joinmassive.com/)
-
-```bash
-curl -x https://us-network.joinmassive.com:65535 \
-     -U '{PROXY_USERNAME}-session-123:{API_KEY}' \
-     https://cloudflare.com/cdn-cgi/trace
-```
-
-1. Use geotargeting
-
-```bash
-curl -x https://network.joinmassive.com:65535 \
-     -U '{PROXY_USERNAME}-country-US-session-123:{API_KEY}' \
-     https://cloudflare.com/cdn-cgi/trace
-```
