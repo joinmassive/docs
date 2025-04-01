@@ -97,6 +97,22 @@ Add the dependency to your project Gradle configuration:
     }
     ```
 
+    **Note:** Make sure to add and configure the `org.jetbrains.kotlin.android` plugin to your app module.
+
+    ```gradle
+    plugins {
+        id("org.jetbrains.kotlin.android")
+    }
+
+    android {
+        ...
+
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+    }
+    ```
+
     If you use a `toml` file for dependency configuration, add the following to the `toml`:
 
     ```gradle
