@@ -23,7 +23,7 @@
   "topbarLinks": [
     {
       "name": "Support",
-      "url": "https://joinmassive.atlassian.net/servicedesk/customer/portal/2/group/2/create/10"
+      "url": "https://forms.fillout.com/t/p8dRqBYs58us"
     }
   ],
   "topbarCtaButton": {
@@ -56,7 +56,7 @@
     {
       "name": "Support",
       "icon": "ticket",
-      "url": "https://joinmassive.atlassian.net/servicedesk/customer/portal/2/group/2/create/10"
+      "url": "https://forms.fillout.com/t/p8dRqBYs58us"
     },
     {
       "name": "Knowledge Base",
