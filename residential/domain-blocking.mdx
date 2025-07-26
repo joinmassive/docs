@@ -1,0 +1,176 @@
+---
+title: "Blocking Domains"
+description: "Control which domains can be accessed through your proxy connections with custom blocklists and exclusions."
+---
+
+## Overview
+
+Domain blocking allows you to prevent specific domains from being accessed through your Massive proxy connections. This feature is useful for filtering out unwanted content like advertisements, tracking scripts, or malicious domains while browsing through the proxy.
+
+## How Domain Blocking Works
+
+When you make a request through the Massive proxy, the system checks the requested domain against multiple blocklists:
+
+1. **Global blocklist** - Managed by Massive to block known malicious and problematic domains
+2. **Your custom blocklist** - Domains you've requested to be blocked for your account
+3. **Exclusion list** - Domains you've requested to be allowed, even if they're on the global blocklist
+
+### Blocking Priority
+
+The system follows this priority order:
+
+1. **Your custom blocklist** (highest priority) - Always blocked
+2. **Your exclusion list** - Allowed, even if globally blocked
+3. **Global blocklist** - Blocked unless specifically excluded
+
+## Account Hierarchy
+
+Domain blocking works across your account structure:
+
+- **Main account blocklist** - Applies to your main account and all sub-accounts
+- **Sub-account blocklist** - Applies only to specific sub-accounts
+- **Exclusions** - Can be set at both main account and sub-account levels
+
+## Configuring Domain Blocking
+
+### For Direct Proxy Accounts
+
+To configure domain blocking for your standard proxy account, contact Massive support with:
+
+1. **Domains to block** - List of domains you want blocked
+2. **Domains to exclude** - List of domains to allow (bypass global blocklist)
+3. **Account scope** - Whether blocking applies to main account, specific sub-accounts, or all
+
+#### Example Request
+
+```
+Subject: Domain Blocking Configuration Request
+
+Account: your-account-name
+
+Domains to block:
+- ads.example.com
+- tracker.malicious.com
+- unwanted-site.net
+
+Domains to exclude from global blocklist:
+- analytics.partner.com
+- required-service.com
+
+Scope: Main account and all sub-accounts
+```
+
+### For Reseller API Accounts
+
+If you're using the Reseller API, domain blocking can be configured for accounts you create:
+
+1. **Create the account** first using the [Reseller API](../reseller-api-reference/create-new-account)
+2. **Request domain blocking** for that account through support
+
+When requesting domain blocking for reseller accounts, include:
+
+- The account ID or username created through the Reseller API
+- Domains to block for that specific account
+- Any exclusions needed
+
+#### Example Reseller Request
+
+```
+Subject: Domain Blocking for Reseller Account
+
+Reseller Account: your-reseller-account
+Target Account: account-id-from-api (username: client@example.com)
+
+Domains to block:
+- social-media.com
+- entertainment.net
+
+Please configure domain blocking for the above reseller sub-account.
+```
+
+## What Happens When Domains Are Blocked
+
+When a blocked domain is accessed through the proxy:
+
+- **HTTP requests**: Return a `452` error with the message "The domain is blocked by Massive content policy"
+- **HTTPS/CONNECT requests**: Connection is refused
+- **The connection is closed** to prevent further requests
+
+## Domain Matching
+
+Domain matching is exact - subdomains are treated separately:
+
+- Blocking `example.com` only blocks `example.com`
+- To block `subdomain.example.com`, it must be specified separately
+- To block all subdomains, each must be listed individually
+
+### Examples
+
+| Blocked Domain | What's Blocked     | What's Still Allowed                 |
+| -------------- | ------------------ | ------------------------------------ |
+| `ads.com`      | `ads.com` only     | `sub.ads.com`, `my-ads.com`          |
+| `tracker.net`  | `tracker.net` only | `api.tracker.net`, `tracker.network` |
+
+## Common Use Cases
+
+### Content Filtering
+
+Block access to inappropriate or distracting websites for corporate environments.
+
+### Ad Blocking
+
+Prevent advertising domains from loading to improve browsing speed and reduce bandwidth usage.
+
+### Security Enhancement
+
+Block known malicious domains to protect against phishing and malware.
+
+### Compliance
+
+Meet regulatory requirements by blocking access to restricted content categories.
+
+## Testing Your Configuration
+
+After your domain blocking is configured, you can test it:
+
+```bash
+# Test a blocked domain (should return error)
+curl -x your-proxy-endpoint "http://blocked-domain.com"
+
+# Test an allowed domain (should work normally)  
+curl -x your-proxy-endpoint "http://allowed-domain.com"
+```
+
+## Self-Service Configuration (Coming Soon)
+
+We're working on a dashboard where you'll be able to:
+
+- Add and remove domains from your blocklist instantly
+- Manage exclusions in real-time
+- Configure different rules for sub-accounts
+- View blocking activity and statistics
+
+Until then, please contact support for all domain blocking configuration requests.
+
+## Best Practices
+
+1. **Start small** - Begin with a few critical domains and expand as needed
+2. **Test thoroughly** - Verify your configuration doesn't block legitimate services
+3. **Document your rules** - Keep track of why specific domains are blocked
+4. **Regular reviews** - Periodically review your blocklist for outdated entries
+5. **Monitor usage** - Watch for unexpected blocking that might impact your operations
+
+## Support
+
+To request domain blocking configuration:
+
+**Submit a support request**: [Massive Support Form](https://forms.fillout.com/t/p8dRqBYs58us)
+
+**Response time**: Configuration changes are typically processed within 24 hours\
+**Emergency requests**: Critical security blocks can be prioritized
+
+**For direct proxy accounts**: Include your account name, specific domains, and desired scope in your support request.
+
+**For reseller accounts**: Include your reseller account details, the target account ID/username, and the domains to configure.
+
+> **Note**: Domain blocking for reseller accounts requires the target account to be created through the Reseller API first. Contact support if you need clarification on the process for your specific use case.pecific use case.
