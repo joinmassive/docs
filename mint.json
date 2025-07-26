@@ -83,7 +83,8 @@
         "residential/asn-type-targeting",
         "residential/accounting",
         "residential/usage-restrictions",
-        "residential/error-types"
+        "residential/error-types",
+        "residential/domain-blocking"
       ]
     },
     {
