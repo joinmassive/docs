@@ -27,9 +27,9 @@ The system follows this priority order:
 
 Domain blocking works across your account structure:
 
-- **Main account blocklist** - Applies to your main account and all sub-accounts
+- **Main account blocklist** - Applies to your main account.
 - **Sub-account blocklist** - Applies only to specific sub-accounts
-- **Exclusions** - Can be set at both main account and sub-account levels
+- **Exclusions** - Can be set at both the main account and sub-account levels
 
 ## Configuring Domain Blocking
 
@@ -60,7 +60,7 @@ Domains to exclude from global blocklist:
 Scope: Main account and all sub-accounts
 ```
 
-### For Reseller API Accounts
+### For Reseller API Accounts (sub-accounts)
 
 If you're using the Reseller API, domain blocking can be configured for accounts you create:
 
@@ -92,8 +92,8 @@ Please configure domain blocking for the above reseller sub-account.
 
 When a blocked domain is accessed through the proxy:
 
-- **HTTP requests**: Return a `452` error with the message "The domain is blocked by Massive content policy"
-- **HTTPS/CONNECT requests**: Connection is refused
+- **HTTP CONNECT request to proxy**: Return a `452` error with the message "The domain is blocked by Massive content policy"
+- **HTTP/HTTPS requests**: Connection is refused
 - **The connection is closed** to prevent further requests
 
 ## Domain Matching
@@ -162,15 +162,15 @@ Until then, please contact support for all domain blocking configuration request
 
 ## Support
 
-To request domain blocking configuration:
+To request the domain blocking configuration:
 
 **Submit a support request**: [Massive Support Form](https://forms.fillout.com/t/p8dRqBYs58us)
 
 **Response time**: Configuration changes are typically processed within 24 hours\
 **Emergency requests**: Critical security blocks can be prioritized
 
-**For direct proxy accounts**: Include your account name, specific domains, and desired scope in your support request.
+**For direct proxy accounts**: include your account name, specific domains, and desired scope in your support request.
 
-**For reseller accounts**: Include your reseller account details, the target account ID/username, and the domains to configure.
+**For reseller accounts**: include your reseller account details, the target account ID/username, and the domains to configure.
 
-> **Note**: Domain blocking for reseller accounts requires the target account to be created through the Reseller API first. Contact support if you need clarification on the process for your specific use case.pecific use case.
+> **Note**: Domain blocking for reseller accounts requires the target account to be created through the Reseller API first. Contact support if you need clarification on the process for your specific use case.
