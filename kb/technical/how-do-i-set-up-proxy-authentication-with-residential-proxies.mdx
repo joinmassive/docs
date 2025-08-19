@@ -1,0 +1,33 @@
+---
+title: "How do I set up proxy authentication with Residential Proxies?"
+description: "How do I set up proxy authentication with Residential Proxies?"
+---
+
+Choose your protocol and follow these steps:
+
+**Protocol Ports:**
+- HTTPS: 65535
+- HTTP: 65534
+- SOCKS5: 65533
+
+**Authentication Commands:**
+
+1. HTTPS:
+```bash
+curl --proxy https://network.joinmassive.com:65535 -U 'PROXY_USERNAME:PROXY_PASSWORD' https://cloudflare.com/cdn-cgi/trace
+```
+
+2. HTTP:
+```bash
+curl --proxy http://network.joinmassive.com:65534 -U 'PROXY_USERNAME:PROXY_PASSWORD' https://cloudflare.com/cdn-cgi/trace
+```
+
+3. SOCKS5:
+```bash
+curl -x socks5h://network.joinmassive.com:65533 -U 'PROXY_USERNAME:PROXY_PASSWORD' https://cloudflare.com/cdn-cgi/trace
+```
+
+**Setup Steps:**
+1. Get your credentials from [Profile](http://partners.joinmassive.com/profile) tab
+2. Replace `PROXY_USERNAME` and `PROXY_PASSWORD` in the command
+3. Optional: Visit [Quickstart](http://partners.joinmassive.com/quickstart) for custom configurations

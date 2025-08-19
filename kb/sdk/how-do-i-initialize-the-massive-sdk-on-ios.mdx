@@ -1,0 +1,19 @@
+---
+title: "How do I initialize the Massive SDK on iOS?"
+description: "How do I initialize the Massive SDK on iOS?"
+---
+
+Use the following code:
+
+```swift
+MassiveClient.shared.initAsync(apiToken: {API_TOKEN}) { status in
+    switch status {
+    case .initialized:
+        // Handle successful initialization 
+    case .error:
+        // Handle initialization error
+    }
+}
+```
+
+Learn more: [iOS Integration Guide](https://docs.joinmassive.com/monetization-sdk/mobile-ios#integration-to-the-app).

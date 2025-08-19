@@ -1,0 +1,30 @@
+---
+title: "How do I handle errors and debugging?"
+description: "How do I handle errors and debugging?"
+---
+
+### Windows:
+
+MassiveStatus enum includes these error states:
+
+- `INVALID_ARGS`: Invalid arguments passed to function
+- `UNINITIALIZED_SERVICE`: Service not initialized  
+- `INITIALIZING_SERVICE`: Service is initializing
+- `ALREADY_STARTED`: Node already started
+- `CORRUPTED_INSTALLATION`: Installation is corrupted
+- `INTERNAL_ERROR`: Internal error occurred
+
+### Android/Fire OS:
+
+- Provides callbacks for the `init`, `start`, and `stop` methods to handle errors.
+
+### iOS:
+
+- Provides callbacks for the `initAsync` method to handle errors.
+- Requires checking the return values of the `start` and `stop` methods.
+
+Learn more about error handling:
+
+- [Android](https://docs.joinmassive.com/monetization-sdk/mobile-android#technical-details)
+- [Windows](https://docs.joinmassive.com/monetization-sdk/desktop-windows#api-reference) 
+- [iOS](https://docs.joinmassive.com/monetization-sdk/mobile-ios#technical-details)

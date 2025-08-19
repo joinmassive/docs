@@ -1,0 +1,25 @@
+---
+title: "How do I handle SDK updates?"
+description: "How do I handle SDK updates?"
+---
+
+Update procedures vary by platform:
+
+### Android/Fire OS:
+- Update the dependency version in the Gradle configuration
+- Follow the migration guide when upgrading from 0.x to 1.0
+
+Learn more: [Migration Guide](https://docs.joinmassive.com/monetization-sdk/mobile-android#migration-from-version-0-x)
+
+### Windows:
+- The Massive service supports auto-updates distributed by Massive and will update automatically after installation.
+- The client library does not update automatically—you must manually update the SDK package in your project.
+
+Learn more: [Windows Guide](https://docs.joinmassive.com/monetization-sdk/desktop-windows#getting-started)
+
+### iOS:
+- Download the latest xcframework
+- Update the embedded framework in Xcode
+- Test integration after updates
+
+Learn more: [iOS Integration Guide](https://docs.joinmassive.com/monetization-sdk/mobile-ios#integration-guide)

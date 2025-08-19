@@ -1,0 +1,27 @@
+---
+title: "How does the SDK handle service interruptions?"
+description: "How does the SDK handle service interruptions?"
+---
+
+Each platform provides service recovery mechanisms:
+
+### Android/Fire OS
+
+- You can **optionally** set a callback when calling the `init` method
+- This callback will receive the **initial service state** after initialization
+- To check the service state later, the user must call the `state` method manually
+
+### Windows
+
+- You can set callbacks for service availability:
+  - `MassiveSetServiceUnavailableCallback` (when the service becomes unavailable)
+  - `MassiveSetServiceAvailableCallback` (when the service becomes available)
+- You can also set callbacks to track service start/stop events triggered from the **service UI** instead of the app UI:
+  - `MassiveStartedViaTaskbarCallback` (when started from the service UI)
+  - `MassiveStoppedViaTaskbarCallback` (when stopped from the service UI)
+
+### iOS
+
+- You **must** set a callback when calling the `initAsync` method.
+- This callback will receive the **initial service state** after initialization.
+- To check the service state later, the user must call the `getStatus` method manually.

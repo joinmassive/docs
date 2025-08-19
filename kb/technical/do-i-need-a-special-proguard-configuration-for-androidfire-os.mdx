@@ -1,0 +1,14 @@
+---
+title: "Do I need a special ProGuard configuration for Android/Fire OS?"
+description: "Do I need a special ProGuard configuration for Android/Fire OS?"
+---
+
+Yes, if not use the R8 compiler. Required rules include:
+
+- Keeping all "com.joinmassive.sdk" classes
+- Keeping OkHttp3 and Moshi classes 
+- Preserving annotations and exceptions
+
+If using R8, rules are automatically applied.
+
+Learn more: [Android Technical Details](https://docs.joinmassive.com/monetization-sdk/mobile-android#technical-details)

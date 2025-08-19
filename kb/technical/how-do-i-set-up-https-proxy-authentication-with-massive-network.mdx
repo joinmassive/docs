@@ -1,0 +1,28 @@
+---
+title: "How do I set up HTTPS proxy authentication with Massive Network?"
+description: "How do I set up HTTPS proxy authentication with Massive Network?"
+---
+
+To authenticate using Massive Network's **HTTPS proxy**, follow these steps:
+
+### **Step 1: Use the Correct Port**
+
+- For **HTTPS proxy connections**, always use **port 65535**.
+- Do not use ports assigned to other protocols, such as HTTP (65534) or SOCKS5 (65533).
+
+### **Step 2: Run the Authentication Command**
+
+Use the following `curl` command to authenticate your **HTTPS proxy** connection:
+
+```bash
+curl --proxy https://network.joinmassive.com:65535 -U 'PROXY_USERNAME:PROXY_PASSWORD' https://cloudflare.com/cdn-cgi/trace
+```
+
+- Replace PROXY_USERNAME and `PROXY_PASSWORD` with your credentials.
+- Retrieve your credentials from the **Profile section** of the Massive Network dashboard: [https://partners.joinmassive.com/profile](https://partners.joinmassive.com/profile).
+
+### **Step 3: Generate a Custom Command (Optional)**
+
+- For advanced customization (e.g., location targeting or protocol preferences), visit the **Quickstart section** in your dashboard: [https://partners.joinmassive.com/quickstart](https://partners.joinmassive.com/quickstart).
+
+Use the **Massive Proxy Configurator** to create tailored commands based on your specific needs.

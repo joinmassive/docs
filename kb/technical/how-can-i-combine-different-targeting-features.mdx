@@ -1,0 +1,26 @@
+---
+title: "How can I combine different targeting features?"
+description: "How can I combine different targeting features?"
+---
+
+Example combinations:
+
+1. Device with Location:
+
+```java
+{USERNAME}-device-mobile-country-GB-city-London:{PASSWORD}
+```
+
+2. Device with Session:
+
+```java
+{USERNAME}-device-mobile-session-123:{PASSWORD}
+```
+
+3. Complete Integration:
+
+```java
+curl -x https://network.joinmassive.com:65535 \
+-U '{USERNAME}-device-mobile-country-US-subdivision-NY-session-876:{PASSWORD}' \
+https://cloudflare.com/cdn-cgi/trace
+```

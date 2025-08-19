@@ -1,0 +1,13 @@
+---
+title: "When do sticky sessions change nodes?"
+description: "When do sticky sessions change nodes?"
+---
+
+Sessions may change under these conditions:
+
+1. TTL expiration
+2. Request limit exceeded 
+3. Node unavailability
+4. Mode-specific conditions:
+   - Flex Mode: After 15 consecutive errors
+   - Strict Mode: Immediate change on failure

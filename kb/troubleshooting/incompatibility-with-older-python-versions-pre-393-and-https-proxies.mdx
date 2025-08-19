@@ -1,0 +1,59 @@
+---
+title: "Incompatibility with Older Python Versions (Pre-3.9.3) and HTTPS Proxies"
+description: "Incompatibility with Older Python Versions (Pre-3.9.3) and HTTPS Proxies"
+---
+
+**Overview**
+
+This article provides guidance on troubleshooting issues related to using a residential proxy network with Python, specifically focusing on scenarios where an older version of Python does not support HTTPS proxies. We also cover the usage of HTTP proxies as an alternative when upgrading Python is not feasible.
+
+**Problem:**
+
+Clients using older versions of Python (before 3.9.3) often face issues when attempting to use HTTPS proxies with the requests library. This is due to the lack of support for HTTPS proxies in older Python versions.
+
+**Root Cause**
+
+Python versions prior to 3.9.3 have limited support for HTTPS proxies, which can lead to issues such as slow response times or failures when making HTTPS requests. The requests library in these versions may struggle with proxying HTTPS connections, especially when using older versions of the library.
+
+**Solution**
+
+1. **Verify Python and requests Library Versions**
+
+- Use Python 3.9.3 or later. If upgrading Python is not an option, use HTTP instead of HTTPS.
+- Confirm the version of the requests library. While the latest version is recommended, the issue primarily lies with the Python version rather than the library.
+
+2. **Switch to HTTP Proxy (Port 65534)**
+
+- If upgrading Python is not possible due to dependency constraints, use the HTTP proxy on port 65534.
+- The HTTP proxy works well with all versions of Python and does not require an upgrade.
+- Modify the proxy configuration in the script to use HTTP as shown below:
+
+> **Configuration Note:**
+> While configuring your proxy settings in Python, it's important to note that even though the requests library expects both http and https keys in the configuration, you can set both keys to the HTTP proxy address (using port 65534). This configuration works correctly and ensures compatibility across different Python versions.
+
+```python
+#!/usr/bin/env python3
+import urllib
+
+import requests
+
+username = urllib.parse.quote('PROXY_USERNAME')
+password = 'API_KEY'
+url      = 'http://cloudflare.com/cdn-cgi/trace'  # Insert your target URL here
+host     = 'network.joinmassive.com'
+port     = 65534  # Use HTTP port
+proxy    = f'http://{username}:{password}@{host}:{port}'
+response = requests.get(url, proxies={'http': proxy, 'https': proxy})
+
+print(response.content)
+```
+
+**Additional Notes**
+
+- **Compatibility**: Be aware that while HTTP is less secure than HTTPS, it might be the only viable solution when working with older Python environments.
+
+**Conclusion**
+
+When encountering issues with HTTPS proxies in Python, especially in versions prior to 3.9.3, switching to an HTTP proxy (port 65534) can provide a quick and effective workaround. This approach maintains the functionality of your residential proxy network while avoiding the need for a Python version upgrade that might disrupt existing dependencies.
+
+For further assistance or if you continue to experience issues, please [contact our support team](https://joinmassive.atlassian.net/servicedesk/customer/portal/2/group/2/create/10).

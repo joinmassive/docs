@@ -1,0 +1,25 @@
+---
+title: "How do I implement sticky sessions?"
+description: "How do I implement sticky sessions?"
+---
+
+Basic Format:
+
+```bash
+PROXY_USERNAME-session-YOUR_ID:PASSWORD
+```
+
+Complete Example with All Parameters:
+
+```bash
+curl -x https://network.joinmassive.com:65535 \
+-U '{USERNAME}-session-37-sessionttl-30-sessionmode-flex:{PASSWORD}' \
+https://cloudflare.com/cdn-cgi/trace
+```
+
+Parameters Explained:
+
+- session-37: Unique session identifier
+- sessionttl-30: 30-minute session duration  
+- sessionmode-flex: Flexible session mode
+- Port 65535: HTTPS (Use 65534 for HTTP, 65533 for SOCKS5)

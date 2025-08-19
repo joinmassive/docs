@@ -1,0 +1,12 @@
+---
+title: "How can I monitor the SDK's network usage?"
+description: "How can I monitor the SDK's network usage?"
+---
+
+Each platform provides network usage tracking:
+
+- **Android/Fire OS:** Use the `usage()` method in MassiveClient
+- **Windows:** Use taskbar usage display functionality  
+- **iOS:** Use `MassiveClient.shared.getNetworkUsage()`
+
+The usage is reported in bytes and can be monitored for resource management.

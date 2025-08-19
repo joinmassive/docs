@@ -1,0 +1,26 @@
+---
+title: "How do I authenticate with ISP proxies?"
+description: "How do I authenticate with ISP proxies?"
+---
+
+Massive ISP proxies support three protocols:
+
+1. HTTP (Port 8000):
+
+```bash
+curl --proxy http://isp.joinmassive.com:8000 -U '{PROXY_USERNAME}:{PROXY_PASSWORD}' https://cloudflare.com/cdn-cgi/trace
+```
+
+2. HTTPS (Port 4080):
+
+```bash
+curl --proxy https://isp.joinmassive.com:4080 -U '{PROXY_USERNAME}:{PROXY_PASSWORD}' https://cloudflare.com/cdn-cgi/trace
+```
+
+3. SOCKS5 (Port 8000):
+
+```bash
+curl -x socks5h://isp.joinmassive.com:8000 -U '{PROXY_USERNAME}:{PROXY_PASSWORD}' https://www.cloudflare.com/cdn-cgi/trace
+```
+
+Replace `PROXY_USERNAME` and `PROXY_PASSWORD` with your credentials.
