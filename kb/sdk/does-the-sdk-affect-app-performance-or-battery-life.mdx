@@ -1,0 +1,38 @@
+---
+title: "Does the SDK affect app performance or battery life?"
+---
+
+No, the SDK is designed to operate with minimal impact by using only free/unused device resources.
+
+### Android/Fire OS:
+
+- Uses idle device resources and runs as a separate process to avoid interfering with the main application.
+- When using Foreground Service, users are kept aware of resource usage through notifications
+
+### iOS:
+
+- Background processing only occurs when the device is charging to preserve battery life
+- No special capabilities are required that might impact performance
+
+### Windows:
+
+- Runs as a separate process to avoid interfering with the main application.
+- Users are notified of resource usage through the system tray notifications.
+
+The SDK implements these battery and performance optimizations:
+
+1. User control over participation
+2. Option to use Background Service mode for less resource usage (Android/Fire OS)
+3. Separate process architecture (Android/Fire OS/Windows)
+4. Charging-only background processing (iOS)
+
+For specific concerns about performance or battery usage, you can:
+
+1. Contact support: [support@joinmassive.com](mailto:support@joinmassive.com)
+2. Submit a ticket: [Support Portal](https://forms.fillout.com/t/p8dRqBYs58us)
+
+Learn more about technical details:
+
+- [Android Technical Details](https://docs.joinmassive.com/monetization-sdk/mobile-android#technical-details)
+- [Windows Getting Started Guide](https://docs.joinmassive.com/monetization-sdk/desktop-windows#getting-started)
+- [iOS Technical Details](https://docs.joinmassive.com/monetization-sdk/mobile-ios#technical-details)

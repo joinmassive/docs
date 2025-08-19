@@ -1,0 +1,23 @@
+---
+title: "How do I implement geotargeting?"
+---
+
+Two syntax options are available:
+
+1. Dash Syntax:
+
+```bash
+curl -x https://network.joinmassive.com:65535 \
+-U '{USERNAME}-country-US-subdivision-CA:{PASSWORD}' \
+https://cloudflare.com/cdn-cgi/trace
+```
+
+2. Query String Syntax:
+
+```bash
+curl -x https://network.joinmassive.com:65535 \
+-U '{USERNAME}?country=US&subdivision=CA:{PASSWORD}' \
+https://cloudflare.com/cdn-cgi/trace
+```
+
+Learn more at [Geotargeting documentation](https://docs.joinmassive.com/residential/geotargeting)

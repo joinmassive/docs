@@ -1,0 +1,65 @@
+---
+title: "Using Residential Proxies with Selenium (Python)"
+---
+
+To use proxies with Selenium in Python, it's recommended to use Selenium Wire ([https://pypi.org/project/selenium-wire/](https://pypi.org/project/selenium-wire/)) instead of standard Selenium. Selenium Wire supports proxies with username and password authentication, which standard Selenium does not.
+
+Install the required packages by running:
+
+```bash
+pip install selenium selenium-wire webdriver-manager
+```
+
+Here's a Python example for integrating Massive proxies with Selenium Wire:
+
+```python
+from seleniumwire import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+
+def configure_proxy(username, password, address, port):
+    proxy_url = f"http://{username}:{password}@{address}:{port}"
+    return {"proxy": {"http": proxy_url, "https": proxy_url}}
+
+def initialize_driver(proxy_options):
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")  # Remove this line to see the browser
+    driver = webdriver.Chrome(
+        service=Service(ChromeDriverManager().install()),
+        seleniumwire_options=proxy_options,
+        options=chrome_options,
+    )
+    return driver
+
+def test_connection(driver, test_url):
+    driver.get(test_url)
+    return driver.find_element(By.TAG_NAME, "body").text
+
+if __name__ == "__main__":
+    PROXY_USERNAME = "<YOUR_PROXY_USERNAME>"
+    PROXY_PASSWORD = "<YOUR_PROXY_PASSWORD>"
+    PROXY_ADDRESS = "network.joinmassive.com"
+    PROXY_PORT = "65534"
+
+    proxy_settings = configure_proxy(
+        PROXY_USERNAME, PROXY_PASSWORD, PROXY_ADDRESS, PROXY_PORT
+    )
+    driver = initialize_driver(proxy_settings)
+
+    try:
+        test_url = "https://httpbin.io/ip"
+        ip_response = test_connection(driver, test_url)
+        print(ip_response)
+    finally:
+        driver.quit()
+```
+
+If you encounter connection issues while using proxies with Selenium Wire, check the following:
+
+1. **Proxy Credentials**: Ensure the username and password are correct.
+
+2. **Proxy Host and Port**: Verify you're using the correct host (network.joinmassive.com) and port (65534).
+
+3. **Proxy URL Format**: Confirm the proxy URL starts with http://.

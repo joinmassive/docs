@@ -1,0 +1,20 @@
+---
+title: "How do I authenticate and verify my connection to Massive Network?"
+---
+
+1. Authentication Requirements:
+   - PROXY_USERNAME and PROXY_PASSWORD (found in [Profile](https://partners.joinmassive.com/profile) section)
+   - Choose the appropriate port:
+     - 65535 for HTTPS
+     - 65534 for HTTP
+     - 65533 for SOCKS5
+     - 1080 when default ports are blocked by firewall
+
+2. Verification Steps:
+
+```bash
+curl -x "https://network.joinmassive.com:65535" -U "PROXY_USERNAME:PROXY_PASSWORD" http://ip-api.com
+```
+
+Successful connection will return your IP information
+Error **407** indicates invalid credentials.

@@ -1,0 +1,50 @@
+---
+title: "How should I organize and implement subaccounts?"
+---
+
+You can organize subaccounts based on different strategies:
+
+1. Client/Environment Segmentation:
+
+```bash
+{USERNAME}-subaccount-clientA_production:{PASSWORD}
+{USERNAME}-subaccount-clientA_staging:{PASSWORD}
+```
+
+2. Department/Project Structure:
+
+```bash
+{USERNAME}-subaccount-marketing_analytics:{PASSWORD}
+{USERNAME}-subaccount-project_alpha_dev:{PASSWORD}
+```
+
+3. Advanced Implementations (**with targeting**):
+
+```bash
+# Geographic targeting
+{USERNAME}-subaccount-client1-country-US:{PASSWORD}
+
+# Device targeting
+{USERNAME}-subaccount-client1-device-mobile:{PASSWORD}
+
+# Combined parameters
+{USERNAME}-subaccount-client1-country-US-device-mobile-session-123:{PASSWORD}
+```
+
+Here are complete examples showing how to use subaccounts in actual requests:
+
+1. Basic Implementation:
+
+```bash
+curl -x https://network.joinmassive.com:65535 \
+-U '{USERNAME}-subaccount-projectX:{PASSWORD}' \
+https://cloudflare.com/cdn-cgi/trace
+```
+
+2. With Customer Tracking:
+
+```bash
+curl -x https://network.joinmassive.com:65535 \
+-U '{USERNAME}-subaccount-customer@example.com:{PASSWORD}' \
+https://cloudflare.com/cdn-cgi/trace
+```

@@ -1,0 +1,17 @@
+---
+title: "What are the rules for combining parameters?"
+---
+
+When combining targeting parameters:
+
+1. Mandatory Requirements:
+   - Country parameter is always required
+   - Additional parameters must be valid for the specified country
+
+2. Parameter Hierarchy:
+   - ZIP/Postal code takes precedence over city
+   - Subdivision and city must match when both are used
+
+3. Impact Considerations:
+   - More specific targeting reduces available proxy nodes
+   - Start with broad parameters and narrow as needed

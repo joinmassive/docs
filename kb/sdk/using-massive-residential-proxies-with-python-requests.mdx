@@ -1,0 +1,43 @@
+---
+title: "Using Massive Residential Proxies with Python (Requests)"
+---
+
+### Step 1: Install Required Library
+
+Ensure you have the `requests` library installed. Run:
+
+```bash
+pip install requests
+```
+
+### Step 2: Configure Proxy
+
+Retrieve your Massive credentials (username and password) from the **Profile** section of the dashboard. Format your proxy URL as:
+
+```
+https://<YOUR_USERNAME>:<YOUR_PASSWORD>@network.joinmassive.com:65535
+```
+
+### Step 3: Code Example
+
+The following Python script demonstrates how to send requests through Massive Residential Proxies:
+
+```python
+import requests
+
+# Construct the proxy URL
+proxy_url = "https://<YOUR_USERNAME>:<YOUR_PASSWORD>@network.joinmassive.com:65535"
+
+# Set up proxies for requests
+proxies = {
+    "http": proxy_url,
+    "https": proxy_url,
+}
+
+# Send a request through the proxy
+try:
+    response = requests.get("https://httpbin.io/ip", proxies=proxies)
+    print(response.text)
+except requests.exceptions.RequestException as e:
+    print(f"Error occurred: {e}")
+```

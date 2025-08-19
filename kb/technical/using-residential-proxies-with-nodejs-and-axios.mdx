@@ -1,0 +1,88 @@
+---
+title: "Using Residential Proxies with Node.js and Axios"
+---
+
+Here's how you can integrate them with Node.js using Axios.
+
+### Step 1: Install Axios
+
+Ensure you have Node.js installed on your system. Navigate to your project directory and install Axios using the following command:
+
+```bash
+npm install axios
+```
+
+### Step 2: Get Your Proxy Credentials
+
+Log in to the Massive dashboard and navigate to the **Profile** section to find your username, password, and proxy domain. Your proxy URL should follow this format:
+
+```
+https://<YOUR_USERNAME>:<YOUR_PASSWORD>@network.joinmassive.com:65535
+```
+
+Replace `<YOUR_USERNAME>` and `<YOUR_PASSWORD>` with your Massive credentials.
+
+### Step 3: Make Requests with Massive Residential Proxies
+
+Here's an example of using Axios with Massive proxies to send a request to `httpbin.io/ip`, which returns the IP address used for the request.
+
+```javascript
+const axios = require('axios');
+
+// Proxy credentials
+const proxy = {
+    protocol: 'https',
+    host: 'network.joinmassive.com',
+    port: '65535',
+    auth: {
+        username: '<YOUR_PROXY_USERNAME>',
+        password: '<YOUR_PROXY_PASSWORD>'
+    }
+};
+
+// Target URL
+const targetURL = 'https://httpbin.io/ip';
+
+// Axios instance with SSL verification disabled
+const axiosInstance = axios.create({
+    proxy: proxy,
+    httpsAgent: new (require('https').Agent)({
+        rejectUnauthorized: false // Disable SSL verification
+    })
+});
+
+// Make the request
+axiosInstance.get(targetURL)
+    .then(response => {
+        console.log('Your IP Address:', response.data);
+    })
+    .catch(error => {
+        console.error('Error:', error.message);
+    });
+```
+
+### Troubleshooting Common Errors
+
+Here are some common issues and their solutions:
+
+### 1. Invalid Proxy Credentials
+
+- If you see a `407 Proxy Authentication Required` or `401 Unauthorized` error, ensure your username and password in the `auth` section match the credentials in the Massive dashboard.
+
+### 2. Outdated Axios Version
+
+- Older Axios versions might not support all proxy configurations. Update Axios to the latest version using: `npm install axios@latest`
+
+### 3. Connection Refused or Blocked
+
+- Verify that you're using the correct protocol (`http` or `https`) and port (`65534` or `65535`).
+- Check if the target website is blocking proxies. Some websites implement advanced anti-bot mechanisms.
+
+### 4. Invalid Proxy URL Format
+
+- The proxy URL must be correctly formatted: `<http://username:password@proxy-host>:port`
+- Ensure no component is missing or incorrectly configured.
+
+### 5. IP Rotation Issues
+
+If IPs are not rotating as expected, check the **Sticky TTL** settings on Massive. Lower the TTL value to rotate IPs more frequently.

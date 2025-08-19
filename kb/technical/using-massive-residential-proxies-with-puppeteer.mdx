@@ -1,0 +1,50 @@
+---
+title: "Using Massive Residential Proxies with Puppeteer"
+---
+
+Puppeteer, a popular headless browser library, can use Massive proxies to bypass anti-bot restrictions.
+
+### Step 1: Install Puppeteer
+
+Ensure Puppeteer is installed. Run:
+
+```bash
+npm install puppeteer
+```
+
+### Step 2: Configure Proxy
+
+Use Puppeteer's `--proxy-server` flag for proxy setup, and authenticate with your Massive credentials.
+
+### Step 3: Code Example
+
+```javascript
+import puppeteer from "puppeteer";
+
+(async () => {
+    const browser = await puppeteer.launch({
+        args: [`--proxy-server=network.joinmassive.com:65534`],
+    });
+    const page = await browser.newPage();
+    await page.authenticate({ username: '<YOUR_USERNAME>', password: '<YOUR_PASSWORD>' });
+    await page.goto("https://httpbin.io/ip");
+    const body = await page.waitForSelector("body");
+    const response = await body.getProperty("textContent");
+    const jsonResponse = await response.jsonValue();
+    console.log(jsonResponse);
+    await browser.close();
+})();
+```
+
+### Troubleshooting:
+
+If you encounter SSL certificate errors (e.g., `net::ERR_CERT_AUTHORITY_INVALID`), add the following:
+
+```javascript
+const browser = await puppeteer.launch({
+    args: [`--proxy-server=network.joinmassive.com:65534`],
+    ignoreHTTPSErrors: true
+});
+```
+
+Use HTTP and port 65534 when using Puppeteer with the proxies.

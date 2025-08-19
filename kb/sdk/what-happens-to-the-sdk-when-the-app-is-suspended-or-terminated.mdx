@@ -1,0 +1,11 @@
+---
+title: "What happens to the SDK when the app is suspended or terminated?"
+---
+
+Behavior varies by platform:
+
+- **Android/Fire OS:** The service can continue running as a separate process in Foreground or Background mode. However, the runtime is limited and depends on whether the device is connected to power.
+
+- **Windows:** Can be configured to stop on app quit using `STOP_MASSIVE_ON_APP_QUIT` option
+
+- **iOS:** State persists in the background but not across launches. If the app is configured to run in the background, it can wake up at regular intervals (approximately every 30 minutes) and run for up to 5 minutes, but only if the device is connected to power.

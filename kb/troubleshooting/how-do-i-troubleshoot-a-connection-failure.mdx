@@ -1,0 +1,21 @@
+---
+title: "How do I troubleshoot a connection failure?"
+---
+
+Follow these steps:
+
+1. Verify Protocol-Port Matching:
+   - HTTPS: Port 65535
+   - HTTP: Port 65534
+   - SOCKS5: Port 65533
+
+2. Check Credentials:
+   - Format: username:password
+   - Look for typos or spaces
+   - Verify in [Profile](https://partners.joinmassive.com/profile) section
+
+3. Test Configuration:
+
+```bash
+curl -x "https://network.joinmassive.com:65535" -U "username:password" http://ip-api.com
+```

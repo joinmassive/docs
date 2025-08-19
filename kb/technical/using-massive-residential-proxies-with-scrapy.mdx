@@ -1,0 +1,54 @@
+---
+title: "Using Massive Residential Proxies with Scrapy"
+---
+
+Here's the clean Markdown version:
+
+Scrapy is a powerful web scraping library that supports proxy integration through `meta` parameters or custom middleware.
+
+### Method 1: Using Meta Parameters
+
+```python
+import scrapy
+
+class ScraperSpider(scrapy.Spider):
+    name = "scraper"
+    start_urls = ["https://httpbin.org/ip"]
+
+    def start_requests(self):
+        for url in self.start_urls:
+            yield scrapy.Request(
+                url=url,
+                callback=self.parse,
+                meta={
+                    "proxy": "http://<YOUR_USERNAME>:<YOUR_PASSWORD>@network.joinmassive.com:65534"
+                },
+            )
+
+    def parse(self, response):
+        self.logger.info(f"Response: {response.text}")
+```
+
+### Method 2: Custom Middleware
+
+Update the `middlewares.py` with:
+
+```python
+class CustomProxyMiddleware:
+    def __init__(self):
+        self.proxy = 'http://<YOUR_USERNAME>:<YOUR_PASSWORD>@network.joinmassive.com:65534'
+
+    def process_request(self, request, spider):
+        if 'proxy' not in request.meta:
+            request.meta['proxy'] = self.proxy
+```
+
+Add the middleware to `DOWNLOADER_MIDDLEWARES` in `settings.py`:
+
+```python
+DOWNLOADER_MIDDLEWARES = {
+    'myproject.middlewares.CustomProxyMiddleware': 350,
+}
+```
+
+Note that, when using proxies with the Scrapy, always use host http and port 65534, which will work perfectly.

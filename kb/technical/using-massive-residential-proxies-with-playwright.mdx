@@ -1,0 +1,56 @@
+---
+title: "Using Massive Residential Proxies with Playwright"
+---
+
+The playwright supports both synchronous and asynchronous scraping. Here's an asynchronous example:
+
+### Step 1: Install Playwright
+
+Run:
+
+```bash
+pip install playwright
+python -m playwright install
+```
+
+### Step 2: Code Example
+
+```python
+import asyncio
+from playwright.async_api import async_playwright
+
+async def main():
+    proxy = {
+        "server": "https://network.joinmassive.com:65535",
+        "username": "<YOUR_USERNAME>",
+        "password": "<YOUR_PASSWORD>"
+    }
+
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(proxy=proxy, headless=True)
+        page = await browser.new_page()
+        await page.goto("https://httpbin.io/ip")
+        content = await page.content()
+        print(content)
+        await browser.close()
+
+asyncio.run(main())
+```
+
+### Troubleshooting Common Issues
+
+1. **Invalid Proxy Credentials**:
+   - Ensure your username and password match the Massive dashboard credentials.
+
+2. **Connection Refused**:
+   - Verify the protocol (`http` or `https`) and port (`65534` or `65535`).
+
+3. **SSL Certificate Errors**:
+   - For headless browsers, configure them to ignore SSL certificate issues.
+
+4. **IP Rotation Settings**:
+   - Adjust Sticky TTL in the Massive dashboard to control how often IPs rotate.
+
+5. **Outdated Library Versions**:
+
+Ensure libraries like `requests`, `puppeteer`, or `playwright` are up-to-date.
