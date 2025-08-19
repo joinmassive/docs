@@ -65,7 +65,7 @@
     {
       "name": "Knowledge Base",
       "icon": "brain",
-      "url": "/kb/introduction"
+      "url": "kb/introduction"
     }
   ],
   "navigation": [
