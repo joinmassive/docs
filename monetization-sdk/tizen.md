@@ -1,0 +1,255 @@
+---
+title: "Tizen"
+description: "Integrate Massive SDK into your Tizen TV application with this guide."
+icon: "tv"
+iconType: "solid"
+---
+
+## Technical Requirements
+
+|                     |                      |
+| ------------------- | -------------------- |
+| Tizen Version       | `3.0` or later       |
+| Tizen TV SDK        | Latest version       |
+
+### Features Needed
+
+|                                        |
+| -------------------------------------- |
+| `http://tizen.org/feature/web.service` |
+
+### Permissions Needed
+
+|                                                 |
+| ----------------------------------------------- |
+| `http://tizen.org/privilege/internet`           |
+| `http://tizen.org/privilege/messageport`        |
+| `http://tizen.org/privilege/application.launch` |
+| `http://tizen.org/privilege/tv.inputdevice`     |
+| `http://tizen.org/privilege/filesystem.read`    |
+| `http://tizen.org/privilege/filesystem.write`   |
+| `http://tizen.org/privilege/alarm`              |
+| `http://tizen.org/privilege/system`             |
+
+## Integration Guide
+
+### Sample application
+
+Massive SDK comes with a sample application showing project configuration, API integration, and consent screen.
+
+To run the app, follow these steps:
+
+1. Install the [Tizen TV SDK](https://developer.samsung.com/smarttv/develop/getting-started/setting-up-sdk/installing-tv-sdk.html).
+2. Extract the sample app and the SDK package provided by Massive.
+3. Copy SDK files to the sample app:
+   - Copy `MassiveClient/MassiveClient.js` to the `js/` directory
+   - Copy `MassiveService/MassiveService.js` to the `service/` directory (create if needed)
+4. Copy the API token from your [Profile](https://partners.joinmassive.com/profile).
+5. Set the token value to the `API_TOKEN` constant in `js/main.js`.
+6. Create a new partner level certificate in the Tizen Certificate Manager.
+7. Create a new Tizen TV web application project in the Tizen IDE.
+8. Replace the project files with the sample application files.
+9. Build and run the app in the emulator.
+
+### Dependency configuration
+
+The Massive SDK for Tizen is distributed in two separate packages:
+
+1. **MassiveSDK-Tizen-X.X.X.zip** - Contains the SDK files needed for integration
+2. **SampleApp-Tizen-X.X.X.zip** - Contains a complete sample application
+
+To integrate the SDK into your project:
+
+1. Extract the `MassiveSDK-Tizen-X.X.X.zip` file to get the SDK files.
+
+2. Copy the following files to your project:
+   - `MassiveClient/MassiveClient.js` to your `js/` directory
+   - `MassiveService/MassiveService.js` to your `service/` directory
+
+3. Configure your `config.xml` file to use the service:
+
+   ```xml
+   <tizen:service id="your_package_id.Service">
+       <tizen:content src="service/MassiveService.js"/>
+       <tizen:name>MassiveService</tizen:name>
+       <tizen:description>Massive SDK Web Service</tizen:description>
+       <tizen:category name="http://tizen.org/category/service"/>
+   </tizen:service>
+   ```
+
+   **Note:** Replace `your_package_id` with your actual package ID.
+
+4. Add required features and privileges to `config.xml`:
+
+   ```xml
+   <feature name="http://tizen.org/feature/web.service"/>
+   <tizen:privilege name="http://tizen.org/privilege/system"/>
+   <tizen:privilege name="http://tizen.org/privilege/internet"/>
+   <tizen:privilege name="http://tizen.org/privilege/messageport"/>
+   <tizen:privilege name="http://tizen.org/privilege/application.launch"/>
+   <tizen:privilege name="http://tizen.org/privilege/tv.inputdevice"/>
+   <tizen:privilege name="http://tizen.org/privilege/filesystem.read"/>
+   <tizen:privilege name="http://tizen.org/privilege/filesystem.write"/>
+   <tizen:privilege name="http://tizen.org/privilege/alarm"/>
+   ```
+
+### Integration to the app
+
+#### 1. Get the API token
+
+Massive SDK API token is available in your [Profile](https://partners.joinmassive.com/profile).
+
+#### 2. Import MassiveClient
+
+Import the MassiveClient module in your JavaScript file:
+
+```javascript
+import { MassiveClient } from './MassiveClient.js';
+```
+
+**Alternative:** If your environment doesn't support ES6 modules, you can import it in your HTML file:
+
+```html
+<script type="module">
+  import { MassiveClient } from "./js/MassiveClient.js";
+  // Make it globally available
+  window.MassiveClient = MassiveClient;
+</script>
+```
+
+#### 3. Initialize MassiveClient
+
+Initialize the client with your API token and handle the result in the callback:
+
+```javascript
+let massiveClient = new MassiveClient();
+massiveClient.init(API_TOKEN, function(result) {
+  if (result) {
+    // The SDK is initialized
+  } else {
+    // The SDK initialization failed
+  }
+});
+```
+
+If you made it globally available:
+
+```javascript
+let massiveClient = new window.MassiveClient();
+```
+
+#### 4. Request consent from the user
+
+Before starting the client, obtain user consent for the terms of resource exchange. Please see our [launch checklist](https://www.joinmassive.com/launch-checklist-tizen) for additional details.
+
+Example consent text:
+
+```
+To remove ads and get free content, please let Massive use a small amount of your device's free resources and IP
+address to download public web data from the internet.
+
+This supports the development of Application and helps us to improve our services.
+
+No personal information is collected except your IP address.
+
+Your participation is optional, and you may opt out anytime by accessing Settings (see Massive's FAQ for details).
+
+Pressing Accept indicates that you agree to Massive's license and privacy policy.
+```
+
+#### 5. Start usage after consent
+
+After receiving the user's consent, start usage using the `start()` method:
+
+```javascript
+// Check if there is user consent to use Massive
+if (isUserConsentGiven()) {
+    massiveClient.start();
+}
+```
+
+#### 6. Stop usage
+
+To stop the SDK usage:
+
+```javascript
+massiveClient.stop();
+```
+
+#### 7. Query SDK status
+
+You can query the SDK status at any time after initialization:
+
+```javascript
+massiveClient.status().then((result) => {
+  console.log(result);
+  // Handle status
+}).catch((error) => {
+  console.error(error);
+});
+```
+
+Possible status values:
+- `Uninitialized`
+- `Initializing`
+- `Initialized`
+- `Started`
+- `Stopped`
+- `Error`
+
+## Technical details
+
+1. **Service architecture**
+   The Massive SDK for Tizen uses a web service application that runs as a separate service component in your application. This service handles the core operations independently of the main application, providing better performance and stability.
+
+2. **Message port communication**
+   The SDK uses Tizen's message port API for communication between your application and the Massive service. This ensures secure and efficient data exchange between components.
+
+3. **One-time initialization**
+   The SDK should be initialized only once per application session. The initialization establishes communication with the service and prepares the SDK for operation. Subsequent calls to `init` will return the current state without reinitializing.
+
+4. **User consent before starting usage**
+   Before starting the SDK usage for the first time (using the `start()` method), it is mandatory to obtain user consent for the terms of resource exchange. This aligns with user privacy and control principles. Ensure that your application includes a clear and understandable consent mechanism.
+
+   ```javascript
+   if (isUserConsentGiven) {
+       massiveClient.start();
+   }
+   ```
+
+5. **Starting and stopping the client**
+   Initialization of the `MassiveClient` with the `init()` method does not automatically start the usage. 
+   
+   **It prepares the SDK for use but does not begin its operation.**
+   
+   To ensure that Massive is running, the `start()` method must be called after initialization. The `start()` method is designed to be idempotent, meaning it is safe to call multiple times. If the service is already started, subsequent calls will have no effect.
+
+   The `stop()` method is used to stop the service operation. After calling `stop()`, you can restart the client by calling the `start()` method again.
+
+6. **Persistent service**
+   The Massive service is designed to persist across application sessions. Once initialized and started, it will continue to operate even when the main application is closed, subject to system resource management policies.
+
+7. **Certificate requirements**
+   To deploy applications with the Massive SDK on Tizen devices, you need a partner-level certificate. This certificate must be created using the Tizen Certificate Manager and is required for accessing certain system privileges needed by the SDK.
+
+8. **Package ID configuration**
+   When integrating the SDK, ensure that the service ID in your `config.xml` matches your application's package ID. This is crucial for proper service registration and message port communication.
+
+9. **Error handling**
+   The SDK provides comprehensive error handling through callbacks and promise rejections. Always implement proper error handling to ensure a smooth user experience:
+
+   ```javascript
+   massiveClient.init(API_TOKEN, function(result) {
+     if (result) {
+       // Success handling
+     } else {
+       // Error handling - initialization failed
+     }
+   });
+   ```
+
+10. **Status monitoring**
+    Regular status monitoring helps ensure the SDK is operating correctly. The `status()` method returns a promise that resolves with the current SDK state, allowing you to implement appropriate UI updates or error recovery mechanisms.
+
+11. **Resource management**
+    The SDK is designed to operate efficiently within the resource constraints of Tizen TV devices. It manages network and computational resources carefully to avoid impacting the user experience of your application or the overall TV performance.
