@@ -182,8 +182,7 @@
             "monetization-sdk/tv-fire",
             "monetization-sdk/mobile-ios",
             "monetization-sdk/webos",
-            "monetization-sdk/tizen",
-            
+            "monetization-sdk/tizen"
           ]
         }
       ]
