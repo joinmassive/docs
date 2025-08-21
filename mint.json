@@ -180,7 +180,10 @@
             "monetization-sdk/mobile-and-smart-tv",
             "monetization-sdk/mobile-android",
             "monetization-sdk/tv-fire",
-            "monetization-sdk/mobile-ios"
+            "monetization-sdk/mobile-ios",
+            "monetization-sdk/webos",
+            "monetization-sdk/tizen",
+            
           ]
         }
       ]
