@@ -7,8 +7,8 @@ description: "We support session persistence (AKA sticky sessions) with a custom
 
 | Key        | Value                                                                                                                                                                          | TTL                                                    | Examples        |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------ | --------------- |
-| session    | Any unique identifier of up to 255 characters (regardless of character encoding); Massive will make best efforts to route requests in the same session to the same egress node | Default: 15 minutes (customizable with \`sessionttl\`) | session42, 1234 |
-| sessionttl | Customizable session TTL in minutes, up to 60 minutes                                                                                                                          | Default: 15 minutes                                    | 30, 60          |
+| session    | Any unique identifier of up to 255 characters (regardless of character encoding); Massive will make best efforts to route requests in the same session to the same egress node | Default: 15 minutes (customizable with `sessionttl`) | session42, 1234 |
+| sessionttl | Customizable session TTL in minutes, up to 240 minutes                                                                                                                          | Default: 15 minutes                                    | 30, 60, 120, 240 |
 
 You can inject a session identifier, like a unique representation of your app or active task, to specify that multiple requests should originate from a single egress node (if available):
 
@@ -18,7 +18,11 @@ curl -x https://network.joinmassive.com:65535 \
      https://cloudflare.com/cdn-cgi/trace
 ```
 
-* Session TTL defaults to 15 minutes but can be customized using the `sessionttl` parameter. For example, to set the TTL to 30 minutes:
+### Session TTL Behavior
+
+* Session TTL defaults to 15 minutes but can be customized using the `sessionttl` parameter up to 240 minutes (4 hours).
+* **Important**: Sessions use static TTL - they expire at creation time + TTL and are not extended by subsequent requests.
+* For example, to set the TTL to 30 minutes:
 
 ```bash
 curl -x https://network.joinmassive.com:65535 \
@@ -26,23 +30,36 @@ curl -x https://network.joinmassive.com:65535 \
      https://cloudflare.com/cdn-cgi/trace
 ```
 
-* When a session identifier is specified and found the server will perform a request via the same node unless:
+### Session Rotation
 
-  * TTL is expired.
+When a session identifier is specified and found, the server will perform a request via the same node unless:
 
-  * The request limit per minute for the node is exceeded.
+* TTL is expired (sessions expire exactly at creation time + TTL)
+* The request limit per minute for the node is exceeded
+* The node has gone offline
+* Error limit is reached (in flex mode)
 
-  * The node has gone offline.
+If the session identifier is not found or the conditions above are not met, a new session is created with the specified ID and attached to a new node.
 
-* If the session identifier is not found or the conditions above are not met, a new session is created with the specified ID and attached to the new node.Additional parameters
+## Session Modes
 
-| Key         | Value            |
-| ----------- | ---------------- |
-| sessionmode | `strict`, `flex` |
+| Key         | Value            | Description |
+| ----------- | ---------------- | ----------- |
+| sessionmode | `strict`, `flex` | Controls session behavior on errors |
 
-By default, when a sticky session fails, our algorithm attempts to find a new node to complete the request, attaching a new IP address to the sticky session. This behavior can be overwritten by specifying `sessionmode-flex`.
+### Flex Mode (Default)
 
-Example of using undefined `sessionmode`, which defaults to `sessionmode-strict`:
+By default, sessions operate in **flex mode** where sessions persist through errors up to a configurable limit. In this mode:
+- Sessions continue through errors up to the error limit (default: 15)
+- Error count resets to 0 on successful requests
+- Provides better IP stability during transient failures
+- May retry failing nodes multiple times
+
+<Info>
+  **Note:** The default error limit is 15. After 15 consecutive errors, a new node is assigned to the sticky session. You can customize this with the `sessionerr` parameter.
+</Info>
+
+Example of using undefined `sessionmode`, which defaults to `sessionmode-flex`:
 
 ```bash
 curl -x https://network.joinmassive.com:65535 \
@@ -50,7 +67,19 @@ curl -x https://network.joinmassive.com:65535 \
      https://cloudflare.com/cdn-cgi/trace
 ```
 
-Example with `sessionmode-strict` explicitly defined:
+Example with `sessionmode-flex` explicitly defined:
+
+```bash
+curl -x https://network.joinmassive.com:65535 \
+     -U '{PROXY_USERNAME}-session-123-sessionmode-flex:{API_KEY}' \
+     https://cloudflare.com/cdn-cgi/trace
+```
+
+### Strict Mode
+
+Sessions can operate in **strict mode** where any error immediately invalidates the session and triggers rotation to a new node. This ensures clean IP rotation on failures but may change IPs more frequently.
+
+Example with `sessionmode-strict`:
 
 ```bash
 curl -x https://network.joinmassive.com:65535 \
@@ -58,16 +87,69 @@ curl -x https://network.joinmassive.com:65535 \
      https://cloudflare.com/cdn-cgi/trace
 ```
 
-Alternatively, a sticky session can persist through an error by using `sessionmode-flex`, though this may increase error rate.
+## Additional Parameters
 
-<Info>
-  **Attention:** The max number of errors is 15 until a new node is assigned to a sticky session.
-</Info>
+| Key         | Value            | Description | Default |
+| ----------- | ---------------- | ----------- | ------- |
+| sessionerr  | Number (1-100)   | Maximum consecutive errors before rotation in flex mode | 15 |
 
-Example with `sessionmode-flex`:
+### Customizing Error Limit
+
+In flex mode, you can customize how many errors are allowed before rotation:
 
 ```bash
 curl -x https://network.joinmassive.com:65535 \
-     -U '{PROXY_USERNAME}-session-123-sessionmode-flex:{API_KEY}' \
+     -U '{PROXY_USERNAME}-session-123-sessionmode-flex-sessionerr-5:{API_KEY}' \
      https://cloudflare.com/cdn-cgi/trace
 ```
+
+This example allows up to 5 consecutive errors before rotating to a new node.
+
+## Best Practices
+
+1. **Plan TTL appropriately**: Since sessions use static TTL (not extended by activity), set an appropriate duration for your use case
+2. **Choose the right mode**: Default flex mode provides IP stability; use strict mode if you need immediate rotation on any error
+3. **Monitor error rates**: Adjust `sessionerr` based on your tolerance for retries (default is 15)
+4. **Session ID naming**: Use descriptive session IDs to help with debugging and monitoring
+
+<Accordion title="Advanced: Parameter Timing and Mutability">
+
+  ### Parameters Applied at Session Creation/Rotation Only
+
+  The following parameters are only applied when a session is created or rotated, not on existing sessions:
+  - `sessionttl` - TTL duration
+  - `sessionmode` - Strict vs flex behavior
+  - `sessionerr` - Error limit for flex mode
+  - Geographic parameters (`subdivision`, `zipcode`, etc.)
+
+  This means changing these parameters on subsequent requests with the same session ID will have no effect until the session rotates to a new node.
+
+  ### Session-Breaking Parameters
+
+  <Warning>
+    **Critical**: Changing `country` or `city` parameters creates a NEW session with a different identity, breaking session continuity. These are part of the session token itself.
+  </Warning>
+
+  Unlike other parameters that are ignored until rotation, `country` and `city` are part of the session's unique identifier. Changing them creates an entirely different session:
+
+  ```bash
+  # First request creates session with US/NewYork
+  curl -x https://network.joinmassive.com:65535 \
+       -U '{PROXY_USERNAME}-session-test-country-US-city-NewYork:{API_KEY}' \
+       https://cloudflare.com/cdn-cgi/trace
+
+  # This creates a DIFFERENT session - not the same as above!
+  curl -x https://network.joinmassive.com:65535 \
+       -U '{PROXY_USERNAME}-session-test-country-US-city-LosAngeles:{API_KEY}' \
+       https://cloudflare.com/cdn-cgi/trace
+  ```
+
+  ### Parameters Always Processed
+
+  Some parameters are processed on every request regardless of session state:
+  - `subaccount` - For billing and tracking
+  - `httpredirect` - For HTTP to HTTPS redirect behavior
+
+  These parameters take effect immediately on each request.
+
+</Accordion>
