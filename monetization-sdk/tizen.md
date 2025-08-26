@@ -1,5 +1,6 @@
 ---
 title: "Tizen"
+icon: "/logo/tizen.svg"
 description: "Integrate Massive SDK into your Tizen TV application with this guide."
 icon: "tv"
 iconType: "solid"

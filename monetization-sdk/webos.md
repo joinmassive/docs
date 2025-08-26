@@ -1,5 +1,6 @@
 ---
 title: "webOS"
+icon: "/logo/webos.svg"
 description: "Integrate Massive SDK into your webOS TV application with this guide."
 icon: "tv"
 iconType: "solid"
