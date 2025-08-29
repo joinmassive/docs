@@ -1,48 +1,56 @@
 ---
-title: 'Select Your Platform'
-description: 'The Massive SDK is available on Android, FireOS, iOS, WebOS, and Tizen.'
+title: "Select Your Platform"
+description: "The Massive SDK is available on Android, FireOS, iOS, WebOS, and Tizen."
 icon: "mobile"
 iconType: "light"
 ---
 
-<CardGroup cols={2}>
-  <Card
-    title="Android"
-    icon="android"
-    href="/monetization-sdk/mobile-android"
-  >
+<Columns cols={2}>
+  <Card title="Android" icon="android" href="/monetization-sdk/mobile-android">
     Integrate in Android.
   </Card>
 
-  <Card
-    title="iOS"
-    icon="apple"
-    href="/monetization-sdk/mobile-ios"
-  >
+  <Card title="iOS" icon="apple" href="/monetization-sdk/mobile-ios">
     Integrate in iOS.
   </Card>
 
-  <Card
-    title="Fire OS"
-    icon="amazon"
-    href="/monetization-sdk/tv-fire"
-  >
+  <Card title="Fire OS" icon="amazon" href="/monetization-sdk/tv-fire">
     Integrate in Fire OS.
   </Card>
 
- <Card
-    title="WebOS"
-    image="/logo/webos.svg"
-    href="/monetization-sdk/webos"
-  >
-    Integrate in WebOS.
+  <Card href="/monetization-sdk/webos">
+    <div style={{ display: "flex", alignItems: "center", gap: "8px", margin: "0 -4px 0 0", padding: 0 }}>
+      <img
+        src="/logo/webos.svg"
+        alt="WebOS"
+        style={{ width: "24px", height: "24px", margin: "0 0 0 -4px", padding: "2px", objectFit: "cover" }}
+      />
+      <h2
+        className="not-prose font-semibold text-base text-gray-800 dark:text-white"
+        data-component-part="card-title"
+        style={{ margin: "16px 0 0 0", padding: 0 }}
+      >
+        WebOS
+      </h2>
+    </div>
+    <p style={{ margin: "4px 0 0 0", padding: 0 }}>Integrate in WebOS.</p>
   </Card>
 
-  <Card
-    title="Tizen"
-    image="/logo/tizen.svg"
-    href="/monetization-sdk/tizen"
-  >
-    Integrate in Tizen.
+  <Card href="/monetization-sdk/tizen">
+    <div style={{ display: "flex", alignItems: "center", gap: "8px", margin: "0 -4px 0 0", padding: 0 }}>
+      <img
+        src="/logo/tizen.svg"
+        alt="Tizen"
+        style={{ width: "24px", height: "24px", margin: "0 0 0 -4px", padding: "2px", objectFit: "cover" }}
+      />
+      <h2
+        className="not-prose font-semibold text-base text-gray-800 dark:text-white"
+        data-component-part="card-title"
+        style={{ margin: "16px 0 0 0", padding: 0 }}
+      >
+        Tizen
+      </h2>
+    </div>
+    <p style={{ margin: "4px 0 0 0", padding: 0 }}>Integrate in Tizen.</p>
   </Card>
-</CardGroup>
+</Columns>
