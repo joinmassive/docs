@@ -19,38 +19,52 @@ iconType: "light"
   </Card>
 
   <Card href="/monetization-sdk/webos">
-    <div style={{ display: "flex", alignItems: "center", gap: "8px", margin: "0 -4px 0 0", padding: 0 }}>
+    <div style={{
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "flex-start",
+      gap: "8px",
+      margin: "8px 0 6px 0"
+    }}>
       <img
         src="/logo/webos.svg"
         alt="WebOS"
-        style={{ width: "24px", height: "24px", margin: "0 0 0 -4px", padding: "2px", objectFit: "cover" }}
+       style={{ width: "24px", height: "24px", padding: 0, objectFit: "cover", overflow: "visible", marginTop: "-6px" }}
       />
       <h2
         className="not-prose font-semibold text-base text-gray-800 dark:text-white"
         data-component-part="card-title"
-        style={{ margin: "16px 0 0 0", padding: 0 }}
+        style={{ margin: "8px 0 0 0" }}
       >
         WebOS
       </h2>
     </div>
-    <p style={{ margin: "4px 0 0 0", padding: 0 }}>Integrate in WebOS.</p>
+    <p style={{ margin: 0 }}>Integrate in WebOS.</p>
   </Card>
 
   <Card href="/monetization-sdk/tizen">
-    <div style={{ display: "flex", alignItems: "center", gap: "8px", margin: "0 -4px 0 0", padding: 0 }}>
+    <div style={{
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "flex-start",
+      gap: "8px",
+      margin: "8px 0 6px 0"
+    }}>
       <img
         src="/logo/tizen.svg"
         alt="Tizen"
-        style={{ width: "24px", height: "24px", margin: "0 0 0 -4px", padding: "2px", objectFit: "cover" }}
+        style={{ width: "24px", height: "24px", padding: 0, objectFit: "cover", overflow: "visible", marginTop: "-6px" }}
       />
       <h2
         className="not-prose font-semibold text-base text-gray-800 dark:text-white"
         data-component-part="card-title"
-        style={{ margin: "16px 0 0 0", padding: 0 }}
+        style={{ margin: "8px 0 0 0" }}
       >
         Tizen
       </h2>
     </div>
-    <p style={{ margin: "4px 0 0 0", padding: 0 }}>Integrate in Tizen.</p>
+    <p style={{ margin: 0 }}>Integrate in Tizen.</p>
   </Card>
 </Columns>
