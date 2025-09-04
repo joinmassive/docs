@@ -27,10 +27,10 @@ iconType: "brands"
 
 ### Sample application
 
-|                 |                                                      |                     |
-| ----------------| ---------------------------------------------------- | ------------------- |
-| <Icon icon="Android" iconType="solid" /> | Sample Application Kotlin (Android / FireOS) | [Download](https://downloads.joinmassive.com/sdk/android/1.4.0/Massive-SampleApp.zip) |
-| <Icon icon="Android" iconType="solid" /> | Sample Application Flutter (Android) | [Download](https://downloads.joinmassive.com/sdk/android/1.4.0/Massive-SampleAppFlutter.zip) |
+|                                          |                                              |                                                            |
+| ---------------------------------------- | -------------------------------------------- | ---------------------------------------------------------- |
+| <Icon icon="Android" iconType="solid" /> | Sample Application Kotlin (Android / FireOS) | [Download](https://partners.joinmassive.com/sdk/downloads) |
+| <Icon icon="Android" iconType="solid" /> | Sample Application Flutter (Android)         | [Download](https://partners.joinmassive.com/sdk/downloads) |
 
 
 Massive SDK comes with a sample application showing project configuration, API integration, and consent screen.
@@ -39,7 +39,7 @@ To run the app, follow next steps:
 
 1. Download the latest sample using the link above.
 2. Unarchive and open the project in Android Studio.
-3. Copy the API token from your [Profile](https://partners.joinmassive.com/profile).
+3. Copy the API token from the [applications](https://partners.joinmassive.com/sdk/applications) page.
 4. Set the token value to the variable `API_TOKEN` at the end of `MainActivity.kt`.
 5. Build and run a target `sampleapp`.
 
@@ -47,7 +47,7 @@ To run the app, follow next steps:
 
 Add the dependency to your project Gradle configuration:
 
-1. Add Massive maven repo `https://downloads.joinmassive.com/sdk/android/release` to the dependency `repositories` used by the project.
+1. Add Massive maven repository to the dependency `repositories` used by the project. You can find the URL in the [downloads](https://partners.joinmassive.com/sdk/downloads) page.
    It can be defined in different places depending on your project.
 
    Common places are:
@@ -63,7 +63,7 @@ Add the dependency to your project Gradle configuration:
             google()
             mavenCentral()
             maven {
-              url = uri("https://downloads.joinmassive.com/sdk/android/release")
+              url = uri("MASSIVE_MAVEN_REPO_URL")
             }
         }
     }
@@ -81,7 +81,7 @@ Add the dependency to your project Gradle configuration:
             google()
             mavenCentral()
             maven {
-                url uri("https://downloads.joinmassive.com/sdk/android/release")
+                url uri("MASSIVE_MAVEN_REPO_URL")
             }
         }
     }
@@ -137,7 +137,7 @@ Add the dependency to your project Gradle configuration:
 
 #### 1. Get the API token
 
-Massive SDK API token is available in your [Profile](https://partners.joinmassive.com/profile).
+Massive SDK API token is available in the [applications](https://partners.joinmassive.com/sdk/applications) page.
 
 #### 2. Initialize MassiveClient
 
@@ -274,7 +274,7 @@ The new version of the Massive SDK introduces several significant changes aimed 
   ```gradle
   repositories {
     maven {
-      url = uri("https://downloads.joinmassive.com/sdk/android/release")
+      url = uri("MASSIVE_MAVEN_REPO_URL")
     }
   }
   ```
