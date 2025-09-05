@@ -30,6 +30,11 @@
     "name": "Dashboard",
     "url": "https://partners.joinmassive.com"
   },
+  "seo": {
+    "metatags": {
+      "robots": "noindex, nofollow"
+    }
+  },
   "primaryTab": {
     "name": "Residential"
   },
