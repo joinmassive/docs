@@ -1,0 +1,323 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "maple",
+  "name": "Massive",
+  "layout": "sidenav",
+  "sidebar": {
+    "items": "container"
+  },
+  "colors": {
+    "primary": "#F77C69",
+    "light": "#FE9C92",
+    "dark": "#C73C1C"
+  },
+  "favicon": "/favicon.svg",
+  "seo": {
+    "metatags": {
+      "robots": "noindex, nofollow"
+    }
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Residential",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "residential/introduction",
+              "residential/quickstart",
+              "residential/authentication"
+            ]
+          },
+          {
+            "group": "Proxy Configuration",
+            "pages": [
+              "residential/routing",
+              "residential/geotargeting",
+              "residential/sticky-sessions",
+              "residential/device-type-targeting",
+              "residential/asn-type-targeting",
+              "residential/accounting",
+              "residential/usage-restrictions",
+              "residential/error-types",
+              "residential/domain-blocking"
+            ]
+          },
+          {
+            "group": "Sample Integrations",
+            "pages": [
+              "residential/samples/puppeteer",
+              "residential/samples/python",
+              "residential/samples/scrapy",
+              "residential/samples/ruby",
+              "residential/samples/.net",
+              "residential/samples/switchyomega",
+              "residential/samples/foxyproxy"
+            ]
+          },
+          {
+            "group": "Reporting API",
+            "pages": [
+              "reporting-api-reference/reporting-api",
+              "reporting-api-reference/get-usage"
+            ]
+          },
+          {
+            "group": "Reseller API",
+            "pages": [
+              "reseller-api-reference/reseller-api-introduction",
+              "reseller-api-reference/reseller-api-authentication",
+              "reseller-api-reference/reseller-api-quickstart",
+              "reseller-api-reference/create-new-account",
+              "reseller-api-reference/get-account",
+              "reseller-api-reference/get-list-of-existing-accounts",
+              "reseller-api-reference/update-account",
+              "reseller-api-reference/disable-account",
+              "reseller-api-reference/enable-account",
+              "reseller-api-reference/allocate-traffic-for-an-account",
+              "reseller-api-reference/get-account-usage",
+              "reseller-api-reference/get-the-allocation-list"
+            ]
+          },
+          {
+            "group": "Others",
+            "pages": [
+              "residential/usage-alerts"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "ISP Proxies",
+        "groups": [
+          {
+            "group": "ISP Proxies",
+            "pages": [
+              "isp-proxies/introduction",
+              "isp-proxies/authentication"
+            ]
+          },
+          {
+            "group": "Proxy Configuration",
+            "pages": [
+              "isp-proxies/geotargeting",
+              "isp-proxies/sticky-sessions",
+              "isp-proxies/usage-restrictions",
+              "isp-proxies/error-types"
+            ]
+          },
+          {
+            "group": "Sample Integrations",
+            "pages": [
+              "isp-proxies/samples/puppeteer",
+              "isp-proxies/samples/python",
+              "isp-proxies/samples/scrapy",
+              "isp-proxies/samples/ruby",
+              "isp-proxies/samples/.net"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Advanced Features",
+        "groups": [
+          {
+            "group": "Advanced Features",
+            "pages": [
+              "advanced-features/serp-api"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Monetization SDK",
+        "groups": [
+          {
+            "group": "Monetization SDK",
+            "pages": [
+              "monetization-sdk/introduction",
+              "monetization-sdk/quickstart",
+              {
+                "group": "Desktop",
+                "pages": [
+                  "monetization-sdk/desktop",
+                  "monetization-sdk/desktop-windows",
+                  "monetization-sdk/desktop-mac-objective-c",
+                  "monetization-sdk/desktop-mac-swift"
+                ]
+              },
+              {
+                "group": "Mobile & smart TV",
+                "pages": [
+                  "monetization-sdk/mobile-and-smart-tv",
+                  "monetization-sdk/mobile-android",
+                  "monetization-sdk/tv-fire",
+                  "monetization-sdk/mobile-ios"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Knowledge Base",
+        "groups": [
+          {
+            "group": "Knowledge Base",
+            "pages": [
+              "kb/introduction",
+              {
+                "group": "Frequently Asked Questions",
+                "pages": [
+                  "kb/faq/how-can-i-get-technical-support",
+                  "kb/faq/what-types-of-proxies-does-massive-network-offer",
+                  "kb/faq/what-reporting-and-analytics-tools-does-massive-network-provide",
+                  "kb/faq/are-there-any-resources-available-for-new-users",
+                  "kb/faq/what-are-subaccounts-and-how-do-they-work",
+                  "kb/faq/how-do-i-create-a-massive-network-account",
+                  "kb/faq/how-do-i-get-started-with-massive-network",
+                  "kb/faq/where-can-i-find-documentation-and-resources",
+                  "kb/faq/where-can-i-find-my-api-token",
+                  "kb/faq/how-do-i-find-my-proxy-username-and-password",
+                  "kb/faq/how-can-i-request-access-to-restricted-content-for-legitimate-business-needs",
+                  "kb/faq/how-can-users-opt-out-of-the-service"
+                ]
+              },
+              {
+                "group": "Troubleshooting",
+                "pages": [
+                  "kb/troubleshooting/how-can-i-prevent-common-errors-before-they-occur",
+                  "kb/troubleshooting/incompatibility-with-older-python-versions-pre-393-and-https-proxies",
+                  "kb/troubleshooting/how-do-i-handle-errors-and-debugging",
+                  "kb/troubleshooting/how-do-i-troubleshoot-a-connection-failure",
+                  "kb/troubleshooting/what-should-i-do-if-i-receive-a-server-error-500-502-or-503",
+                  "kb/troubleshooting/what-should-i-do-if-the-sdk-initialization-fails",
+                  "kb/troubleshooting/what-are-the-most-common-error-codes-and-how-do-i-fix-them",
+                  "kb/troubleshooting/im-getting-a-connect-tunnel-failed-response-407-error-how-do-i-fix-it",
+                  "kb/troubleshooting/what-should-i-do-if-i-encounter-issues-with-the-sdk"
+                ]
+              },
+              {
+                "group": "Billing & Payments",
+                "pages": [
+                  "kb/billing/what-are-massive-networks-pricing-and-fees",
+                  "kb/billing/how-to-access-your-billcom-invoice",
+                  "kb/billing/what-should-i-know-about-the-free-trial",
+                  "kb/billing/how-can-i-contact-the-sales-team"
+                ]
+              },
+              {
+                "group": "Technical Configuration",
+                "pages": [
+                  "kb/technical/what-ports-should-i-use-for-proxy-connections",
+                  "kb/technical/how-can-i-combine-different-targeting-features",
+                  "kb/technical/how-do-i-set-up-proxy-authentication-with-residential-proxies",
+                  "kb/technical/using-massive-residential-proxies-with-puppeteer",
+                  "kb/technical/using-residential-proxies-with-nodejs-and-axios",
+                  "kb/technical/what-ports-are-available-for-email-services",
+                  "kb/technical/how-do-i-configure-massive-residential-proxies-in-foxy-proxy",
+                  "kb/technical/using-massive-residential-proxies-with-scrapy",
+                  "kb/technical/how-do-i-configure-massive-residential-proxies-in-switchyomega",
+                  "kb/technical/using-massive-residential-proxies-with-playwright",
+                  "kb/technical/how-do-i-implement-geotargeting",
+                  "kb/technical/what-is-device-type-targeting",
+                  "kb/technical/what-are-sticky-sessions-and-how-do-they-work",
+                  "kb/technical/which-ports-should-i-use-for-standard-web-traffic",
+                  "kb/technical/how-do-i-authenticate-with-isp-proxies",
+                  "kb/technical/when-do-sticky-sessions-change-nodes",
+                  "kb/technical/how-should-i-organize-and-implement-subaccounts",
+                  "kb/technical/how-do-i-authenticate-and-verify-my-connection-to-massive-network",
+                  "kb/technical/what-geotargeting-parameters-are-supported",
+                  "kb/technical/what-are-the-usage-restrictions-for-massive-network-proxies-isp-and-residential",
+                  "kb/technical/do-i-need-a-special-proguard-configuration-for-androidfire-os",
+                  "kb/technical/what-are-massives-proxy-pool-capabilities",
+                  "kb/technical/how-do-i-set-up-https-proxy-authentication-with-massive-network",
+                  "kb/technical/what-are-the-rules-for-combining-parameters",
+                  "kb/technical/how-do-i-implement-sticky-sessions"
+                ]
+              },
+              {
+                "group": "SDK Integration",
+                "pages": [
+                  "kb/sdk/how-do-i-initialize-the-massive-sdk-on-ios",
+                  "kb/sdk/how-is-revenue-calculated-using-the-massive-sdk",
+                  "kb/sdk/what-is-the-massive-sdk",
+                  "kb/sdk/how-do-i-initialize-the-massive-sdk-on-androidfire-os",
+                  "kb/sdk/what-permissions-does-the-massive-sdk-require-on-androidfire-os",
+                  "kb/sdk/how-can-i-check-if-a-device-is-compatible-with-the-sdk",
+                  "kb/sdk/how-can-i-monitor-the-sdks-network-usage",
+                  "kb/sdk/does-the-sdk-affect-app-performance-or-battery-life",
+                  "kb/sdk/how-does-the-sdk-handle-service-interruptions",
+                  "kb/sdk/where-can-i-find-sample-applications",
+                  "kb/sdk/using-massive-residential-proxies-with-python-requests",
+                  "kb/sdk/how-does-the-massive-sdk-work-and-make-money-for-developers",
+                  "kb/sdk/which-platforms-does-the-massive-sdk-support",
+                  "kb/sdk/what-are-the-minimum-requirements-for-ios-integration",
+                  "kb/sdk/how-do-i-handle-sdk-updates",
+                  "kb/sdk/what-happens-to-the-sdk-when-the-app-is-suspended-or-terminated",
+                  "kb/sdk/what-are-the-minimum-requirements-for-androidfire-os-integration",
+                  "kb/sdk/what-should-i-test-before-releasing-my-app-with-the-sdk",
+                  "kb/sdk/using-residential-proxies-with-selenium-python",
+                  "kb/sdk/what-are-the-service-types-available-in-androidfire-os"
+                ]
+              },
+              {
+                "group": "Company Information",
+                "pages": [
+                  "kb/general/what-is-massive-networks-infrastructure-size",
+                  "kb/general/how-does-massive-ensure-compliance-with-gdpr-and-ccpa",
+                  "kb/general/what-is-a-massive-network",
+                  "kb/general/what-are-the-main-use-cases",
+                  "kb/general/what-is-the-ip-distribution-by-country",
+                  "kb/general/what-is-ethical-data-collection-and-how-does-massive-ensure-it",
+                  "kb/general/what-content-is-restricted-on-the-massive-network"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Blog",
+          "href": "https://www.joinmassive.com/blog",
+          "icon": "newspaper"
+        },
+        {
+          "anchor": "Support",
+          "href": "https://forms.fillout.com/t/p8dRqBYs58us",
+          "icon": "ticket"
+        }
+      ]
+    }
+  },
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg",
+    "href": "https://www.joinmassive.com"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Support",
+        "href": "https://forms.fillout.com/t/p8dRqBYs58us"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Dashboard",
+      "href": "https://partners.joinmassive.com"
+    }
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/joinmassive",
+      "linkedin": "https://www.linkedin.com/company/joinmassive",
+      "x": "https://x.com/joinmassive"
+    }
+  },
+  "isWhiteLabeled": true
+}
