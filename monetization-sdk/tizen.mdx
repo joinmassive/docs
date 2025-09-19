@@ -31,6 +31,10 @@ iconType: "solid"
 | `http://tizen.org/privilege/alarm`              |
 | `http://tizen.org/privilege/system`             |
 
+## Downloads
+
+Download the latest SDK and sample application from the [Downloads section](https://partners.joinmassive.com/sdk/downloads) in the partners portal.
+
 ## Integration Guide
 
 ### Sample application
@@ -44,7 +48,7 @@ To run the app, follow these steps:
 3. Copy SDK files to the sample app:
    - Copy `MassiveClient/MassiveClient.js` to the `js/` directory
    - Copy `MassiveService/MassiveService.js` to the `service/` directory (create if needed)
-4. Copy the API token from your [Profile](https://partners.joinmassive.com/profile).
+4. Copy the API token from your [Applications List](https://partners.joinmassive.com/sdk/applications).
 5. Set the token value to the `API_TOKEN` constant in `js/main.js`.
 6. Create a new partner level certificate in the Tizen Certificate Manager.
 7. Create a new Tizen TV web application project in the Tizen IDE.
@@ -97,7 +101,7 @@ To integrate the SDK into your project:
 
 #### 1. Get the API token
 
-Massive SDK API token is available in your [Profile](https://partners.joinmassive.com/profile).
+Massive SDK API token is available in your [Applications List](https://partners.joinmassive.com/sdk/applications).
 
 #### 2. Import MassiveClient
 
@@ -140,7 +144,7 @@ let massiveClient = new window.MassiveClient();
 
 #### 4. Request consent from the user
 
-Before starting the client, obtain user consent for the terms of resource exchange. Please see our [launch checklist](https://www.joinmassive.com/launch-checklist-tizen) for additional details.
+Before starting the client, obtain user consent for the terms of resource exchange. Please see our [launch checklist](https://www.joinmassive.com/launch-checklist) for additional details.
 
 Example consent text:
 
