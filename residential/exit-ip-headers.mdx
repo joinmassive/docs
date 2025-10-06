@@ -1,0 +1,66 @@
+---
+title: "Exit IP Headers"
+description: "Exit IP address automatically included in CONNECT response headers for HTTPS traffic."
+---
+
+## Overview
+
+The `X-Exit-IP` header is automatically included in the HTTP 200 OK response to CONNECT requests, providing visibility into which exit IP will be used for tunneled connections (HTTPS traffic).
+
+## HTTP vs HTTPS Proxy Behavior
+
+### Plain HTTP Traffic
+For plain HTTP requests, the proxy directly forwards your request to the target server and returns the response. No CONNECT request is used, and therefore no `X-Exit-IP` header is available.
+
+### HTTPS Traffic (with CONNECT)
+For HTTPS traffic, a tunnel must be established first:
+
+1. Your client sends a CONNECT request to the proxy asking to establish a tunnel to the target server
+2. The proxy responds with HTTP 200 OK including the `X-Exit-IP` header
+3. After receiving the 200 OK, your client sends the actual HTTPS traffic through this tunnel
+4. The tunnel ensures your HTTPS traffic remains encrypted end-to-end between your client and the target server
+
+## How It Works
+
+When your client sends a CONNECT request to establish an HTTPS tunnel:
+
+```bash
+CONNECT example.com:443 HTTP/1.1
+Host: example.com:443
+Proxy-Authorization: Basic {credentials}
+```
+
+The proxy responds with:
+
+```http
+HTTP/1.1 200 OK
+X-Exit-IP: 203.0.113.42
+
+```
+
+This header tells you which exit IP will be used for the tunneled connection before any actual HTTPS data is sent through the tunnel.
+
+## Availability
+
+The `X-Exit-IP` header:
+- Is automatically included in all CONNECT responses (HTTPS traffic only)
+- Shows the actual IP that will be used for the tunneled connection
+- Is not available for plain HTTP requests (which don't use CONNECT)
+
+## Example Usage
+
+### With curl
+
+```bash
+curl -x https://network.joinmassive.com:65535 \
+     -U '{PROXY_USERNAME}:{API_KEY}' \
+     -v https://example.com
+```
+
+In verbose mode, you'll see:
+
+```
+* CONNECT tunnel established, response 200
+< HTTP/1.1 200 OK
+< X-Exit-IP: 203.0.113.42
+```
