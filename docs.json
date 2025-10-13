@@ -121,17 +121,6 @@
         ]
       },
       {
-        "tab": "Advanced Features",
-        "groups": [
-          {
-            "group": "Advanced Features",
-            "pages": [
-              "advanced-features/serp-api"
-            ]
-          }
-        ]
-      },
-      {
         "tab": "Monetization SDK",
         "groups": [
           {
