@@ -42,7 +42,7 @@
               "residential/usage-restrictions",
               "residential/error-types",
               "residential/domain-blocking",
-              "residential/exit-ip-headers"
+              "residential/exit-node-headers"
             ]
           },
           {
