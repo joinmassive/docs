@@ -1,11 +1,11 @@
 ---
-title: "Exit IP Headers"
-description: "Exit IP address automatically included in CONNECT response headers for HTTPS traffic."
+title: "Exit Node Headers"
+description: "Exit node metadata automatically included in CONNECT response headers for HTTPS traffic."
 ---
 
 ## Overview
 
-The `X-Exit-IP` header is automatically included in the HTTP 200 OK response to CONNECT requests, providing visibility into which exit IP will be used for tunneled connections (HTTPS traffic).
+Exit node headers are automatically included in the HTTP 200 OK response to CONNECT requests, providing visibility into the exit node properties that will be used for tunneled connections (HTTPS traffic). These headers include the exit IP address, country, timezone, and ASN information.
 
 ## HTTP vs HTTPS Proxy Behavior
 
@@ -35,17 +35,46 @@ The proxy responds with:
 ```http
 HTTP/1.1 200 OK
 X-Exit-IP: 203.0.113.42
+X-Exit-Country: US
+X-Exit-Timezone: America/New_York
+X-Exit-ASN: 7922
 
 ```
 
-This header tells you which exit IP will be used for the tunneled connection before any actual HTTPS data is sent through the tunnel.
+These headers provide information about the exit node before any actual HTTPS data is sent through the tunnel.
+
+## Available Headers
+
+### X-Exit-IP
+- **Description**: The IP address of the exit node
+- **Format**: IPv4 or IPv6 address
+- **Example**: `X-Exit-IP: 203.0.113.42`
+- **Availability**: Always included in CONNECT responses
+
+### X-Exit-Country
+- **Description**: Two-letter country code of the exit node location
+- **Format**: ISO 3166-1 alpha-2 country code
+- **Example**: `X-Exit-Country: US`
+- **Availability**: Included when geo data is available
+
+### X-Exit-Timezone
+- **Description**: IANA timezone identifier of the exit node location
+- **Format**: IANA timezone string
+- **Example**: `X-Exit-Timezone: America/New_York`
+- **Availability**: Included when geo data is available
+
+### X-Exit-ASN
+- **Description**: Autonomous System Number of the exit node's network
+- **Format**: Unsigned integer
+- **Example**: `X-Exit-ASN: 7922`
+- **Availability**: Included when ASN data is available
 
 ## Availability
 
-The `X-Exit-IP` header:
-- Is automatically included in all CONNECT responses (HTTPS traffic only)
-- Shows the actual IP that will be used for the tunneled connection
-- Is not available for plain HTTP requests (which don't use CONNECT)
+Exit node headers:
+- Are automatically included in all CONNECT responses (HTTPS traffic only)
+- Provide information about the exit node before the tunnel is established
+- Are not available for plain HTTP requests (which don't use CONNECT)
 
 ## Example Usage
 
@@ -63,4 +92,16 @@ In verbose mode, you'll see:
 * CONNECT tunnel established, response 200
 < HTTP/1.1 200 OK
 < X-Exit-IP: 203.0.113.42
+< X-Exit-Country: US
+< X-Exit-Timezone: America/New_York
+< X-Exit-ASN: 7922
 ```
+
+## Use Cases
+
+Exit node headers are useful for:
+
+- **Logging and Debugging**: Track which exit nodes are being used for each request
+- **Compliance**: Verify that traffic is exiting from expected geographic locations
+- **Analytics**: Analyze exit node distribution and performance
+- **Troubleshooting**: Identify patterns in exit node selection for debugging purposes
