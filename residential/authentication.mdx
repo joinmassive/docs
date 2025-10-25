@@ -14,10 +14,15 @@ How to authenticate using HTTPS.
 |             |                     |
 |-------------|---------------------|
 | HTTPS Port  | 65535               |
+| Minimum supported TLS version  | 1.2               |
 
 ```bash
 curl --proxy https://network.joinmassive.com:65535 -U '{PROXY_USERNAME}:{API_KEY}' https://cloudflare.com/cdn-cgi/trace
 ```
+
+<info>
+If you see errors like <code>curl: (35) SSL connect error</code>, check that your client supports TLS 1.2 or higher.
+</info>
 
 ## HTTP
 
