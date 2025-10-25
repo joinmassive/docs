@@ -1,0 +1,20 @@
+---
+title: “How do I export data from the dashboard?"
+---
+
+## Exporting Results as a CSV, XLSX, JSON, or PNG
+
+To export the results of a particular card, hover over the dashboard card, click the three-dot menu (<code>⋯</code>), and select **Download results**.
+
+<Img src="/images/dashboard-download.png" alt="Export results of a dashboard card" />
+
+From here, you can select one of the following formats:
+
+- `.csv`
+- `.xlsx`
+- `.json`
+- `.png` *(if the card is a chart)*
+
+<Info>
+To export the raw, unformatted results, hold down the <kbd>Option</kbd> key (Mac) or <kbd>Alt</kbd> key (Windows) while clicking the desired download format.
+</Info>
