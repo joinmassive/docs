@@ -7,6 +7,8 @@ description: "Block specific domains directly from the Massive Dashboard with pe
 
 The Domain Blocklist feature allows users to block specific domains directly from the Massive Dashboard. This provides greater control over browsing restrictions without requiring API calls or admin intervention.
 
+> **Note:** Only exact domain matches are blocked. Wildcards, subdomains, and path-based blocking (e.g., `sub.example.com` or `example.com/path`) are not yet supported.
+
 ## Key Features
 
 - Add or remove domains to your personal blocklist
@@ -65,6 +67,7 @@ metrics-data.example.org
 - Each user can only manage their own blocklist
 - Admins may apply global blocklists that override personal settings
 - The maximum number of blocked domains per account is 1,000
+- **Wildcards are not supported** – Only exact domains on the list will be blocked. Subdomains (e.g., `sub.example.com`) and paths (e.g., `example.com/path`) will not be blocked unless explicitly added.
 
 ## Need Help?
 
