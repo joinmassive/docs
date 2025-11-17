@@ -1,0 +1,64 @@
+---
+title: 'Authentication'
+description: 'Learn how to authenticate with the Pool Stats API using API keys.'
+---
+
+# API Key Authentication
+
+The Pool Stats API uses API keys for authentication. Every request must include your API key in the `x-api-key` header.
+
+## Getting Your API Key
+
+Contact Massive support at support@joinmassive.com to request an API key for the Pool Stats API.
+
+## Using Your API Key
+
+Include the API key in the request header:
+
+```bash
+curl -X GET 'https://pool-stats.api-network.joinmassive.com/v1/live' \
+  -H 'x-api-key: YOUR_API_KEY'
+```
+
+## Security Best Practices
+
+- **Never share your API key** in public repositories or client-side code
+- **Rotate your API key** if you suspect it has been compromised
+- **Use environment variables** to store your API key in your applications
+
+## Error Responses
+
+If authentication fails, you'll receive one of these error responses:
+
+### Missing API Key (401)
+```json
+{
+  "success": false,
+  "error": {
+    "code": "MISSING_API_KEY",
+    "message": "API key is required"
+  }
+}
+```
+
+### Invalid API Key (401)
+```json
+{
+  "success": false,
+  "error": {
+    "code": "INVALID_API_KEY",
+    "message": "Invalid API key"
+  }
+}
+```
+
+### Rate Limit Exceeded (429)
+```json
+{
+  "success": false,
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "Too many requests"
+  }
+}
+```
