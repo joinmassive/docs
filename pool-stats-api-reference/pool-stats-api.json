@@ -1,0 +1,364 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Pool Stats API",
+    "x-logo": {
+        "url": "logo192.png",
+        "altText": "Massive Proxy Resellers API"
+      },
+    "description": "The Pool Stats API provides real-time statistics about the node pool availability. This API allows you to query live node counts with various filtering and grouping options.\n\n## Features\n- Get live node pool statistics with filtering\n- Group results by various dimensions (country, city, ASN, pool type, ZIP)\n- Retrieve available server regions\n\n## Authorization\nThe API uses API key for authorization. The API key should be included in the request header as `x-api-key`.\n\nPlease contact Massive support to obtain an API key for this API.",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "https://api-network.joinmassive.com/pool-stats"
+    }
+  ],
+  "paths": {
+    "/v1/live": {
+      "get": {
+        "summary": "Get live node pool statistics",
+        "description": "Retrieve the latest statistics for node pool with optional filtering and grouping. Results are always aggregated by server_region. Optional group_by parameter adds additional grouping dimensions.",
+        "operationId": "getLiveStats",
+        "parameters": [
+          {
+            "name": "group_by",
+            "in": "query",
+            "required": false,
+            "description": "Additional dimension(s) to group results by (comma-separated). Results are always grouped by server_region. This parameter adds additional grouping on top. Examples: \"country\", \"city\", \"asn\", \"pool_type\", \"zip\", \"country,city\"",
+            "schema": {
+              "type": "string",
+              "pattern": "^(country|city|asn|pool_type|zip)(,(country|city|asn|pool_type|zip))*$"
+            }
+          },
+          {
+            "name": "server_region",
+            "in": "query",
+            "required": false,
+            "description": "Filter by server region",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z]{2}-[a-z]+-\\d+$",
+              "example": "us-east-1"
+            }
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "required": false,
+            "description": "Filter by country code",
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 2,
+              "pattern": "^[A-Z]{2}$",
+              "example": "US"
+            }
+          },
+          {
+            "name": "city",
+            "in": "query",
+            "required": false,
+            "description": "Filter by city name",
+            "schema": {
+              "type": "string",
+              "maxLength": 100,
+              "example": "New York"
+            }
+          },
+          {
+            "name": "asn",
+            "in": "query",
+            "required": false,
+            "description": "Filter by ASN (Autonomous System Number)",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4294967295,
+              "example": 15169
+            }
+          },
+          {
+            "name": "pool_type",
+            "in": "query",
+            "required": false,
+            "description": "Filter by pool type",
+            "schema": {
+              "type": "string",
+              "maxLength": 50,
+              "example": "fast"
+            }
+          },
+          {
+            "name": "zip",
+            "in": "query",
+            "required": false,
+            "description": "Filter by ZIP/postal code",
+            "schema": {
+              "type": "string",
+              "maxLength": 20,
+              "example": "10001"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with stats data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["success", "data", "total_count"],
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Whether the request was successful",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "description": "Array of stats results, always grouped by server_region at minimum",
+                      "items": {
+                        "type": "object",
+                        "required": ["server_region", "count"],
+                        "properties": {
+                          "server_region": {
+                            "type": "string",
+                            "description": "AWS region of the proxy server (always present)",
+                            "example": "us-east-1"
+                          },
+                          "country": {
+                            "type": "string",
+                            "description": "Country code (present when grouping by country or city)",
+                            "example": "US",
+                            "nullable": true
+                          },
+                          "city": {
+                            "type": "string",
+                            "description": "City name (present when grouping by city)",
+                            "example": "New York",
+                            "nullable": true
+                          },
+                          "asn": {
+                            "type": "integer",
+                            "description": "Autonomous System Number (present when grouping by asn)",
+                            "example": 15169,
+                            "nullable": true
+                          },
+                          "pool_type": {
+                            "type": "string",
+                            "description": "Pool type (present when grouping by pool_type)",
+                            "example": "fast",
+                            "nullable": true
+                          },
+                          "zip": {
+                            "type": "string",
+                            "description": "ZIP/postal code (present when grouping by zip)",
+                            "example": "10001",
+                            "nullable": true
+                          },
+                          "count": {
+                            "type": "integer",
+                            "description": "Number of active nodes in this group",
+                            "example": 42
+                          }
+                        }
+                      }
+                    },
+                    "total_count": {
+                      "type": "integer",
+                      "description": "Total number of nodes across all results",
+                      "example": 1250
+                    },
+                    "grouped_by": {
+                      "type": "string",
+                      "description": "Field(s) used for grouping (if applicable)",
+                      "example": "server_region,country"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - missing or invalid API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests - rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Statistics"]
+      }
+    },
+    "/v1/regions": {
+      "get": {
+        "summary": "Get available server regions",
+        "description": "Retrieve a list of distinct server regions that have active nodes in the pool. Results are sorted alphabetically.",
+        "operationId": "getAvailableRegions",
+        "responses": {
+          "200": {
+            "description": "Successful response with available regions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["success", "data"],
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "description": "Whether the request was successful",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "description": "Array of available server region identifiers",
+                      "items": {
+                        "type": "string",
+                        "description": "AWS region identifier",
+                        "example": "us-east-1"
+                      },
+                      "example": ["eu-west-1", "us-east-1", "us-west-2"]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - missing or invalid API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests - rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["Statistics"]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ErrorResponse": {
+        "type": "object",
+        "required": ["success", "error"],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Always false for errors",
+            "example": false
+          },
+          "error": {
+            "type": "object",
+            "required": ["code", "message"],
+            "properties": {
+              "code": {
+                "type": "string",
+                "description": "Error code",
+                "example": "INVALID_PARAMETER"
+              },
+              "message": {
+                "type": "string",
+                "description": "Human-readable error message",
+                "example": "Invalid server_region format"
+              },
+              "details": {
+                "type": "object",
+                "description": "Additional error details",
+                "additionalProperties": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key"
+      }
+    }
+  },
+  "security": [
+    {
+      "ApiKeyAuth": []
+    }
+  ]
+}
