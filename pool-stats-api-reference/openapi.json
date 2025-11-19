@@ -3,9 +3,9 @@
   "info": {
     "title": "Pool Stats API",
     "x-logo": {
-        "url": "logo192.png",
-        "altText": "Massive Proxy Resellers API"
-      },
+      "url": "logo192.png",
+      "altText": "Massive Proxy Resellers API"
+    },
     "description": "The Pool Stats API provides real-time statistics about the node pool availability. This API allows you to query live node counts with various filtering and grouping options.\n\n## Features\n- Get live node pool statistics with filtering\n- Group results by various dimensions (country, city, ASN, pool type, ZIP)\n- Retrieve available server regions\n\n## Authorization\nThe API uses API key for authorization. The API key should be included in the request header as `x-api-key`.\n\nPlease contact Massive support to obtain an API key for this API.",
     "version": "v1"
   },
@@ -111,7 +111,10 @@
                   "description": "Array of stats results, always grouped by server_region at minimum",
                   "items": {
                     "type": "object",
-                    "required": ["server_region", "count"],
+                    "required": [
+                      "server_region",
+                      "count"
+                    ],
                     "properties": {
                       "server_region": {
                         "type": "string",
@@ -203,7 +206,9 @@
             }
           }
         },
-        "tags": ["Statistics"]
+        "tags": [
+          "Statistics"
+        ]
       }
     },
     "/v1/regions": {
@@ -211,6 +216,17 @@
         "summary": "Get available server regions with endpoint URLs",
         "description": "Retrieve a map of server regions to their corresponding network endpoint URLs. Regions are determined by querying active nodes in the pool. The endpoint URLs can be used directly to target proxy servers in specific regions.",
         "operationId": "getAvailableRegions",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "description": "API key for authentication",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful response with available regions and their endpoint URLs",
@@ -221,7 +237,13 @@
                   "description": "Map of region identifiers to their network endpoint URLs",
                   "additionalProperties": {
                     "type": "string",
-                    "description": "Network endpoint URL for the region"
+                    "description": "Network endpoint URL for the region",
+                    "example": "https://us-network.joinmassive.com"
+                  },
+                  "example": {
+                    "eu-west-1": "https://eu-network.joinmassive.com",
+                    "us-east-1": "https://us-network.joinmassive.com",
+                    "us-west-2": "https://us-network.joinmassive.com"
                   }
                 }
               }
@@ -268,7 +290,9 @@
             }
           }
         },
-        "tags": ["Statistics"]
+        "tags": [
+          "Statistics"
+        ]
       }
     }
   },
@@ -276,7 +300,9 @@
     "schemas": {
       "ErrorResponse": {
         "type": "object",
-        "required": ["error"],
+        "required": [
+          "error"
+        ],
         "properties": {
           "error": {
             "type": "string",
