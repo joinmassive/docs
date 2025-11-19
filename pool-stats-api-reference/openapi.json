@@ -107,73 +107,45 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": ["success", "data", "total_count"],
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "description": "Whether the request was successful",
-                      "example": true
-                    },
-                    "data": {
-                      "type": "array",
-                      "description": "Array of stats results, always grouped by server_region at minimum",
-                      "items": {
-                        "type": "object",
-                        "required": ["server_region", "count"],
-                        "properties": {
-                          "server_region": {
-                            "type": "string",
-                            "description": "AWS region of the proxy server (always present)",
-                            "example": "us-east-1"
-                          },
-                          "country": {
-                            "type": "string",
-                            "description": "Country code (present when grouping by country or city)",
-                            "example": "US",
-                            "nullable": true
-                          },
-                          "city": {
-                            "type": "string",
-                            "description": "City name (present when grouping by city)",
-                            "example": "New York",
-                            "nullable": true
-                          },
-                          "asn": {
-                            "type": "integer",
-                            "description": "Autonomous System Number (present when grouping by asn)",
-                            "example": 15169,
-                            "nullable": true
-                          },
-                          "pool_type": {
-                            "type": "string",
-                            "description": "Pool type (present when grouping by pool_type)",
-                            "example": "fast",
-                            "nullable": true
-                          },
-                          "zip": {
-                            "type": "string",
-                            "description": "ZIP/postal code (present when grouping by zip)",
-                            "example": "10001",
-                            "nullable": true
-                          },
-                          "count": {
-                            "type": "integer",
-                            "description": "Number of active nodes in this group",
-                            "example": 42
-                          }
-                        }
+                  "type": "array",
+                  "description": "Array of stats results, always grouped by server_region at minimum",
+                  "items": {
+                    "type": "object",
+                    "required": ["server_region", "count"],
+                    "properties": {
+                      "server_region": {
+                        "type": "string",
+                        "description": "AWS region of the proxy server (always present)"
+                      },
+                      "country": {
+                        "type": "string",
+                        "description": "Country code (present when grouping by country or city)",
+                        "nullable": true
+                      },
+                      "city": {
+                        "type": "string",
+                        "description": "City name (present when grouping by city)",
+                        "nullable": true
+                      },
+                      "asn": {
+                        "type": "integer",
+                        "description": "Autonomous System Number (present when grouping by asn)",
+                        "nullable": true
+                      },
+                      "pool_type": {
+                        "type": "string",
+                        "description": "Pool type (present when grouping by pool_type)",
+                        "nullable": true
+                      },
+                      "zip": {
+                        "type": "string",
+                        "description": "ZIP/postal code (present when grouping by zip)",
+                        "nullable": true
+                      },
+                      "count": {
+                        "type": "integer",
+                        "description": "Number of active nodes in this group"
                       }
-                    },
-                    "total_count": {
-                      "type": "integer",
-                      "description": "Total number of nodes across all results",
-                      "example": 1250
-                    },
-                    "grouped_by": {
-                      "type": "string",
-                      "description": "Field(s) used for grouping (if applicable)",
-                      "example": "server_region,country"
                     }
                   }
                 }
@@ -236,33 +208,20 @@
     },
     "/v1/regions": {
       "get": {
-        "summary": "Get available server regions",
-        "description": "Retrieve a list of distinct server regions that have active nodes in the pool. Results are sorted alphabetically.",
+        "summary": "Get available server regions with endpoint URLs",
+        "description": "Retrieve a map of server regions to their corresponding network endpoint URLs. Regions are determined by querying active nodes in the pool. The endpoint URLs can be used directly to target proxy servers in specific regions.",
         "operationId": "getAvailableRegions",
         "responses": {
           "200": {
-            "description": "Successful response with available regions",
+            "description": "Successful response with available regions and their endpoint URLs",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["success", "data"],
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "description": "Whether the request was successful",
-                      "example": true
-                    },
-                    "data": {
-                      "type": "array",
-                      "description": "Array of available server region identifiers",
-                      "items": {
-                        "type": "string",
-                        "description": "AWS region identifier",
-                        "example": "us-east-1"
-                      },
-                      "example": ["eu-west-1", "us-east-1", "us-west-2"]
-                    }
+                  "description": "Map of region identifiers to their network endpoint URLs",
+                  "additionalProperties": {
+                    "type": "string",
+                    "description": "Network endpoint URL for the region"
                   }
                 }
               }
@@ -317,33 +276,11 @@
     "schemas": {
       "ErrorResponse": {
         "type": "object",
-        "required": ["success", "error"],
+        "required": ["error"],
         "properties": {
-          "success": {
-            "type": "boolean",
-            "description": "Always false for errors",
-            "example": false
-          },
           "error": {
-            "type": "object",
-            "required": ["code", "message"],
-            "properties": {
-              "code": {
-                "type": "string",
-                "description": "Error code",
-                "example": "INVALID_PARAMETER"
-              },
-              "message": {
-                "type": "string",
-                "description": "Human-readable error message",
-                "example": "Invalid server_region format"
-              },
-              "details": {
-                "type": "object",
-                "description": "Additional error details",
-                "additionalProperties": true
-              }
-            }
+            "type": "string",
+            "description": "Human-readable error message"
           }
         }
       }
