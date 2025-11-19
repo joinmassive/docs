@@ -242,8 +242,7 @@
                   },
                   "example": {
                     "eu-west-1": "https://eu-network.joinmassive.com",
-                    "us-east-1": "https://us-network.joinmassive.com",
-                    "us-west-2": "https://us-network.joinmassive.com"
+                    "us-east-1": "https://us-network.joinmassive.com"
                   }
                 }
               }
