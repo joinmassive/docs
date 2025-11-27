@@ -28,7 +28,7 @@
             "description": "Additional dimension(s) to group results by (comma-separated). Results are always grouped by server_region. This parameter adds additional grouping on top. Examples: \"country\", \"city\", \"asn\", \"pool_type\", \"zip\", \"country,city\"",
             "schema": {
               "type": "string",
-              "pattern": "^(country|city|asn|pool_type|zip)(,(country|city|asn|pool_type|zip))*$"
+              "pattern": "^(country|subdivision|city|asn|pool_type|zip)(,(country|subdivision|city|asn|pool_type|zip))*$"
             }
           },
           {
@@ -53,6 +53,19 @@
               "maxLength": 2,
               "pattern": "^[A-Z]{2}$",
               "example": "US"
+            }
+          },
+          {
+            "name": "subdivision",
+            "in": "query",
+            "required": false,
+            "description": "Filter by state / subdivision",
+            "schema": {
+              "type": "string",
+              "minLength": 0,
+              "maxLength": 3,
+              "pattern": "^[A-Z]{2}$",
+              "example": "CA"
             }
           },
           {
@@ -123,6 +136,11 @@
                       "country": {
                         "type": "string",
                         "description": "Country code (present when grouping by country or city)",
+                        "nullable": true
+                      },
+                      "subdivision": {
+                        "type": "string",
+                        "description": "Subdivision / state (present when grouping by country or city)",
                         "nullable": true
                       },
                       "city": {
