@@ -47,9 +47,29 @@ If the session identifier is not found or the conditions above are not met, a ne
 | ----------- | ---------------- | ----------- |
 | sessionmode | `strict`, `flex` | Controls session behavior on errors |
 
-### Flex Mode (Default)
+### Strict Mode (Default)
 
-By default, sessions operate in **flex mode** where sessions persist through errors up to a configurable limit. In this mode:
+By default, sessions operate in **strict mode** where any error immediately invalidates the session and triggers rotation to a new node. This ensures clean IP rotation on failures but may change IPs more frequently.
+
+Example of using undefined `sessionmode`, which defaults to `sessionmode-strict`:
+
+```bash
+curl -x https://network.joinmassive.com:65535 \
+     -U '{PROXY_USERNAME}-session-123:{API_KEY}' \
+     https://cloudflare.com/cdn-cgi/trace
+```
+
+Example with `sessionmode-strict` explicitly defined:
+
+```bash
+curl -x https://network.joinmassive.com:65535 \
+     -U '{PROXY_USERNAME}-session-123-sessionmode-strict:{API_KEY}' \
+     https://cloudflare.com/cdn-cgi/trace
+```
+
+### Flex Mode
+
+Sessions can operate in **flex mode** where sessions persist through errors up to a configurable limit. In this mode:
 - Sessions continue through errors up to the error limit (default: 15)
 - Error count resets to 0 on successful requests
 - Provides better IP stability during transient failures
@@ -59,31 +79,11 @@ By default, sessions operate in **flex mode** where sessions persist through err
   **Note:** The default error limit is 15. After 15 consecutive errors, a new node is assigned to the sticky session. You can customize this with the `sessionerr` parameter.
 </Info>
 
-Example of using undefined `sessionmode`, which defaults to `sessionmode-flex`:
-
-```bash
-curl -x https://network.joinmassive.com:65535 \
-     -U '{PROXY_USERNAME}-session-123:{API_KEY}' \
-     https://cloudflare.com/cdn-cgi/trace
-```
-
-Example with `sessionmode-flex` explicitly defined:
+Example with `sessionmode-flex`:
 
 ```bash
 curl -x https://network.joinmassive.com:65535 \
      -U '{PROXY_USERNAME}-session-123-sessionmode-flex:{API_KEY}' \
-     https://cloudflare.com/cdn-cgi/trace
-```
-
-### Strict Mode
-
-Sessions can operate in **strict mode** where any error immediately invalidates the session and triggers rotation to a new node. This ensures clean IP rotation on failures but may change IPs more frequently.
-
-Example with `sessionmode-strict`:
-
-```bash
-curl -x https://network.joinmassive.com:65535 \
-     -U '{PROXY_USERNAME}-session-123-sessionmode-strict:{API_KEY}' \
      https://cloudflare.com/cdn-cgi/trace
 ```
 
@@ -108,7 +108,7 @@ This example allows up to 5 consecutive errors before rotating to a new node.
 ## Best Practices
 
 1. **Plan TTL appropriately**: Since sessions use static TTL (not extended by activity), set an appropriate duration for your use case
-2. **Choose the right mode**: Default flex mode provides IP stability; use strict mode if you need immediate rotation on any error
+2. **Choose the right mode**: Default strict mode ensures immediate rotation on any error; use flex mode if you need IP stability
 3. **Monitor error rates**: Adjust `sessionerr` based on your tolerance for retries (default is 15)
 4. **Session ID naming**: Use descriptive session IDs to help with debugging and monitoring
 
