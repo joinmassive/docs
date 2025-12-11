@@ -25,10 +25,10 @@
             "name": "group_by",
             "in": "query",
             "required": false,
-            "description": "Additional dimension(s) to group results by (comma-separated). Results are always grouped by server_region. This parameter adds additional grouping on top. Examples: \"country\", \"city\", \"asn\", \"pool_type\", \"zip\", \"country,city\"",
+            "description": "Additional dimension(s) to group results by (comma-separated). Results are always grouped by server_region. This parameter adds additional grouping on top. Examples: \"country\", \"city\", \"asn\", \"zip\", \"country,city\"",
             "schema": {
               "type": "string",
-              "pattern": "^(country|subdivision|city|asn|pool_type|zip)(,(country|subdivision|city|asn|pool_type|zip))*$"
+              "pattern": "^(country|subdivision|city|asn|zip)(,(country|subdivision|city|asn|zip))*$"
             }
           },
           {
@@ -92,17 +92,6 @@
             }
           },
           {
-            "name": "pool_type",
-            "in": "query",
-            "required": false,
-            "description": "Filter by pool type",
-            "schema": {
-              "type": "string",
-              "maxLength": 50,
-              "example": "fast"
-            }
-          },
-          {
             "name": "zip",
             "in": "query",
             "required": false,
@@ -151,11 +140,6 @@
                       "asn": {
                         "type": "integer",
                         "description": "Autonomous System Number (present when grouping by asn)",
-                        "nullable": true
-                      },
-                      "pool_type": {
-                        "type": "string",
-                        "description": "Pool type (present when grouping by pool_type)",
                         "nullable": true
                       },
                       "zip": {
