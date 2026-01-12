@@ -6,7 +6,7 @@
       "url": "logo192.png",
       "altText": "Massive Proxy Resellers API"
     },
-    "description": "The Pool Stats API provides real-time statistics about the node pool availability. This API allows you to query live node counts with various filtering and grouping options.\n\n## Features\n- Get live node pool statistics with filtering\n- Group results by various dimensions (country, city, ASN, pool type, ZIP)\n- Retrieve available server regions\n\n## Authorization\nThe API uses API key for authorization. The API key should be included in the request header as `x-api-key`.\n\nPlease contact Massive support to obtain an API key for this API.",
+    "description": "The Pool Stats API provides real-time statistics about the node pool availability. This API allows you to query live node counts with various filtering and grouping options.\n\n## Features\n- Get live node pool statistics with filtering\n- Group results by various dimensions (country, city, ASN, ZIP, device type)\n- Retrieve available server regions\n\n## Authorization\nThe API uses API key for authorization. The API key should be included in the request header as `x-api-key`.\n\nPlease contact Massive support to obtain an API key for this API.",
     "version": "v1"
   },
   "servers": [
@@ -28,7 +28,7 @@
             "description": "Additional dimension(s) to group results by (comma-separated). Results are always grouped by server_region. This parameter adds additional grouping on top. Examples: \"country\", \"city\", \"asn\", \"zip\", \"device_type\", \"country,city\"",
             "schema": {
               "type": "string",
-              "pattern": "^(country|subdivision|city|asn|zip|pool_type|device_type)(,(country|subdivision|city|asn|zip|pool_type|device_type))*$"
+              "pattern": "^(country|subdivision|city|asn|zip|device_type)(,(country|subdivision|city|asn|zip|device_type))*$"
             }
           },
           {
@@ -103,16 +103,6 @@
             }
           },
           {
-            "name": "pool_type",
-            "in": "query",
-            "required": false,
-            "description": "Filter by pool type",
-            "schema": {
-              "type": "string",
-              "example": "residential"
-            }
-          },
-          {
             "name": "device_type",
             "in": "query",
             "required": false,
@@ -165,11 +155,6 @@
                       "zip": {
                         "type": "string",
                         "description": "ZIP/postal code (present when grouping by zip)",
-                        "nullable": true
-                      },
-                      "pool_type": {
-                        "type": "string",
-                        "description": "Pool type (present when grouping by pool_type)",
                         "nullable": true
                       },
                       "device_type": {
