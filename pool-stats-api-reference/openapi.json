@@ -6,7 +6,7 @@
       "url": "logo192.png",
       "altText": "Massive Proxy Resellers API"
     },
-    "description": "The Pool Stats API provides real-time statistics about the node pool availability. This API allows you to query live node counts with various filtering and grouping options.\n\n## Features\n- Get live node pool statistics with filtering\n- Group results by various dimensions (country, city, ASN, pool type, ZIP)\n- Retrieve available server regions\n\n## Authorization\nThe API uses API key for authorization. The API key should be included in the request header as `x-api-key`.\n\nPlease contact Massive support to obtain an API key for this API.",
+    "description": "The Pool Stats API provides real-time statistics about the node pool availability. This API allows you to query live node counts with various filtering and grouping options.\n\n## Features\n- Get live node pool statistics with filtering\n- Group results by various dimensions (country, city, ASN, ZIP, device type)\n- Retrieve available server regions\n\n## Authorization\nThe API uses API key for authorization. The API key should be included in the request header as `x-api-key`.\n\nPlease contact Massive support to obtain an API key for this API.",
     "version": "v1"
   },
   "servers": [
@@ -25,10 +25,10 @@
             "name": "group_by",
             "in": "query",
             "required": false,
-            "description": "Additional dimension(s) to group results by (comma-separated). Results are always grouped by server_region. This parameter adds additional grouping on top. Examples: \"country\", \"city\", \"asn\", \"zip\", \"country,city\"",
+            "description": "Additional dimension(s) to group results by (comma-separated). Results are always grouped by server_region. This parameter adds additional grouping on top. Examples: \"country\", \"city\", \"asn\", \"zip\", \"device_type\", \"country,city\"",
             "schema": {
               "type": "string",
-              "pattern": "^(country|subdivision|city|asn|zip)(,(country|subdivision|city|asn|zip))*$"
+              "pattern": "^(country|subdivision|city|asn|zip|device_type)(,(country|subdivision|city|asn|zip|device_type))*$"
             }
           },
           {
@@ -101,6 +101,16 @@
               "maxLength": 20,
               "example": "10001"
             }
+          },
+          {
+            "name": "device_type",
+            "in": "query",
+            "required": false,
+            "description": "Filter by device type (mobile, tv, or common)",
+            "schema": {
+              "type": "string",
+              "example": "mobile"
+            }
           }
         ],
         "responses": {
@@ -145,6 +155,11 @@
                       "zip": {
                         "type": "string",
                         "description": "ZIP/postal code (present when grouping by zip)",
+                        "nullable": true
+                      },
+                      "device_type": {
+                        "type": "string",
+                        "description": "Device type (mobile, tv, or common) (present when grouping by device_type)",
                         "nullable": true
                       },
                       "count": {
