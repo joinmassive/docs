@@ -9,6 +9,21 @@ description: 'The Pool Stats API provides real-time statistics about the node po
 - Group results by various dimensions (country, city, ASN, ZIP, pool type, device type)
 - Retrieve available server regions
 
+# Important Disclaimer
+
+<Warning>
+The node counts returned by the Pool Stats API are **not** the number of nodes that will be available to serve requests. Many factors determine actual node availability, including:
+
+- Concurrent request load
+- Real-time node connections and disconnections
+- Traffic routing rules and policies
+- Geo-targeting requirements
+
+**Rule of thumb:** For reliable geo-targeting, we recommend having at least **1,000 nodes** in the specified geographic area.
+
+**Note:** The more specific the geographic targeting (e.g., city or ZIP code level), the less accurate the counts become and the higher the chance of receiving a 521 error, even if the Pool Stats API shows nodes available for that location.
+</Warning>
+
 # Getting Started
 
 To start using the Pool Stats API, you'll need an API key (contact Massive support to enable it for this API).
