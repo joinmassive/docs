@@ -18,7 +18,7 @@
     "/v1/live": {
       "get": {
         "summary": "Get live node pool statistics",
-        "description": "Retrieve the latest statistics for node pool with optional filtering and grouping. Results are always aggregated by server_region. Optional group_by parameter adds additional grouping dimensions.",
+        "description": "Retrieve the latest statistics for node pool with optional filtering and grouping. Results are always aggregated by server_region. Optional group_by parameter adds additional grouping dimensions.\n\n**IMPORTANT:** The node counts returned are NOT the number of nodes that will be available to serve requests. For reliable geo-targeting, at least 1,000 nodes in the specified geographic area are recommended. More specific geographic targeting (e.g., city or ZIP code level) results in less accurate counts and higher chances of 521 errors, even if nodes are shown as available.",
         "operationId": "getLiveStats",
         "parameters": [
           {
