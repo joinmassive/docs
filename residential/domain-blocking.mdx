@@ -7,8 +7,6 @@ description: "Block specific domains directly from the Massive Dashboard with pe
 
 The Domain Blocklist feature allows users to block specific domains directly from the Massive Dashboard. This provides greater control over browsing restrictions without requiring API calls or admin intervention.
 
-> **Note:** Only exact domain matches are blocked. Wildcards, subdomains, and path-based blocking (e.g., `sub.example.com` or `example.com/path`) are not yet supported.
-
 ## Key Features
 
 - Add or remove domains to your personal blocklist
@@ -36,6 +34,21 @@ To manage your blocklist:
 1. Click **Bulk Upload CSV** to add multiple domains at once
 2. Each domain should be listed on a separate line in the file
 
+## Wildcard Support
+
+Wildcards can be used to block multiple matching domains. For example, `*.example.com` will match all subdomains under `example.com`.
+
+Possible scenarios:
+
+| Pattern              | Description                                           | Example Matches                            |
+|----------------------|-------------------------------------------------------|--------------------------------------------|
+| `*.example.com`      | Block all subdomains (excluding `example.com` itself) | `ads.example.com`, `ads.click.example.com` |
+| `example.*`          | Block all top-level domains and public suffixes       | `example.com`, `example.co.uk`             |
+| `ads.*.example.com`  | Block all domains in-between                          | `ads.click.foo.example.com`                |
+| `*example*`          | Block domain at any level                             | `ads.example.test.com`, `example.com`      |
+
+> **Note:** Only one wildcard per domain is supported (`*example*` is a special case). Blocklist entries like `ads.*.test.*.example.com` will be rejected.
+
 ## Managing Your Blocklist
 
 - **Search domains** – Quickly locate entries in your blocklist
@@ -53,6 +66,8 @@ malicious-domain.test
 phishing-site.demo
 untrusted-proxy.biz
 metrics-data.example.org
+ads.*.buynow.com
+*.malware.test
 ```
 
 ## Best Practices
@@ -67,7 +82,7 @@ metrics-data.example.org
 - Each user can only manage their own blocklist
 - Admins may apply global blocklists that override personal settings
 - The maximum number of blocked domains per account is 1,000
-- **Wildcards are not supported** – Only exact domains on the list will be blocked. Subdomains (e.g., `sub.example.com`) and paths (e.g., `example.com/path`) will not be blocked unless explicitly added.
+- Paths (e.g., `example.com/path`) will not be blocked. Only domains are supported.
 
 ## Need Help?
 
