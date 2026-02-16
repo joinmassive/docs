@@ -76,6 +76,7 @@
               "reseller-api-reference/update-account",
               "reseller-api-reference/disable-account",
               "reseller-api-reference/enable-account",
+              "reseller-api-reference/update-domains-blocklist",
               "reseller-api-reference/allocate-traffic-for-an-account",
               "reseller-api-reference/get-account-usage",
               "reseller-api-reference/get-the-allocation-list"
