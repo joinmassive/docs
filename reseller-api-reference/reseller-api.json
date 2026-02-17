@@ -6,7 +6,7 @@
         "url": "logo192.png",
         "altText": "Massive Proxy Resellers API"
       },
-      "description": "The Proxy Resellers API allows to manage proxy resellers accounts.\nThe accounts created via this API are used to authenticate the Network API (see below \"Using Crentials).\n\n## Features\n- Create an account\n- Update an account\n- Get list of accounts created\n- Enable/Disable account\n- Allocate trafic for account\n- Get list of allocations made for account\n- Get current account trafic usage\n\n## Authorization\nThe API uses API key for authorization. The API key should be included in the request header as `x-api-key`.\n\nPlease note that the API key provided for the Network API is not automatically enabled for this API, enabling it must be requested to Massive support.\n\n## Using Credentials\nSuccessfully created account will have the following credentials to access the Massive Network:\n- Username: `<customerUsername>_<accountUsername>`\n- Password: `<accountPassword>`\n\n**The account will be linked to the customer but have own credentials to access the Massive Network.**\n\n### Example\nRequest:\n```sh\ncurl --location 'https://api-network.joinmassive.com/resellers/accounts' \\\n--header 'Content-Type: application/json' \\\n--header 'x-api-key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' \\\n--data-raw '{\n  \"username\": \"johndoe@example.com\",\n  \"password\": \"isdnf8eh8weun823\"\n}'\n```\n\nRequest to the Massive Network considering that x-api-key belongs to the demo@joinmassive.com account:\n```sh\ncurl -x 'https://network.joinmassive.com:65535' \\\n-U 'demo@joinmassive.com_johndoe@example.com:isdnf8eh8weun823'\n```\n\n_demo@joinmassive.com_johndoe@example.com_ is a username and targeting params can be provided according to the Massive Network documentation.\n",
+      "description": "The Proxy Resellers API allows to manage proxy resellers accounts.\nThe accounts created via this API are used to authenticate the Network API (see below \"Using Credentials).\n\n## Features\n- Create an account\n- Update an account\n- Get list of accounts created\n- Enable/Disable account\n- Manage account domains blocklist\n- Allocate traffic for account\n- Get list of allocations made for account\n- Get current account traffic usage\n\n## Authorization\nThe API uses API key for authorization. The API key should be included in the request header as `x-api-key`.\n\nPlease note that the API key provided for the Network API is not automatically enabled for this API, enabling it must be requested to Massive support.\n\n## Using Credentials\nSuccessfully created account will have the following credentials to access the Massive Network:\n- Username: `<customerUsername>_<accountUsername>`\n- Password: `<accountPassword>`\n\n**The account will be linked to the customer but have own credentials to access the Massive Network.**\n\n### Example\nRequest:\n```sh\ncurl --location 'https://api-network.joinmassive.com/resellers/accounts' \\\n--header 'Content-Type: application/json' \\\n--header 'x-api-key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' \\\n--data-raw '{\n  \"username\": \"johndoe@example.com\",\n  \"password\": \"isdnf8eh8weun823\"\n}'\n```\n\nRequest to the Massive Network considering that x-api-key belongs to the demo@joinmassive.com account:\n```sh\ncurl -x 'https://network.joinmassive.com:65535' \\\n-U 'demo@joinmassive.com_johndoe@example.com:isdnf8eh8weun823'\n```\n\n_demo@joinmassive.com_johndoe@example.com_ is a username and targeting params can be provided according to the Massive Network documentation.\n",
       "version": "v1"
     },
     "servers": [
@@ -45,6 +45,11 @@
                       "type": "integer",
                       "description": "The initial allocated traffic allowance in bytes.",
                       "example": 1000000
+                    },
+                    "sync_with_parent": {
+                      "type": "boolean",
+                      "description": "If true, synchronize the new account's domains blocklist with the parent account. The sub-account can still have its own blocklist entries, which are merged with the parent's.",
+                      "default": false
                     }
                   }
                 }
@@ -339,6 +344,70 @@
           },
           "tags": [
             "Enabling/Disabling Account"
+          ]
+        }
+      },
+      "/accounts/{id}/blocklist": {
+        "put": {
+          "summary": "Update domains blocklist for account",
+          "description": "Configure which domains are blocked for this account's proxy access. For synchronized sub-accounts, the blocklist is merged with the parent's blocklist.\n",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "description": "The account ID"
+            }
+          ],
+          "security": [
+            {
+              "api-key": []
+            }
+          ],
+          "operationId": "updateDomainsBlocklist",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/updateDomainsBlocklistRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Domains blocklist updated successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "example": {}
+                  }
+                }
+              }
+            },
+            "400": {
+              "$ref": "#/components/responses/BadRequestError"
+            },
+            "401": {
+              "$ref": "#/components/responses/UnauthorizedError"
+            },
+            "403": {
+              "$ref": "#/components/responses/ForbiddenError"
+            },
+            "404": {
+              "$ref": "#/components/responses/AccountNotFound"
+            },
+            "500": {
+              "$ref": "#/components/responses/InternalServerError"
+            }
+          },
+          "tags": [
+            "User profile Configuration"
           ]
         }
       },
@@ -649,6 +718,34 @@
               "type": "integer",
               "description": "The allocated traffic in bytes.",
               "example": 1000000
+            },
+            "domains_blocklist": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of domains blocked for this account.",
+              "example": ["example.com", "test.org"]
+            },
+            "sync_with_parent": {
+              "type": "boolean",
+              "description": "If true, synchronize the new account's domains blocklist with the parent account. The sub-account can still have its own blocklist entries, which are merged with the parent's.",
+              "example": false
+            }
+          }
+        },
+        "updateDomainsBlocklistRequest": {
+          "type": "object",
+          "required": ["domains_blocklist"],
+          "properties": {
+            "domains_blocklist": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Array of domain names to block. Maximum 253 characters per domain. Domains will be automatically deduplicated and sanitized.",
+              "example": ["example.com", "test.org", "badsite.net"],
+              "maxItems": 100
             }
           }
         }
