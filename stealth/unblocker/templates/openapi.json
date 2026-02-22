@@ -146,6 +146,93 @@
       "get": {
         "summary": "Content",
         "description": "Retrieve webpage content or queue content for later retrieval.",
+        "parameters": [
+          {
+            "name": "url",
+            "in": "query",
+            "description": "The URL of the page to browse; any unsafe characters require [URL encoding](https://developer.mozilla.org/en-US/docs/Glossary/Percent-encoding).",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "difficulty",
+            "in": "query",
+            "description": "The difficulty pool to attempt to access the page from.",
+            "schema": { "type": "string", "enum": ["low", "medium", "high"], "default": "low" }
+          },
+          {
+            "name": "speed",
+            "in": "query",
+            "description": "The speed mode to browse at.",
+            "schema": { "type": "string", "enum": ["light", "ridiculous", "ludicrous"], "default": "light" }
+          },
+          {
+            "name": "device",
+            "in": "query",
+            "description": "The name of the device to emulate browsing on (these names are case insensitive but must include form- or URL-encoded spaces and punctuation marks); device emulation is unused by default.",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "ip",
+            "in": "query",
+            "description": "The type of IP address to browse from; a random IP type is used by default.",
+            "schema": { "type": "string", "enum": ["residential", "isp", "datacenter"] }
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "description": "The [two-letter ISO code](https://www.iso.org/obp/ui/#search/code) of the country to browse from (these codes are case insensitive); a random country will be used by default.",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "subdivision",
+            "in": "query",
+            "description": "The alphanumeric second part (proceeding the separator) of a [first-level subdivision code](https://www.iso.org/obp/ui/#search/code) in the (prerequisite) country to browse from (these codes are case insensitive); a random subdivision will be used by default.",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "city",
+            "in": "query",
+            "description": "The [commonly spelled name](https://www.geonames.org/) of the city in the (prerequisite) country to browse from (these names are temporarily case sensitive and required to include form- or URL-encoded spaces and punctuation marks); a random city will be used by default.",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "captcha",
+            "in": "query",
+            "description": "The CAPTCHA-handling strategy.",
+            "schema": { "type": "string", "enum": ["solved", "ignored", "rejected"], "default": "solved" }
+          },
+          {
+            "name": "readiness",
+            "in": "query",
+            "description": "The page-load event to wait for before snapshotting.",
+            "schema": { "type": "string", "enum": ["load", "domcontentloaded"], "default": "load" }
+          },
+          {
+            "name": "delay",
+            "in": "query",
+            "description": "The number of seconds to inject before snapshotting the browsed content, from `.1` to `10` inclusive; no delay is injected by default.",
+            "schema": { "type": "number", "minimum": 0.1, "maximum": 10 }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "The format to output to.",
+            "schema": { "type": "string", "enum": ["rendered", "raw", "markdown"], "default": "rendered" }
+          },
+          {
+            "name": "expiration",
+            "in": "query",
+            "description": "The maximum age of cached content in days to accept, where `0` will disable caching.",
+            "schema": { "type": "integer", "minimum": 0, "default": 1 }
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "description": "The synchronous or asynchronous timing of when to retrieve content (see the [async endpoint](content)).",
+            "schema": { "type": "string", "enum": ["sync", "async"], "default": "sync" }
+          }
+        ],
         "responses": {
           "200": {
             "description": "The page content or a job identifier.",
@@ -159,7 +246,16 @@
                 }
               }
             }
-          }
+          },
+          "400": { "$ref": "#/components/responses/paramsError" },
+          "401": { "$ref": "#/components/responses/authenticationError" },
+          "402": { "$ref": "#/components/responses/creditsError" },
+          "403": { "$ref": "#/components/responses/captchaError" },
+          "404": { "$ref": "#/components/responses/unsupportedError" },
+          "429": { "$ref": "#/components/responses/throttlingError" },
+          "500": { "$ref": "#/components/responses/unknownError" },
+          "503": { "$ref": "#/components/responses/unavailableError" },
+          "504": { "$ref": "#/components/responses/timeoutError" }
         }
       }
     },
@@ -217,6 +313,60 @@
           },
           "400": { "$ref": "#/components/responses/paramsError" },
           "401": { "$ref": "#/components/responses/authenticationError" }
+        }
+      }
+    },
+    "/usage": {
+      "get": {
+        "summary": "Usage data",
+        "description": "Retrieve aggregated usage data for your account.",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "description": "The start date of the report in `YYYY-MM-DD` format (UTC); defaults to 7 days ago.",
+            "schema": { "type": "string", "format": "date" }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "description": "The end date of the report in `YYYY-MM-DD` format (UTC); defaults to today.",
+            "schema": { "type": "string", "format": "date" }
+          },
+          {
+            "name": "service",
+            "in": "query",
+            "description": "The service to filter by; all services are included by default.",
+            "schema": { "$ref": "#/components/schemas/Service" }
+          },
+          {
+            "name": "by",
+            "in": "query",
+            "description": "The time period to disaggregate by; data is aggregated across the full date range by default.",
+            "schema": { "type": "string", "enum": ["day", "week", "month"] }
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "description": "The email address of the account to filter by; all accounts are included by default.",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The usage data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/UsageRecord" }
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/paramsError" },
+          "401": { "$ref": "#/components/responses/authenticationError" },
+          "403": { "$ref": "#/components/responses/authorizationError" }
         }
       }
     }
@@ -487,6 +637,46 @@
           }
         },
         "required": ["status"]
+      },
+      "Service": {
+        "type": "string",
+        "enum": ["browser", "search"]
+      },
+      "UsageRecord": {
+        "type": "object",
+        "summary": "Usage record",
+        "properties": {
+          "service": {
+            "type": "string",
+            "description": "The name of the service.",
+            "example": "browser"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "description": "The date or start date of the period.",
+            "example": "2025-01-01"
+          },
+          "requests": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "The total number of API requests.",
+            "example": 1000
+          },
+          "successes": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "The number of successful requests.",
+            "example": 950
+          },
+          "credits": {
+            "type": "number",
+            "minimum": 0,
+            "description": "The number of credits consumed.",
+            "example": 475.5
+          }
+        },
+        "required": ["service", "date", "requests", "successes", "credits"]
       }
     },
     "responses": {
@@ -514,10 +704,50 @@
           }
         }
       },
+      "creditsError": {
+        "description": "Insufficient credits.",
+        "content": {
+          "text/plain": {
+            "schema": { "type": "string", "example": "Insufficient credits" }
+          }
+        }
+      },
+      "captchaError": {
+        "description": "A CAPTCHA could not be solved.",
+        "content": {
+          "text/plain": {
+            "schema": { "type": "string", "example": "CAPTCHA could not be solved" }
+          }
+        }
+      },
+      "unsupportedError": {
+        "description": "The page could not be found or is unsupported.",
+        "content": {
+          "text/plain": {
+            "schema": { "type": "string", "example": "Page not found or unsupported" }
+          }
+        }
+      },
+      "throttlingError": {
+        "description": "Too many requests.",
+        "content": {
+          "text/plain": {
+            "schema": { "type": "string", "example": "Too many requests" }
+          }
+        }
+      },
       "unknownError": {
         "description": "An unknown error occurred.",
         "content": {
           "text/plain": { "schema": { "type": "string", "example": "Unknown error occurred" } }
+        }
+      },
+      "unavailableError": {
+        "description": "The service is temporarily unavailable.",
+        "content": {
+          "text/plain": {
+            "schema": { "type": "string", "example": "Service temporarily unavailable" }
+          }
         }
       },
       "timeoutError": {

@@ -12,6 +12,7 @@
     "dark": "#C73C1C"
   },
   "favicon": "/favicon.svg",
+  "openapi": ["stealth/unblocker/openapi.json"],
   "seo": {
     "metatags": {
       "robots": "noindex, nofollow"
@@ -86,6 +87,37 @@
             "group": "Others",
             "pages": [
               "residential/usage-alerts"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Unblocker",
+        "groups": [
+          {
+            "group": "Endpoints",
+            "pages": [
+              "stealth/unblocker/browser",
+              "stealth/unblocker/search",
+              "stealth/unblocker/reporting"
+            ]
+          },
+          {
+            "group": "Configuration",
+            "pages": [
+              "stealth/unblocker/geotargeting",
+              "stealth/unblocker/scheduling"
+            ]
+          },
+          {
+            "group": "API Reference",
+            "pages": [
+              "stealth/unblocker/reference/browser",
+              "stealth/unblocker/reference/browser/content",
+              "stealth/unblocker/reference/browser/devices",
+              "stealth/unblocker/reference/search",
+              "stealth/unblocker/reference/search/results",
+              "stealth/unblocker/reference/usage"
             ]
           }
         ]
