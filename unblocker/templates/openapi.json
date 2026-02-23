@@ -3,109 +3,227 @@
   "info": {
     "title": "{{COMPANY_NAME}}",
     "description": "The missing services for agent-first development.",
-    "version": "1.0.0-beta"
+    "version": "1.0.0"
   },
-  "servers": [{ "url": "https://{{API_ENDPOINT}}" }],
-  "security": [{ "bearerAuth": [] }],
+  "servers": [
+    {
+      "url": "https://{{API_ENDPOINT}}"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
   "paths": {
     "/search": {
       "get": {
         "summary": "Results",
-        "description": "Retrieve Google search results or queue results for later retrieval.",
+        "description": "Retrieve popular search results or queue results for later retrieval.",
         "parameters": [
           {
             "name": "terms",
-            "in": "query",
             "description": "The broad or exact word or phrase to query (e.g., `foo bar baz` or `\"foo bar baz\"`); the terms require [form or URL encoding](https://developer.mozilla.org/en-US/docs/Glossary/Percent-encoding) (with any space character being replaced by a `+` character or `%20` sequence).",
-            "required": true,
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string",
+              "example": "foo"
+            },
+            "in": "query",
+            "required": true
           },
           {
             "name": "serps",
-            "in": "query",
-            "description": "The number of results pages to retrieve.",
-            "schema": { "type": "integer", "minimum": 1, "maximum": 10, "default": 1 }
+            "description": "The number of results pages to fetch.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10,
+              "default": 1,
+              "example": 1
+            },
+            "in": "query"
           },
           {
             "name": "size",
-            "in": "query",
-            "description": "The number of results per page to retrieve; page size is unset by default.",
-            "schema": { "type": "integer", "minimum": 0, "maximum": 100 }
+            "description": "The number of results per page to fetch; page size is unset by default.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100,
+              "example": null
+            },
+            "in": "query"
           },
           {
             "name": "offset",
-            "in": "query",
-            "description": "The number of initial results to skip; results aren’t offset by default.",
-            "schema": { "type": "integer", "minimum": 0, "maximum": 100 }
+            "description": "The number of initial results to skip; results aren\u2019t offset by default.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100,
+              "example": null
+            },
+            "in": "query"
+          },
+          {
+            "name": "ip",
+            "description": "The type of IP address to search from; a random IP type is used by default.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "residential",
+                "isp"
+              ],
+              "example": null
+            },
+            "in": "query"
           },
           {
             "name": "country",
-            "in": "query",
-            "description": "The [two-letter ISO code](https://www.iso.org/obp/ui/#search/code) of the country to search from (these codes are case insensitive); a random country will be used by default.",
-            "schema": { "type": "string" }
+            "description": "The [two-letter ISO code](https://www.iso.org/obp/ui/#search/code) of the country to search from (these codes are case insensitive); a random country is used by default.",
+            "schema": {
+              "type": "string",
+              "example": null
+            },
+            "in": "query"
           },
           {
             "name": "subdivision",
-            "in": "query",
-            "description": "The alphanumeric second part (proceeding the separator) of a [first-level subdivision code](https://www.iso.org/obp/ui/#search/code) in the (prerequisite) country to search from (these codes are case insensitive); a random subdivision will be used by default.",
-            "schema": { "type": "string" }
+            "description": "The alphanumeric second part (proceeding the separator) of a [first-level subdivision code](https://www.iso.org/obp/ui/#search/code) in the (prerequisite) country to search from (these codes are case insensitive); a random subdivision is used by default.",
+            "schema": {
+              "type": "string",
+              "example": null
+            },
+            "in": "query"
           },
           {
             "name": "city",
-            "in": "query",
-            "description": "The [commonly spelled name](https://www.geonames.org/) of the city in the (prerequisite) country to search from (these names are temporarily case sensitive and required to include form- or URL-encoded spaces and punctuation marks); a random city will be used by default.",
-            "schema": { "type": "string" }
+            "description": "The [commonly spelled name](https://www.geonames.org/) of the city in the (prerequisite) country to search from (these names are temporarily case sensitive and required to include form- or URL-encoded spaces and punctuation marks); a random city is used by default.",
+            "schema": {
+              "type": "string",
+              "example": null
+            },
+            "in": "query"
           },
           {
             "name": "uule",
-            "in": "query",
-            "description": "The [proprietary encoded string](https://moz.com/blog/geolocation-the-ultimate-tip-to-emulate-local-search) for emulating the location to search from; if possible, the actual location will be searched from not emulated; location emulation is unused by default.",
-            "schema": { "type": "string" }
+            "description": "The [proprietary encoded string](https://moz.com/blog/geolocation-the-ultimate-tip-to-emulate-local-search) for emulating the location to search from; if possible, the actual location is searched from not emulated; location emulation is unused by default.",
+            "schema": {
+              "type": "string",
+              "example": null
+            },
+            "in": "query"
           },
           {
             "name": "language",
-            "in": "query",
             "description": "The commonly spelled name, [two-letter ISO code](https://www.loc.gov/standards/iso639-2/php/code_list.php), or [Google code](https://www.google.com/advanced_search) of the language to search in (these names and codes are case insensitive but required to include form- or URL-encoded spaces and punctuation marks); the language is unset by default.",
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string",
+              "example": null
+            },
+            "in": "query"
           },
           {
-            "name": "mode",
-            "in": "query",
-            "description": "The synchronous or asynchronous timing of when to retrieve results (see the [async endpoint](results)).",
-            "schema": { "type": "string", "enum": ["sync", "async"], "default": "sync" }
+            "name": "display",
+            "description": "The commonly spelled name, [two-letter ISO code](https://www.loc.gov/standards/iso639-2/php/code_list.php), or [Google code](https://www.google.com/advanced_search) of the search interface\u2019s display language (these names and codes are case insensitive but required to include form- or URL-encoded spaces and punctuation marks); the display language is unset by default or set to the language if given.",
+            "schema": {
+              "type": "string",
+              "example": null
+            },
+            "in": "query"
           },
           {
             "name": "format",
-            "in": "query",
             "description": "The format to output to.",
-            "schema": { "type": "string", "enum": ["html", "json"], "default": "html" }
+            "schema": {
+              "type": "string",
+              "enum": [
+                "html",
+                "json"
+              ],
+              "default": "html",
+              "example": "json"
+            },
+            "in": "query"
           },
           {
-            "name": "subaccount",
-            "in": "query",
-            "description": "Any unique identifier of up to 255 characters (regardless of character encoding); we’ll bill requests made from subaccounts separately.",
-            "schema": { "type": "string" }
+            "name": "expiration",
+            "description": "The age in days of when to consider cached results expired, where `0` disables caching.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 1,
+              "example": 0
+            },
+            "in": "query"
+          },
+          {
+            "name": "mode",
+            "description": "The synchronous or asynchronous mode of results retrieval (see the [async resource](search/results)).",
+            "schema": {
+              "$ref": "#/components/schemas/Mode"
+            },
+            "in": "query"
           }
         ],
         "responses": {
           "200": {
-            "description": "The search results or a job identifier.",
+            "description": "The search results.",
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    { "$ref": "#/components/schemas/Results" },
-                    { "$ref": "#/components/schemas/SearchJob" }
+                  "$ref": "#/components/schemas/Results"
+                }
+              },
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "A job identifier.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "description": "The identifier to retrieve the queued search with.",
+                      "type": "string",
+                      "example": "078fd246-f0f7-44a0-aabb-cadd7b12454f"
+                    }
+                  },
+                  "required": [
+                    "id"
                   ]
                 }
               }
             }
           },
-          "400": { "$ref": "#/components/responses/paramsError" },
-          "401": { "$ref": "#/components/responses/authenticationError" },
-          "403": { "$ref": "#/components/responses/authorizationError" },
-          "500": { "$ref": "#/components/responses/unknownError" },
-          "504": { "$ref": "#/components/responses/timeoutError" }
+          "401": {
+            "$ref": "#/components/responses/authenticationError"
+          },
+          "402": {
+            "$ref": "#/components/responses/creditsError"
+          },
+          "422": {
+            "$ref": "#/components/responses/paramsError"
+          },
+          "504": {
+            "$ref": "#/components/responses/timeoutError"
+          },
+          "403": {
+            "$ref": "#/components/responses/captchaError"
+          },
+          "503": {
+            "$ref": "#/components/responses/unavailableError"
+          },
+          "500": {
+            "$ref": "#/components/responses/unknownError"
+          }
         }
       }
     },
@@ -116,29 +234,66 @@
         "parameters": [
           {
             "name": "id",
-            "in": "query",
             "description": "The identifier returned by the [search endpoint](../search) of the queued search to retrieve.",
-            "required": true,
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string",
+              "example": "078fd246-f0f7-44a0-aabb-cadd7b12454f"
+            },
+            "in": "query",
+            "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "The job results or status.",
+            "description": "The search results.",
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    { "$ref": "#/components/schemas/Results" },
-                    { "$ref": "#/components/schemas/SearchStatus" }
+                  "$ref": "#/components/schemas/Results"
+                }
+              },
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "The search status.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "description": "The status of the queued search.",
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Status"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "status"
                   ]
                 }
               }
             }
           },
-          "400": { "$ref": "#/components/responses/paramsError" },
-          "401": { "$ref": "#/components/responses/authenticationError" },
-          "403": { "$ref": "#/components/responses/authorizationError" }
+          "401": {
+            "$ref": "#/components/responses/authenticationError"
+          },
+          "403": {
+            "$ref": "#/components/responses/authorizationError"
+          },
+          "422": {
+            "$ref": "#/components/responses/paramsError"
+          },
+          "500": {
+            "$ref": "#/components/responses/unknownError"
+          }
         }
       }
     },
@@ -149,113 +304,228 @@
         "parameters": [
           {
             "name": "url",
-            "in": "query",
             "description": "The URL of the page to browse; any unsafe characters require [URL encoding](https://developer.mozilla.org/en-US/docs/Glossary/Percent-encoding).",
-            "required": true,
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string",
+              "example": "https://example.com/"
+            },
+            "in": "query",
+            "required": true
           },
           {
             "name": "difficulty",
-            "in": "query",
-            "description": "The difficulty pool to attempt to access the page from.",
-            "schema": { "type": "string", "enum": ["low", "medium", "high"], "default": "low" }
+            "description": "The difficulty pool to attempt to access the URL from.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "low",
+                "medium",
+                "high (coming soon)"
+              ],
+              "default": "low",
+              "example": "low"
+            },
+            "in": "query"
           },
           {
             "name": "speed",
-            "in": "query",
-            "description": "The speed mode to browse at.",
-            "schema": { "type": "string", "enum": ["light", "ridiculous", "ludicrous"], "default": "light" }
+            "description": "The speed to attempt to access the URL at, where `ridiculous` is 30 percent faster on average than `light` speed.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "light",
+                "ridiculous",
+                "ludicrous (planned)"
+              ],
+              "default": "light",
+              "example": "light"
+            },
+            "in": "query"
           },
           {
             "name": "device",
-            "in": "query",
-            "description": "The name of the device to emulate browsing on (these names are case insensitive but must include form- or URL-encoded spaces and punctuation marks); device emulation is unused by default.",
-            "schema": { "type": "string" }
+            "description": "The name as returned by the [devices resource](browser/devices) of the device to emulate browsing on (these names are case insensitive but must include form- or URL-encoded spaces and punctuation marks); device emulation is unused by default.",
+            "schema": {
+              "type": "string",
+              "example": null
+            },
+            "in": "query"
           },
           {
             "name": "ip",
-            "in": "query",
             "description": "The type of IP address to browse from; a random IP type is used by default.",
-            "schema": { "type": "string", "enum": ["residential", "isp", "datacenter"] }
+            "schema": {
+              "type": "string",
+              "enum": [
+                "residential",
+                "isp",
+                "datacenter (planned)"
+              ],
+              "example": null
+            },
+            "in": "query"
           },
           {
             "name": "country",
-            "in": "query",
-            "description": "The [two-letter ISO code](https://www.iso.org/obp/ui/#search/code) of the country to browse from (these codes are case insensitive); a random country will be used by default.",
-            "schema": { "type": "string" }
+            "description": "The [two-letter ISO code](https://www.iso.org/obp/ui/#search/code) of the country to browse from (these codes are case insensitive); a random country is used by default.",
+            "schema": {
+              "type": "string",
+              "example": null
+            },
+            "in": "query"
           },
           {
             "name": "subdivision",
-            "in": "query",
-            "description": "The alphanumeric second part (proceeding the separator) of a [first-level subdivision code](https://www.iso.org/obp/ui/#search/code) in the (prerequisite) country to browse from (these codes are case insensitive); a random subdivision will be used by default.",
-            "schema": { "type": "string" }
+            "description": "The alphanumeric second part (proceeding the separator) of a [first-level subdivision code](https://www.iso.org/obp/ui/#search/code) in the (prerequisite) country to browse from (these codes are case insensitive); a random subdivision is used by default.",
+            "schema": {
+              "type": "string",
+              "example": null
+            },
+            "in": "query"
           },
           {
             "name": "city",
-            "in": "query",
-            "description": "The [commonly spelled name](https://www.geonames.org/) of the city in the (prerequisite) country to browse from (these names are temporarily case sensitive and required to include form- or URL-encoded spaces and punctuation marks); a random city will be used by default.",
-            "schema": { "type": "string" }
+            "description": "The [commonly spelled name](https://www.geonames.org/) of the city in the (prerequisite) country to browse from (these names are temporarily case sensitive and required to include form- or URL-encoded spaces and punctuation marks); a random city is used by default.",
+            "schema": {
+              "type": "string",
+              "example": null
+            },
+            "in": "query"
           },
           {
             "name": "captcha",
-            "in": "query",
-            "description": "The CAPTCHA-handling strategy.",
-            "schema": { "type": "string", "enum": ["solved", "ignored", "rejected"], "default": "solved" }
+            "description": "The intended resolution of any detected captcha, where `rejected` results in a `403` response.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "solved",
+                "ignored",
+                "rejected"
+              ],
+              "default": "solved",
+              "example": "rejected"
+            },
+            "in": "query"
           },
           {
             "name": "readiness",
-            "in": "query",
-            "description": "The page-load event to wait for before snapshotting.",
-            "schema": { "type": "string", "enum": ["load", "domcontentloaded"], "default": "load" }
+            "description": "The standard ready event to await before snapshotting browsed content.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "load",
+                "domcontentloaded"
+              ],
+              "default": "load",
+              "example": "load"
+            },
+            "in": "query"
           },
           {
             "name": "delay",
-            "in": "query",
-            "description": "The number of seconds to inject before snapshotting the browsed content, from `.1` to `10` inclusive; no delay is injected by default.",
-            "schema": { "type": "number", "minimum": 0.1, "maximum": 10 }
+            "description": "The number of supplemental seconds to delay before snapshotting browsed content; no delay is used by default.",
+            "schema": {
+              "type": "number",
+              "minimum": 0.1,
+              "maximum": 10,
+              "example": null
+            },
+            "in": "query"
           },
           {
             "name": "format",
-            "in": "query",
             "description": "The format to output to.",
-            "schema": { "type": "string", "enum": ["rendered", "raw", "markdown"], "default": "rendered" }
+            "schema": {
+              "type": "string",
+              "enum": [
+                "rendered",
+                "raw",
+                "markdown"
+              ],
+              "default": "rendered",
+              "example": "markdown"
+            },
+            "in": "query"
           },
           {
             "name": "expiration",
-            "in": "query",
-            "description": "The maximum age of cached content in days to accept, where `0` will disable caching.",
-            "schema": { "type": "integer", "minimum": 0, "default": 1 }
+            "description": "The age in days of when to consider cached content expired, where `0` disables caching.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 1,
+              "example": 0
+            },
+            "in": "query"
           },
           {
             "name": "mode",
-            "in": "query",
-            "description": "The synchronous or asynchronous timing of when to retrieve content (see the [async endpoint](content)).",
-            "schema": { "type": "string", "enum": ["sync", "async"], "default": "sync" }
+            "description": "The synchronous or asynchronous mode of content retrieval (see the [async resource](browser/content)).",
+            "schema": {
+              "$ref": "#/components/schemas/Mode"
+            },
+            "in": "query"
           }
         ],
         "responses": {
           "200": {
-            "description": "The page content or a job identifier.",
+            "description": "The page content.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "A job identifier.",
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    { "$ref": "#/components/schemas/Content" },
-                    { "$ref": "#/components/schemas/BrowserJob" }
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "description": "The identifier to retrieve the queued request with.",
+                      "type": "string",
+                      "example": "1851dab8-4619-409f-893f-47dd3a180bc3"
+                    }
+                  },
+                  "required": [
+                    "id"
                   ]
                 }
               }
             }
           },
-          "400": { "$ref": "#/components/responses/paramsError" },
-          "401": { "$ref": "#/components/responses/authenticationError" },
-          "402": { "$ref": "#/components/responses/creditsError" },
-          "403": { "$ref": "#/components/responses/captchaError" },
-          "404": { "$ref": "#/components/responses/unsupportedError" },
-          "429": { "$ref": "#/components/responses/throttlingError" },
-          "500": { "$ref": "#/components/responses/unknownError" },
-          "503": { "$ref": "#/components/responses/unavailableError" },
-          "504": { "$ref": "#/components/responses/timeoutError" }
+          "401": {
+            "$ref": "#/components/responses/authenticationError"
+          },
+          "402": {
+            "$ref": "#/components/responses/creditsError"
+          },
+          "422": {
+            "$ref": "#/components/responses/paramsError"
+          },
+          "429": {
+            "$ref": "#/components/responses/throttlingError"
+          },
+          "504": {
+            "$ref": "#/components/responses/timeoutError"
+          },
+          "403": {
+            "$ref": "#/components/responses/captchaError"
+          },
+          "404": {
+            "$ref": "#/components/responses/unsupportedError"
+          },
+          "503": {
+            "$ref": "#/components/responses/unavailableError"
+          },
+          "500": {
+            "$ref": "#/components/responses/unknownError"
+          }
         }
       }
     },
@@ -266,25 +536,60 @@
         "parameters": [
           {
             "name": "id",
-            "in": "query",
             "description": "The identifier returned by the [browser endpoint](../browser) of the queued request to retrieve.",
-            "required": true,
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string",
+              "example": "1851dab8-4619-409f-893f-47dd3a180bc3"
+            },
+            "in": "query",
+            "required": true
           }
         ],
         "responses": {
           "200": {
-            "description": "The job content or status.",
+            "description": "The request content.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "The request status.",
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    { "$ref": "#/components/schemas/Content" },
-                    { "$ref": "#/components/schemas/BrowserStatus" }
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "description": "The status of the queued request.",
+                      "allOf": [
+                        {
+                          "$ref": "#/components/schemas/Status"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "status"
                   ]
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/authenticationError"
+          },
+          "403": {
+            "$ref": "#/components/responses/authorizationError"
+          },
+          "422": {
+            "$ref": "#/components/responses/paramsError"
+          },
+          "500": {
+            "$ref": "#/components/responses/unknownError"
           }
         }
       }
@@ -300,7 +605,9 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": { "type": "string" },
+                  "items": {
+                    "type": "string"
+                  },
                   "example": [
                     "Blackberry PlayBook",
                     "Blackberry PlayBook landscape",
@@ -311,183 +618,351 @@
               }
             }
           },
-          "400": { "$ref": "#/components/responses/paramsError" },
-          "401": { "$ref": "#/components/responses/authenticationError" }
+          "401": {
+            "$ref": "#/components/responses/authenticationError"
+          },
+          "403": {
+            "$ref": "#/components/responses/authorizationError"
+          },
+          "402": {
+            "$ref": "#/components/responses/creditsError"
+          }
         }
       }
     },
     "/usage": {
       "get": {
         "summary": "Usage data",
-        "description": "Retrieve aggregated usage data for your account.",
+        "description": "Generate an hourly consumption report.",
         "parameters": [
           {
             "name": "from",
+            "description": "The [ISO datetime](https://www.w3.org/TR/NOTE-datetime) to select data starting from, inclusively.",
+            "schema": {
+              "type": "string",
+              "example": "2025-12-24T18:00:00-06:00"
+            },
             "in": "query",
-            "description": "The start date of the report in `YYYY-MM-DD` format (UTC); defaults to 7 days ago.",
-            "schema": { "type": "string", "format": "date" }
+            "required": true
           },
           {
             "name": "to",
+            "description": "The [ISO datetime](https://www.w3.org/TR/NOTE-datetime) to select data up to, inclusively.",
+            "schema": {
+              "type": "string",
+              "example": "2025-12-25T9:00:00-06:00"
+            },
             "in": "query",
-            "description": "The end date of the report in `YYYY-MM-DD` format (UTC); defaults to today.",
-            "schema": { "type": "string", "format": "date" }
-          },
-          {
-            "name": "service",
-            "in": "query",
-            "description": "The service to filter by; all services are included by default.",
-            "schema": { "$ref": "#/components/schemas/Service" }
-          },
-          {
-            "name": "by",
-            "in": "query",
-            "description": "The time period to disaggregate by; data is aggregated across the full date range by default.",
-            "schema": { "type": "string", "enum": ["day", "week", "month"] }
+            "required": true
           },
           {
             "name": "email",
-            "in": "query",
-            "description": "The email address of the account to filter by; all accounts are included by default.",
-            "schema": { "type": "string" }
+            "description": "**[Whitelabelers only]** The (case-insensitive) email address of the user to select data for; multiple email addresses can be provided by repeating the key; data for all email addresses is included by default.",
+            "schema": {
+              "type": "string",
+              "example": "user@example.com"
+            },
+            "in": "query"
+          },
+          {
+            "name": "service",
+            "description": "The service to select data for; multiple services can be provided by repeating the key; data for all services is included by default.",
+            "schema": {
+              "$ref": "#/components/schemas/Service"
+            },
+            "in": "query"
+          },
+          {
+            "name": "by",
+            "description": "The time unit to group the data by.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "hour",
+                "day (planned)",
+                "total"
+              ],
+              "default": "total",
+              "example": "total"
+            },
+            "in": "query"
           }
         ],
         "responses": {
           "200": {
-            "description": "The usage data.",
+            "description": "The hourly report.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/UsageRecord" }
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "email": {
+                        "description": "The email address of the user whose data is selected.",
+                        "type": "string",
+                        "example": "user@example.com"
+                      },
+                      "from": {
+                        "description": "The ISO datetime of the first datapoint.",
+                        "type": "string",
+                        "example": "2025-12-25T00:00:00+00:00"
+                      },
+                      "to": {
+                        "description": "The ISO datetime of the last datapoint.",
+                        "type": "string",
+                        "example": "2025-12-25T15:00:00+00:00"
+                      },
+                      "service": {
+                        "description": "The service included in the data.",
+                        "allOf": [
+                          {
+                            "$ref": "#/components/schemas/Service"
+                          }
+                        ]
+                      },
+                      "result": {
+                        "description": "The type of result included in the data.",
+                        "type": "string",
+                        "enum": [
+                          "success",
+                          "failure"
+                        ],
+                        "example": "success"
+                      },
+                      "calls": {
+                        "description": "The number of API calls of the service and result type.",
+                        "type": "integer",
+                        "minimum": 1,
+                        "example": 17208
+                      },
+                      "meanSecs": {
+                        "description": "The average number of elapsed seconds of the API calls.",
+                        "type": "number",
+                        "minimum": 0,
+                        "example": 6.78
+                      }
+                    },
+                    "required": [
+                      "email",
+                      "from",
+                      "to",
+                      "service",
+                      "result",
+                      "calls",
+                      "meanSecs"
+                    ]
+                  }
                 }
               }
             }
           },
-          "400": { "$ref": "#/components/responses/paramsError" },
-          "401": { "$ref": "#/components/responses/authenticationError" },
-          "403": { "$ref": "#/components/responses/authorizationError" }
+          "401": {
+            "$ref": "#/components/responses/authenticationError"
+          },
+          "403": {
+            "$ref": "#/components/responses/authorizationError"
+          },
+          "422": {
+            "$ref": "#/components/responses/paramsError"
+          },
+          "429": {
+            "$ref": "#/components/responses/throttlingError"
+          },
+          "500": {
+            "$ref": "#/components/responses/unknownError"
+          }
         }
       }
     }
   },
   "components": {
-    "securitySchemes": { "bearerAuth": { "type": "http", "scheme": "bearer" } },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
     "schemas": {
+      "Mode": {
+        "summary": "Retrieval mode",
+        "type": "string",
+        "enum": [
+          "sync",
+          "async"
+        ],
+        "default": "sync",
+        "example": "sync"
+      },
+      "Service": {
+        "summary": "API service",
+        "type": "string",
+        "enum": [
+          "search",
+          "browser"
+        ],
+        "example": "browser"
+      },
       "Results": {
+        "summary": "Search results",
         "type": "object",
-        "summary": "Google search results",
         "properties": {
-          "terms": {
+          "engine": {
+            "description": "The queried search engine.",
             "type": "string",
+            "enum": [
+              "google"
+            ],
+            "example": "google"
+          },
+          "terms": {
             "description": "The queried word or phrase.",
+            "type": "string",
             "example": "foo"
           },
           "results": {
             "type": "array",
             "items": {
               "oneOf": [
-                { "$ref": "#/components/schemas/Organic" },
-                { "$ref": "#/components/schemas/OrganicWithSitelinks" }
+                {
+                  "$ref": "#/components/schemas/Organic"
+                },
+                {
+                  "$ref": "#/components/schemas/OrganicWithSitelinks"
+                }
               ],
-              "discriminator": { "propertyName": "type" }
+              "discriminator": {
+                "propertyName": "type"
+              }
             }
           },
           "resultsCount": {
+            "description": "The number of parsed results.",
             "type": "integer",
             "minimum": 0,
-            "description": "The number of parsed results.",
             "example": 43
           },
-          "approxResultsCount": {
-            "type": "integer",
-            "minimum": 0,
-            "description": "The approximate number of indexed results.",
-            "example": 255000000
-          },
-          "resultsOffset": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 100,
-            "nullable": true,
-            "description": "The number of skipped initial results.",
-            "example": null
-          },
           "pageCount": {
+            "description": "The number of retrieved results pages.",
             "type": "integer",
             "minimum": 1,
             "maximum": 10,
-            "description": "The number of retrieved results pages.",
             "example": 1
           },
           "pageSize": {
+            "description": "The number of retrieved results per page.",
             "type": "integer",
             "minimum": 0,
             "maximum": 100,
-            "nullable": true,
-            "description": "The number of retrieved results per page.",
+            "example": null
+          },
+          "approxResultsCount": {
+            "description": "The approximate number of indexed results.",
+            "type": "integer",
+            "minimum": 0,
+            "example": 255000000
+          },
+          "resultsOffset": {
+            "description": "The number of skipped initial results.",
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100,
             "example": null
           },
           "country": {
+            "description": "The ISO code of the targeted country.",
             "type": "string",
-            "nullable": true,
-            "description": "The ISO code of the requested country.",
             "example": null
           },
           "subdivision": {
+            "description": "The partial ISO code of the targeted subdivision.",
             "type": "string",
-            "nullable": true,
-            "description": "The partial ISO code of the requested subdivision.",
             "example": null
           },
           "city": {
+            "description": "The common name of the targeted city.",
             "type": "string",
-            "nullable": true,
-            "description": "The name of the requested city.",
             "example": null
           },
           "uule": {
-            "type": "string",
-            "nullable": true,
             "description": "The encoded string of the emulated location.",
+            "type": "string",
             "example": null
           },
           "language": {
+            "description": "The common name, ISO code, or Google code of the targeted language.",
             "type": "string",
-            "nullable": true,
-            "description": "The name, ISO code, or Google code of the requested language.",
+            "example": null
+          },
+          "display": {
+            "description": "The common name, ISO code, or Google code of the targeted display language.",
+            "type": "string",
             "example": null
           }
         },
         "required": [
+          "engine",
           "terms",
           "results",
           "resultsCount",
-          "pageCount",
-          "country",
-          "subdivision",
-          "city"
+          "pageCount"
         ]
       },
       "Organic": {
-        "type": "object",
         "summary": "Organic result",
+        "type": "object",
         "properties": {
-          "type": { "type": "string", "enum": ["organic"] },
-          "page": { "type": "integer", "minimum": 1, "maximum": 10, "example": 1 },
-          "section": {
+          "type": {
             "type": "string",
-            "enum": ["top", "left", "main", "bottom", "right"],
-            "example": "main"
+            "enum": [
+              "organic"
+            ],
+            "example": "organic"
           },
-          "feature": { "type": "integer", "minimum": 1, "example": 1 },
-          "position": { "type": "integer", "minimum": 1, "example": 1 },
-          "url": { "type": "string", "example": "https://foofighters.com/" },
-          "title": { "type": "string", "example": "Foo Fighters" },
-          "site": { "type": "string", "example": "Foo Fighters" },
-          "visibleUrl": { "type": "string", "example": "https://foofighters.com" },
-          "date": { "type": "string", "nullable": true, "example": null },
-          "snippet": { "type": "string", "example": "Official website of Foo Fighters." },
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10,
+            "example": 1
+          },
+          "section": {
+            "$ref": "#/components/schemas/Section"
+          },
+          "feature": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 1
+          },
+          "position": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 1
+          },
+          "url": {
+            "type": "string",
+            "example": "https://foofighters.com/"
+          },
+          "title": {
+            "type": "string",
+            "example": "Foo Fighters"
+          },
+          "site": {
+            "type": "string",
+            "example": "Foo Fighters"
+          },
+          "visibleUrl": {
+            "type": "string",
+            "example": "https://foofighters.com"
+          },
+          "date": {
+            "type": "string",
+            "nullable": true,
+            "example": null
+          },
+          "snippet": {
+            "type": "string",
+            "example": "Official website of Foo Fighters."
+          },
           "rating": {
             "type": "number",
             "minimum": 0,
@@ -495,9 +970,24 @@
             "nullable": true,
             "example": null
           },
-          "votes": { "type": "integer", "minimum": 0, "nullable": true, "example": null },
-          "sitelinks": { "type": "array", "items": { "$ref": "#/components/schemas/Link" } },
-          "images": { "type": "array", "items": { "$ref": "#/components/schemas/Image" } }
+          "votes": {
+            "type": "integer",
+            "minimum": 0,
+            "nullable": true,
+            "example": null
+          },
+          "sitelinks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Link"
+            }
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Image"
+            }
+          }
         },
         "required": [
           "type",
@@ -518,20 +1008,52 @@
         ]
       },
       "OrganicWithSitelinks": {
-        "type": "object",
         "summary": "Organic result with sitelinks",
+        "type": "object",
         "properties": {
-          "type": { "type": "string", "enum": ["organic-with-sitelinks"] },
-          "page": { "type": "integer", "minimum": 1, "maximum": 10 },
-          "section": { "type": "string", "enum": ["top", "left", "main", "bottom", "right"] },
-          "feature": { "type": "integer", "minimum": 1 },
-          "position": { "type": "integer", "minimum": 1 },
-          "url": { "type": "string" },
-          "title": { "type": "string" },
-          "site": { "type": "string" },
-          "visibleUrl": { "type": "string" },
-          "snippet": { "type": "string" },
-          "sitelinks": { "type": "array", "items": { "$ref": "#/components/schemas/Sitelink" } }
+          "type": {
+            "type": "string",
+            "enum": [
+              "organic-with-sitelinks"
+            ]
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10
+          },
+          "section": {
+            "$ref": "#/components/schemas/Section"
+          },
+          "feature": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "position": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "url": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "site": {
+            "type": "string"
+          },
+          "visibleUrl": {
+            "type": "string"
+          },
+          "snippet": {
+            "type": "string"
+          },
+          "sitelinks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Sitelink"
+            }
+          }
         },
         "required": [
           "type",
@@ -547,152 +1069,110 @@
           "sitelinks"
         ]
       },
+      "Section": {
+        "summary": "Result section",
+        "type": "string",
+        "enum": [
+          "top",
+          "left",
+          "main",
+          "bottom",
+          "right"
+        ],
+        "example": "main"
+      },
       "Link": {
-        "type": "object",
         "summary": "Link element",
+        "type": "object",
         "properties": {
-          "position": { "type": "integer", "minimum": 1, "example": 1 },
-          "url": { "type": "string", "example": "https://foofighters.com/tour-dates/" },
-          "title": { "type": "string", "example": "Tour Dates" }
+          "position": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 1
+          },
+          "url": {
+            "type": "string",
+            "example": "https://foofighters.com/tour-dates/"
+          },
+          "title": {
+            "type": "string",
+            "example": "Tour Dates"
+          }
         },
-        "required": ["position", "url", "title"]
+        "required": [
+          "position",
+          "url",
+          "title"
+        ]
       },
       "Image": {
-        "type": "object",
         "summary": "Image element",
+        "type": "object",
         "properties": {
-          "position": { "type": "integer", "minimum": 1, "example": 1 },
-          "source": { "type": "string", "example": "[Image data]" },
-          "altText": { "type": "string", "example": "foo from en.wikipedia.org" }
+          "position": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 1
+          },
+          "source": {
+            "type": "string",
+            "example": "[Image data]"
+          },
+          "altText": {
+            "type": "string",
+            "example": "foo from en.wikipedia.org"
+          }
         },
-        "required": ["position", "source", "altText"]
+        "required": [
+          "position",
+          "source",
+          "altText"
+        ]
       },
       "Sitelink": {
-        "type": "object",
         "summary": "Sitelink element",
-        "properties": {
-          "position": { "type": "integer", "minimum": 1 },
-          "url": { "type": "string" },
-          "title": { "type": "string" },
-          "snippet": { "type": "string" }
-        },
-        "required": ["position", "url", "title", "snippet"]
-      },
-      "SearchJob": {
         "type": "object",
-        "summary": "Search job",
         "properties": {
-          "id": {
-            "type": "string",
-            "description": "The identifier to retrieve a queued search with.",
-            "example": "078fd246-f0f7-44a0-aabb-cadd7b12454f"
+          "position": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "url": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "snippet": {
+            "type": "string"
           }
         },
-        "required": ["id"]
+        "required": [
+          "position",
+          "url",
+          "title",
+          "snippet"
+        ]
       },
-      "SearchStatus": {
-        "type": "object",
+      "Status": {
         "summary": "Job status",
-        "properties": {
-          "status": {
-            "type": "string",
-            "enum": ["retrieving", "failed"],
-            "description": "The status of a queued search."
-          }
-        },
-        "required": ["status"]
-      },
-      "Content": {
-        "type": "object",
-        "summary": "Webpage content",
-        "properties": {
-          "device": {
-            "type": "string",
-            "nullable": true,
-            "description": "The name of the emulated device.",
-            "example": null
-          }
-        }
-      },
-      "BrowserJob": {
-        "type": "object",
-        "summary": "Browsing job",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "The identifier to retrieve a queued request with.",
-            "example": "078fd246-f0f7-44a0-aabb-cadd7b12454f"
-          }
-        },
-        "required": ["id"]
-      },
-      "BrowserStatus": {
-        "type": "object",
-        "summary": "Browsing status",
-        "properties": {
-          "status": {
-            "type": "string",
-            "enum": ["retrieving", "failed"],
-            "description": "The status of a queued request."
-          }
-        },
-        "required": ["status"]
-      },
-      "Service": {
         "type": "string",
-        "enum": ["browser", "search"]
-      },
-      "UsageRecord": {
-        "type": "object",
-        "summary": "Usage record",
-        "properties": {
-          "service": {
-            "type": "string",
-            "description": "The name of the service.",
-            "example": "browser"
-          },
-          "date": {
-            "type": "string",
-            "format": "date",
-            "description": "The date or start date of the period.",
-            "example": "2025-01-01"
-          },
-          "requests": {
-            "type": "integer",
-            "minimum": 0,
-            "description": "The total number of API requests.",
-            "example": 1000
-          },
-          "successes": {
-            "type": "integer",
-            "minimum": 0,
-            "description": "The number of successful requests.",
-            "example": 950
-          },
-          "credits": {
-            "type": "number",
-            "minimum": 0,
-            "description": "The number of credits consumed.",
-            "example": 475.5
-          }
-        },
-        "required": ["service", "date", "requests", "successes", "credits"]
+        "enum": [
+          "retrieving",
+          "failed"
+        ],
+        "example": "retrieving"
       }
     },
     "responses": {
-      "paramsError": {
-        "description": "One or more parameters were invalid.",
-        "content": {
-          "text/plain": {
-            "schema": { "type": "string", "example": "One or more parameters were invalid" }
-          }
-        }
-      },
       "authenticationError": {
         "description": "The authorization header was missing.",
         "content": {
           "text/plain": {
-            "schema": { "type": "string", "example": "Authorization header must be provided" }
+            "schema": {
+              "type": "string",
+              "example": "Authorization header must be provided"
+            }
           }
         }
       },
@@ -700,60 +1180,99 @@
         "description": "The API token was invalid.",
         "content": {
           "text/plain": {
-            "schema": { "type": "string", "example": "Valid API token must be provided" }
+            "schema": {
+              "type": "string",
+              "example": "Valid API token must be provided"
+            }
           }
         }
       },
       "creditsError": {
-        "description": "Insufficient credits.",
+        "description": "No more credits are available.",
         "content": {
           "text/plain": {
-            "schema": { "type": "string", "example": "Insufficient credits" }
+            "schema": {
+              "type": "string",
+              "example": "Credit balance is 0; top up at {{CHECKOUT_URL}}"
+            }
           }
         }
       },
-      "captchaError": {
-        "description": "A CAPTCHA could not be solved.",
+      "paramsError": {
+        "description": "One or more parameters were invalid.",
         "content": {
           "text/plain": {
-            "schema": { "type": "string", "example": "CAPTCHA could not be solved" }
-          }
-        }
-      },
-      "unsupportedError": {
-        "description": "The page could not be found or is unsupported.",
-        "content": {
-          "text/plain": {
-            "schema": { "type": "string", "example": "Page not found or unsupported" }
+            "schema": {
+              "type": "string",
+              "example": "Character counts must be no more than 255"
+            }
           }
         }
       },
       "throttlingError": {
-        "description": "Too many requests.",
+        "description": "The rate limit was exceeded.",
         "content": {
           "text/plain": {
-            "schema": { "type": "string", "example": "Too many requests" }
-          }
-        }
-      },
-      "unknownError": {
-        "description": "An unknown error occurred.",
-        "content": {
-          "text/plain": { "schema": { "type": "string", "example": "Unknown error occurred" } }
-        }
-      },
-      "unavailableError": {
-        "description": "The service is temporarily unavailable.",
-        "content": {
-          "text/plain": {
-            "schema": { "type": "string", "example": "Service temporarily unavailable" }
+            "schema": {
+              "type": "string",
+              "example": "Rate limit was exceeded; please retry in 180 seconds"
+            }
           }
         }
       },
       "timeoutError": {
         "description": "The operation timed out.",
         "content": {
-          "text/plain": { "schema": { "type": "string", "example": "Operation timed out" } }
+          "text/plain": {
+            "schema": {
+              "type": "string",
+              "example": "Request(s) timed out"
+            }
+          }
+        }
+      },
+      "captchaError": {
+        "description": "The content was captcha\u2019d.",
+        "content": {
+          "text/plain": {
+            "schema": {
+              "type": "string",
+              "example": "Captcha was detected"
+            }
+          }
+        }
+      },
+      "unsupportedError": {
+        "description": "One or more resources is nonexistant.",
+        "content": {
+          "text/plain": {
+            "schema": {
+              "type": "string",
+              "example": "Domain is nonexistant"
+            }
+          }
+        }
+      },
+      "unavailableError": {
+        "description": "The service is unavailable.",
+        "content": {
+          "text/plain": {
+            "schema": {
+              "type": "string",
+              "example": "Service is autoscaling; please retry in 180 seconds"
+            }
+          }
+        }
+      },
+      "unknownError": {
+        "description": "An unknown error occurred.",
+        "content": {
+          "text/plain": {
+            "schema": {
+              "type": "string",
+              "example": "Unknown error occurred"
+            }
+          }
         }
       }
     }

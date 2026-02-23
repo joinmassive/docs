@@ -99,7 +99,7 @@
             "pages": [
               "unblocker/browser",
               "unblocker/search",
-              "unblocker/reporting"
+              "unblocker/usage"
             ]
           },
           {

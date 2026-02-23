@@ -5,7 +5,7 @@ iconType: light
 description: Defer responses for later retrieval.
 ---
 
-import { companyName, apiEndpoint } from '/snippets/whitelabel/config.mdx';
+import { apiEndpoint } from '/snippets/whitelabel/config.mdx';
 import Search from '/snippets/whitelabel/search/mode.mdx';
 import Browser from '/snippets/whitelabel/browser/mode.mdx';
 import Results from '/snippets/whitelabel/search/id.mdx';
@@ -54,9 +54,16 @@ retried:
 { "status": "failed" }
 ```
 
-Here are the scheduling keys and values:
+These are the scheduling request parameters:
 
-| Key    | Required | Value                                                                                                    |
-| :----- | :------- | :------------------------------------------------------------------------------------------------------- |
-| `mode` | ⬜       | The synchronous or asynchronous mode of content retrieval, `sync` or `async`; `sync` is the default mode |
-| `id`   | ⬜       | The identifier provided by **{companyName}** to reference an asynchronous job                            |
+| Key    | Required | Value                                                                                                                                                |
+| :----- | :------- | :--------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `mode` | ⬜       | The synchronous or asynchronous mode of content retrieval, `sync` or `async`; `sync` is the default mode                                             |
+| `id`   | ⬜       | The identifier provided by the <Link href='search'>search</Link> or <Link href='browser'>browser endpoints</Link> of an asynchronous job to retrieve |
+
+These are the response parameters:
+
+| Key      | Value                                                       |
+| :------- | :---------------------------------------------------------- |
+| `id`     | The identifier to retrieve an asynchronous job with         |
+| `status` | The status of an asynchronous job, `retrieving` or `failed` |
