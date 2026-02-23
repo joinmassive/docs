@@ -12,6 +12,7 @@
     "dark": "#C73C1C"
   },
   "favicon": "/favicon.svg",
+  "css": "/global.css",
   "openapi": ["unblocker/openapi.json"],
   "seo": {
     "metatags": {

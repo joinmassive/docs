@@ -1,0 +1,65 @@
+.bg-background-light, .bg-white {
+  background-color: #FFFFFF !important;
+}
+
+.dark\:bg-background-dark:is(.dark *), .dark\:bg-codeblock:is(.dark *) {
+  background-color: #121117 !important;
+}
+
+#content-area a, #content-area a:visited {
+  color: #d74939;
+}
+
+.dark #content-area a, .dark #content-area a:visited {
+  color: #ff8163;
+}
+
+[data-callout-type="info"],
+[data-callout-type="tip"] {
+  border-color: rgb(215 73 57 / .2) !important;
+  background-color: rgb(255 129 99 / .07) !important;
+}
+
+[data-callout-type="info"] svg,
+[data-callout-type="tip"] svg {
+  color: #d74939 !important;
+}
+
+.dark [data-callout-type="info"],
+.dark [data-callout-type="tip"] {
+  border-color: rgb(255 129 99 / .25) !important;
+  background-color: rgb(255 129 99 / .1) !important;
+}
+
+.dark [data-callout-type="info"] svg,
+.dark [data-callout-type="tip"] svg {
+  color: #ff8163 !important;
+}
+
+.dark [data-callout-type="info"],
+.dark [data-callout-type="info"] *,
+.dark [data-callout-type="tip"],
+.dark [data-callout-type="tip"] * {
+  color: rgb(255 129 99 / .85) !important;
+}
+
+.dark [data-callout-type="info"] a,
+.dark [data-callout-type="tip"] a {
+  color: #ff8163 !important;
+}
+
+.latex-style {
+  display: block;
+  margin-bottom: 1.5em;
+  font-size: 1.125rem;
+}
+
+footer {
+  margin-top: -1.375rem;
+  padding-top: 0 !important;
+  padding-bottom: 4rem !important;
+}
+
+footer > div:nth-of-type(2) {
+  visibility: hidden;
+}
