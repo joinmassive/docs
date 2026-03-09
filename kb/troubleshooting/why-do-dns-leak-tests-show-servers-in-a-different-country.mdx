@@ -1,0 +1,9 @@
+---
+title: "Why do DNS leak tests show servers in a different country?"
+---
+
+When running a DNS leak test through our proxy, you may see DNS resolvers in a country different from your selected exit node (for example, German DNS servers appearing when targeting the US). This is expected behavior caused by our security architecture — it is not a DNS leak.
+
+Our proxy servers perform a DNS lookup on incoming requests to verify that hostnames do not resolve to private or local IP addresses. This validation protects against [DNS rebinding attacks](https://en.wikipedia.org/wiki/DNS_rebinding), a class of vulnerability where an attacker tricks a proxy into connecting to internal network resources. Because this validation happens on our infrastructure (hosted in Europe), DNS leak test sites detect it as a separate resolver.
+
+Your actual traffic still exits through a node in your selected country. The validation lookup is purely internal and is invisible to target websites — they only see the connection from the exit node's IP address in the country you specified. The DNS resolver location has no impact on your browsing, scraping, or data collection.
