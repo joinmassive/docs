@@ -222,7 +222,8 @@
                   "kb/troubleshooting/what-should-i-do-if-the-sdk-initialization-fails",
                   "kb/troubleshooting/what-are-the-most-common-error-codes-and-how-do-i-fix-them",
                   "kb/troubleshooting/im-getting-a-connect-tunnel-failed-response-407-error-how-do-i-fix-it",
-                  "kb/troubleshooting/what-should-i-do-if-i-encounter-issues-with-the-sdk"
+                  "kb/troubleshooting/what-should-i-do-if-i-encounter-issues-with-the-sdk",
+                  "kb/troubleshooting/why-do-dns-leak-tests-show-servers-in-a-different-country"
                 ]
               },
               {
