@@ -39,7 +39,7 @@ When a session identifier is specified and found, the server will perform a requ
 * The node has gone offline
 * Error limit is reached (in flex mode)
 
-If the session identifier is not found or the conditions above are not met, a new session is created with the specified ID and attached to a new node. In **norotate** mode, no new session is created — the request fails with a **502** error instead.
+If the session identifier is not found or the conditions above are not met, a new session is created with the specified ID and attached to a new node. In **norotate** mode, no new session is created — the request fails with a **502** or **503** error instead.
 
 ## Session Modes
 
@@ -89,10 +89,11 @@ curl -x https://network.joinmassive.com:65535 \
 
 ### No-Rotate Mode
 
-Sessions can operate in **norotate mode** where sessions are never rotated to a new node. If the assigned node becomes unavailable or any error occurs, the request fails with a **502** error instead of rotating to a new node. This is useful when IP consistency is critical and you would rather fail than silently switch IPs.
+Sessions can operate in **norotate mode** where sessions are never rotated to a new node. If the assigned node becomes unavailable or any error occurs, the request fails instead of rotating to a new node. This is useful when IP consistency is critical and you would rather fail than silently switch IPs.
 
 - Sessions never rotate to a new node
-- Returns **502** on node failure, TTL expiry, or rate limit instead of assigning a new node
+- Returns **502** on tunnel errors (node responds with an error) or **503** when the node is unavailable (gone offline or session expired)
+- The `sessionerr` parameter is ignored in norotate mode — any error fails immediately
 - Guarantees that a given session ID always maps to the same node or fails
 
 <Warning>
@@ -146,14 +147,15 @@ This example allows up to 5 consecutive errors before rotating to a new node.
 
   The following parameters are only applied when a session is created or rotated, not on existing sessions:
   - `sessionttl` - TTL duration
-  - `sessionmode` - Strict, flex, or norotate behavior
   - `sessionerr` - Error limit for flex mode
   - Geographic parameters (`subdivision`, `zipcode`, etc.)
 
   This means changing these parameters on subsequent requests with the same session ID will have no effect until the session rotates to a new node.
 
+  ### Parameters Re-parsed on Every Request
+
   <Warning>
-    **Runtime re-parsing:** Session parameters are re-parsed from the auth string on every request. If you omit a parameter like `sessionmode-norotate` on a subsequent request, the session silently reverts to the default behavior (strict mode). Always use consistent auth strings for all requests within a session.
+    **`sessionmode` is evaluated on every request**, not just at session creation. The mode is re-parsed from the auth string each time. If you omit `sessionmode-norotate` on a subsequent request, the session silently falls back to **strict** mode and may rotate on failure. Always use consistent auth strings for all requests within a session.
   </Warning>
 
   ### Session-Breaking Parameters
