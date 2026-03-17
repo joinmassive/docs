@@ -23,7 +23,7 @@ Parameters Explained:
 - sessionmode-flex: Flexible session mode (also supports `strict` and `norotate`)
 - Port 65535: HTTPS (Use 65534 for HTTP, 65533 for SOCKS5)
 
-No-Rotate Example (fails with 502 instead of rotating):
+No-Rotate Example (returns 502/503 on node errors instead of rotating):
 
 ```bash
 curl -x https://network.joinmassive.com:65535 \
