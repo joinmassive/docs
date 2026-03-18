@@ -35,11 +35,10 @@ curl -x https://network.joinmassive.com:65535 \
 When a session identifier is specified and found, the server will perform a request via the same node unless:
 
 * TTL is expired (sessions expire exactly at creation time + TTL)
-* The request limit per minute for the node is exceeded
-* The node has gone offline
+* The node has gone offline (except in norotate mode)
 * Error limit is reached (in flex mode)
 
-If the session identifier is not found or the conditions above are not met, a new session is created with the specified ID and attached to a new node. In **norotate** mode, the request fails instead of rotating (see [No-Rotate Mode](#no-rotate-mode) below).
+If the session identifier is not found or the conditions above are not met, a new session is created with the specified ID and attached to a new node.
 
 ## Session Modes
 
@@ -89,7 +88,7 @@ curl -x https://network.joinmassive.com:65535 \
 
 ### No-Rotate Mode
 
-Sessions can operate in **norotate mode** where node errors cause immediate failure instead of rotation. This is useful when IP consistency is critical and you would rather fail than silently switch IPs. Note that TTL expiry and rate-limit exceeded still create a new session (same as other modes).
+Sessions can operate in **norotate mode** where node errors cause immediate failure instead of rotation. This is useful when IP consistency is critical and you would rather fail than silently switch IPs. Note that TTL expiry still creates a new session (same as other modes).
 
 - Returns **502** on tunnel errors (node responds with an error) or **503** when the node has gone offline
 - The `sessionerr` parameter is ignored in norotate mode — any error fails immediately
@@ -127,7 +126,7 @@ This example allows up to 5 consecutive errors before rotating to a new node.
 ## Best Practices
 
 1. **Plan TTL appropriately**: Since sessions use static TTL (not extended by activity), set an appropriate duration for your use case
-2. **Choose the right mode**: Default strict mode ensures immediate rotation on any error; use flex mode if you need IP stability; use norotate mode if you need IP consistency on node errors (TTL expiry and rate limits still rotate)
+2. **Choose the right mode**: Default strict mode ensures immediate rotation on any error; use flex mode if you need IP stability; use norotate mode if you need IP consistency on node errors (TTL expiry still rotates)
 3. **Monitor error rates**: Adjust `sessionerr` based on your tolerance for retries (default is 15)
 4. **Session ID naming**: Use descriptive session IDs to help with debugging and monitoring
 
