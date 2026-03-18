@@ -35,6 +35,7 @@ curl -x https://network.joinmassive.com:65535 \
 When a session identifier is specified and found, the server will perform a request via the same node unless:
 
 * TTL is expired (sessions expire exactly at creation time + TTL)
+ * The request limit per minute for the node is exceeded (only for strict mode)
 * The node has gone offline (except in norotate mode)
 * Error limit is reached (in flex mode)
 
