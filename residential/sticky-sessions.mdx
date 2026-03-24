@@ -35,8 +35,8 @@ curl -x https://network.joinmassive.com:65535 \
 When a session identifier is specified and found, the server will perform a request via the same node unless:
 
 * TTL is expired (sessions expire exactly at creation time + TTL)
-* The request limit per minute for the node is exceeded
-* The node has gone offline
+* The request limit per minute for the node is exceeded (only for strict mode)
+* The node has gone offline (except in norotate mode)
 * Error limit is reached (in flex mode)
 
 If the session identifier is not found or the conditions above are not met, a new session is created with the specified ID and attached to a new node.
@@ -45,7 +45,7 @@ If the session identifier is not found or the conditions above are not met, a ne
 
 | Key         | Value            | Description |
 | ----------- | ---------------- | ----------- |
-| sessionmode | `strict`, `flex` | Controls session behavior on errors |
+| sessionmode | `strict`, `flex`, `norotate` | Controls session behavior on errors |
 
 ### Strict Mode (Default)
 
@@ -87,6 +87,25 @@ curl -x https://network.joinmassive.com:65535 \
      https://cloudflare.com/cdn-cgi/trace
 ```
 
+### No-Rotate Mode
+
+Sessions can operate in **norotate mode** where node errors cause immediate failure instead of rotation. This is useful when IP consistency is critical and you would rather fail than silently switch IPs. Note that TTL expiry still creates a new session (same as other modes).
+
+- Returns **502** on tunnel errors (node responds with an error) or **503** when the node has gone offline
+- The `sessionerr` parameter is ignored in norotate mode — any error fails immediately
+
+<Warning>
+  **Consistent auth strings required:** Session parameters (including `sessionmode`) are re-parsed from the auth string on every request. If you omit `sessionmode-norotate` on a subsequent request using the same session ID, the session silently falls back to **strict** mode and may rotate to a new node on failure. Always include `sessionmode-norotate` in every request for the session.
+</Warning>
+
+Example with `sessionmode-norotate`:
+
+```bash
+curl -x https://network.joinmassive.com:65535 \
+     -U '{PROXY_USERNAME}-session-123-sessionmode-norotate:{API_KEY}' \
+     https://cloudflare.com/cdn-cgi/trace
+```
+
 ## Additional Parameters
 
 | Key         | Value            | Description | Default |
@@ -108,7 +127,7 @@ This example allows up to 5 consecutive errors before rotating to a new node.
 ## Best Practices
 
 1. **Plan TTL appropriately**: Since sessions use static TTL (not extended by activity), set an appropriate duration for your use case
-2. **Choose the right mode**: Default strict mode ensures immediate rotation on any error; use flex mode if you need IP stability
+2. **Choose the right mode**: Default strict mode ensures immediate rotation on any error; use flex mode if you need IP stability; use norotate mode if you need IP consistency on node errors (TTL expiry still rotates)
 3. **Monitor error rates**: Adjust `sessionerr` based on your tolerance for retries (default is 15)
 4. **Session ID naming**: Use descriptive session IDs to help with debugging and monitoring
 
@@ -118,11 +137,14 @@ This example allows up to 5 consecutive errors before rotating to a new node.
 
   The following parameters are only applied when a session is created or rotated, not on existing sessions:
   - `sessionttl` - TTL duration
-  - `sessionmode` - Strict vs flex behavior
   - `sessionerr` - Error limit for flex mode
   - Geographic parameters (`subdivision`, `zipcode`, etc.)
 
   This means changing these parameters on subsequent requests with the same session ID will have no effect until the session rotates to a new node.
+
+  ### Parameters Re-parsed on Every Request
+
+  `sessionmode` is evaluated on every request, not just at session creation (see the [norotate warning](#no-rotate-mode) above).
 
   ### Session-Breaking Parameters
 
