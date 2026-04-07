@@ -8,11 +8,13 @@ Sticky sessions (session persistence) maintain the same proxy IP for multiple re
 
 1. Duration:
    - Default TTL: 15 minutes
-   - Maximum TTL: 60 minutes
-   - Customizable via sessionttl parameter
+   - Maximum TTL: 240 minutes (4 hours)
+   - Customizable via `sessionttl` parameter
+   - Static TTL: expires at creation time + TTL, not extended by activity
 
 2. Session Modes:
-   - Strict Mode (Default): Maintains exact IP consistency
-   - Flex Mode: Tolerates temporary issues, resets after 15 consecutive errors
+   - **Strict Mode** (Default): Any error immediately rotates to a new node
+   - **Flex Mode**: Tolerates up to N consecutive errors before rotating (default 15, customizable via `sessionerr`)
+   - **No-Rotate Mode**: Never rotates on errors; returns 502/503 instead
 
-For more details, refer to the [sticky sessions documentation](https://docs.joinmassive.com/residential/sticky-sessions).
+For more details, refer to the [sticky sessions documentation](/residential/sticky-sessions).
