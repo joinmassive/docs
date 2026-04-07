@@ -12,7 +12,7 @@ A TCP connection is the underlying network link between your client and the Mass
 - **Scope**: A single request (or a series of keep-alive requests on the same socket)
 - **Lifetime**: Typically seconds to minutes, depending on activity
 
-When a TCP connection closes, it does **not** mean your session has expired or that a new IP has been assigned.
+When a TCP connection closes, it does **not** mean your sticky session has expired or that a new IP has been assigned.
 
 ## Sticky Session (Application Layer)
 
@@ -21,23 +21,33 @@ A sticky session is a logical mapping between your session ID and a specific pro
 - **Default TTL**: 15 minutes (customizable up to 240 minutes via `sessionttl`)
 - **TTL is static**: Set at creation time, not extended by subsequent requests
 - **Scope**: All requests sharing the same session ID, regardless of how many TCP connections they use
-- **Lifetime**: Minutes to hours, controlled by `sessionttl`
+- **Lifetime**: Minutes to hours, controlled by `sessionttl` parameter.
 
 ## How They Work Together
 
-```
-Timeline:
-0:00  ─── TCP connection 1 opens ──── Request 1 (session-abc, IP: 1.2.3.4)
-0:02  ─── TCP connection 1 closes (done) ───
-0:45  ─── TCP connection 2 opens ──── Request 2 (session-abc, IP: 1.2.3.4) ← same IP
-0:47  ─── TCP connection 2 closes (done) ───
-3:00  ─── TCP connection 3 opens ──── Request 3 (session-abc, IP: 1.2.3.4) ← still same IP
-...
-15:00 ─── Session TTL expires ───
-15:01 ─── TCP connection N opens ──── Request N (session-abc, IP: 5.6.7.8) ← new IP, new session
-```
+Within a single sticky session, many TCP connections can open and close — your IP stays the same throughout.
 
-Multiple TCP connections can open and close within a single sticky session. As long as the session has not expired (and the node is still available), all requests with the same session ID route to the same IP.
+<Steps>
+  <Step title="0:00 — First request">
+    TCP connection opens → Request with `session-abc` → Assigned to IP **1.2.3.4** → TCP connection closes.
+  </Step>
+  <Step title="0:45 — Second request (45 seconds later)">
+    New TCP connection opens → Same `session-abc` → Still routed to IP **1.2.3.4** → TCP connection closes.
+  </Step>
+  <Step title="3:00 — Third request (3 minutes later)">
+    New TCP connection opens → Same `session-abc` → Still IP **1.2.3.4**. Session is alive until TTL expires.
+  </Step>
+  <Step title="15:00 — Session TTL expires">
+    The 15-minute sticky session ends. The IP **1.2.3.4** is no longer reserved for `session-abc`.
+  </Step>
+  <Step title="15:01 — Next request">
+    New TCP connection opens → Same `session-abc` → New session created → New IP **5.6.7.8**.
+  </Step>
+</Steps>
+
+<Note>
+  TCP connections closed 3 times in this example, but the IP never changed until the session TTL expired.
+</Note>
 
 ## Key Takeaway
 
@@ -45,10 +55,7 @@ Multiple TCP connections can open and close within a single sticky session. As l
 |---|---|---|
 | **What it is** | Network socket between client and proxy | Logical IP-to-session mapping |
 | **Idle timeout** | 30 seconds | None (static TTL) |
-| **Default lifetime** | Seconds | 15 minutes |
 | **Max lifetime** | As long as data flows | 240 minutes (`sessionttl-240`) |
-| **IP changes when it closes?** | No | Yes (new session on next request) |
-| **Applies to** | All connections | Only requests with a `session` parameter |
 
 <Info>
   The 30-second idle timeout applies to the TCP connection, not the session TTL. If your TCP connection closes due to inactivity, simply open a new connection with the same session ID — you will get the same IP as long as the session TTL has not expired.
