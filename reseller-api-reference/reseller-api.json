@@ -731,6 +731,11 @@
               "type": "boolean",
               "description": "If true, synchronize the new account's domains blocklist with the parent account. The sub-account can still have its own blocklist entries, which are merged with the parent's.",
               "example": false
+            },
+            "proxy_access": {
+              "type": "boolean",
+              "description": "Whether the account currently has proxy access. Reflects the actual proxy status from the network layer, which may differ from account `status` if access was not revoked by user (e.g. usage limit reached).",
+              "example": true
             }
           }
         },
