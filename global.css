@@ -48,6 +48,11 @@
   color: #ff8163 !important;
 }
 
+table th:not(:last-child), table td:not(:last-child) {
+  min-width: 0;
+  white-space: nowrap;
+}
+
 .latex-style {
   display: block;
   margin-bottom: 1.5em;
