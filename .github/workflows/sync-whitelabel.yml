@@ -1,0 +1,97 @@
+name: Sync AgentFirst whitelabel docs
+
+on:
+  schedule:
+    # Mondays at 09:00 UTC — picks up upstream changes from the prior week
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Clone upstream whitelabel
+        run: |
+          git clone --depth 1 https://github.com/agentfirstdev/whitelabel.git .whitelabel-tmp
+          UPSTREAM_SHA=$(git -C .whitelabel-tmp rev-parse --short HEAD)
+          echo "UPSTREAM_SHA=$UPSTREAM_SHA" >> "$GITHUB_ENV"
+          echo "Upstream at $UPSTREAM_SHA"
+
+      - name: Run whitelabel script
+        working-directory: .whitelabel-tmp
+        run: |
+          npm install --no-audit --no-fund
+          npm run whitelabel -- \
+            --path 'unblocker' \
+            --company 'Massive' \
+            --email 'support@joinmassive.com' \
+            --endpoint 'unblocker.joinmassive.com' \
+            --dashboard 'https://partners.joinmassive.com' \
+            --checkout 'https://partners.joinmassive.com'
+
+      - name: Re-apply local customizations
+        run: |
+          # Drop the `## Additional examples` / <Emails /> section from usage.mdx.
+          # Upstream hasn't adopted this; see docs commit 15236c5.
+          sed -i '/^## Additional examples$/,$d' unblocker/usage.mdx
+          # Trim any trailing blank lines left by the delete
+          sed -i -e :a -e '/^$/N;/\n$/ba' unblocker/usage.mdx
+
+      - name: Clean up upstream checkout
+        run: rm -rf .whitelabel-tmp
+
+      - name: Detect changes
+        id: diff
+        run: |
+          if git diff --quiet && [ -z "$(git status --porcelain)" ]; then
+            echo "No changes from upstream — nothing to sync."
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open sync PR
+        if: steps.diff.outputs.has_changes == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH="auto/whitelabel-sync-${UPSTREAM_SHA}"
+          TITLE="chore(unblocker): sync from agentfirstdev/whitelabel@${UPSTREAM_SHA}"
+
+          # If a prior sync run already opened this exact PR, skip
+          if gh pr list --head "$BRANCH" --state open --json number --jq 'length' | grep -q '^[1-9]'; then
+            echo "PR for $BRANCH already open — skipping."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add -A
+          git commit -m "$TITLE"
+          git push origin "$BRANCH"
+
+          gh pr create \
+            --base main \
+            --head "$BRANCH" \
+            --title "$TITLE" \
+            --body "Automated sync of upstream [agentfirstdev/whitelabel](https://github.com/agentfirstdev/whitelabel) docs.
+
+          **Upstream:** \`agentfirstdev/whitelabel@${UPSTREAM_SHA}\`
+
+          Local customizations re-applied after the whitelabel script run:
+          - \`unblocker/usage.mdx\`: removed \`## Additional examples\` / \`<Emails />\` section
+
+          Review the diff, check the Mintlify preview, then merge. If upstream changes something that needs manual attention (e.g. a new nav page in \`docs.json\`, a new customization to preserve), follow up separately.
+
+          _Triggered by \`.github/workflows/sync-whitelabel.yml\`_"
