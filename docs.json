@@ -98,6 +98,7 @@
           {
             "group": "Endpoints",
             "pages": [
+              "unblocker/ai",
               "unblocker/browser",
               "unblocker/search",
               "unblocker/usage"
@@ -107,18 +108,26 @@
             "group": "Configuration",
             "pages": [
               "unblocker/geotargeting",
-              "unblocker/scheduling"
+              "unblocker/scheduling",
+              "unblocker/pricing"
             ]
           },
           {
             "group": "API Reference",
             "pages": [
+              "unblocker/reference/ai",
+              "unblocker/reference/ai/completions",
+              "unblocker/reference/ai/devices",
               "unblocker/reference/browser",
               "unblocker/reference/browser/content",
               "unblocker/reference/browser/devices",
               "unblocker/reference/search",
               "unblocker/reference/search/results",
-              "unblocker/reference/usage"
+              "unblocker/reference/usage",
+              "unblocker/reference/user",
+              "unblocker/reference/users",
+              "unblocker/reference/users/get",
+              "unblocker/reference/users/patch"
             ]
           }
         ]
