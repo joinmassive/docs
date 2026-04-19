@@ -81,6 +81,12 @@
             "in": "query"
           },
           {
+            "name": "awaiting",
+            "description": "The lazy result features to wait to load; any AI overview, which can take significant time to generate, is awaited for a maximum of **1 minute**; multiple features can be provided by repeating the key; lazy results aren’t awaited by default.",
+            "schema": { "type": "string", "enum": ["ai", "answers"], "example": "ai" },
+            "in": "query"
+          },
+          {
             "name": "expiration",
             "description": "The age in days of when to consider cached results expired, where `0` disables caching.",
             "schema": { "type": "integer", "minimum": 0, "maximum": 1, "default": 1, "example": 0 },
@@ -1160,7 +1166,7 @@
             "enum": ["chatgpt", "gemini", "perplexity (coming soon)", "copilot (coming soon)"],
             "example": "chatgpt"
           },
-          "prompt": {
+          "query": {
             "description": "The user prompt that the completion was generated for.",
             "type": "string",
             "example": "best basketball shoes for 2026"
@@ -1170,17 +1176,17 @@
             "type": "string",
             "example": "<!DOCTYPE html><html lang=\"en-US\" ..."
           },
-          "promptHtml": {
+          "prompt": {
             "description": "The rendered HTML of just the prompt portion of the conversation.",
             "type": "string",
             "example": "<h4 class=\"sr-only select-none\">You said: ..."
           },
-          "completionHtml": {
+          "completion": {
             "description": "The rendered HTML of just the completion portion of the conversation.",
             "type": "string",
             "example": "<h4 class=\"sr-only select-none\">ChatGPT said: ..."
           },
-          "sourcesHtml": {
+          "sources": {
             "description": "The rendered HTML of just the sources portion of the conversation.",
             "type": "string",
             "example": "<section aria-label=\"Sources\" ..."
@@ -1232,11 +1238,11 @@
         },
         "required": [
           "model",
-          "prompt",
+          "query",
           "html",
-          "promptHtml",
-          "completionHtml",
-          "sourcesHtml",
+          "prompt",
+          "completion",
+          "sources",
           "subqueries"
         ]
       },
