@@ -16,6 +16,10 @@
   "openapi": ["web-render/openapi.json"],
   "redirects": [
     {
+      "source": "/unblocker",
+      "destination": "/web-render/ai"
+    },
+    {
       "source": "/unblocker/ai",
       "destination": "/web-render/ai"
     },
