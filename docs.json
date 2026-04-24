@@ -175,7 +175,7 @@
         ]
       },
       {
-        "tab": "Web Render",
+        "tab": "Web Render API",
         "groups": [
           {
             "group": "Endpoints",
