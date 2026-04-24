@@ -14,6 +14,88 @@
   "favicon": "/favicon.svg",
   "css": "/global.css",
   "openapi": ["web-render/openapi.json"],
+  "redirects": [
+    {
+      "source": "/unblocker/ai",
+      "destination": "/web-render/ai"
+    },
+    {
+      "source": "/unblocker/browser",
+      "destination": "/web-render/browser"
+    },
+    {
+      "source": "/unblocker/geotargeting",
+      "destination": "/web-render/geotargeting"
+    },
+    {
+      "source": "/unblocker/pricing",
+      "destination": "/web-render/pricing"
+    },
+    {
+      "source": "/unblocker/reference/ai",
+      "destination": "/web-render/reference/ai"
+    },
+    {
+      "source": "/unblocker/reference/ai/completions",
+      "destination": "/web-render/reference/ai/completions"
+    },
+    {
+      "source": "/unblocker/reference/ai/devices",
+      "destination": "/web-render/reference/ai/devices"
+    },
+    {
+      "source": "/unblocker/reference/browser",
+      "destination": "/web-render/reference/browser"
+    },
+    {
+      "source": "/unblocker/reference/browser/content",
+      "destination": "/web-render/reference/browser/content"
+    },
+    {
+      "source": "/unblocker/reference/browser/devices",
+      "destination": "/web-render/reference/browser/devices"
+    },
+    {
+      "source": "/unblocker/reference/search",
+      "destination": "/web-render/reference/search"
+    },
+    {
+      "source": "/unblocker/reference/search/results",
+      "destination": "/web-render/reference/search/results"
+    },
+    {
+      "source": "/unblocker/reference/usage",
+      "destination": "/web-render/reference/usage"
+    },
+    {
+      "source": "/unblocker/reference/user",
+      "destination": "/web-render/reference/user"
+    },
+    {
+      "source": "/unblocker/reference/users",
+      "destination": "/web-render/reference/users"
+    },
+    {
+      "source": "/unblocker/reference/users/get",
+      "destination": "/web-render/reference/users/get"
+    },
+    {
+      "source": "/unblocker/reference/users/patch",
+      "destination": "/web-render/reference/users/patch"
+    },
+    {
+      "source": "/unblocker/scheduling",
+      "destination": "/web-render/scheduling"
+    },
+    {
+      "source": "/unblocker/search",
+      "destination": "/web-render/search"
+    },
+    {
+      "source": "/unblocker/usage",
+      "destination": "/web-render/usage"
+    }
+  ],
   "seo": {
     "metatags": {
       "robots": "noindex, nofollow"
