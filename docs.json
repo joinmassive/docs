@@ -13,7 +13,7 @@
   },
   "favicon": "/favicon.svg",
   "css": "/global.css",
-  "openapi": ["unblocker/openapi.json"],
+  "openapi": ["web-render/openapi.json"],
   "seo": {
     "metatags": {
       "robots": "noindex, nofollow"
@@ -98,36 +98,36 @@
           {
             "group": "Endpoints",
             "pages": [
-              "unblocker/ai",
-              "unblocker/browser",
-              "unblocker/search",
-              "unblocker/usage"
+              "web-render/ai",
+              "web-render/browser",
+              "web-render/search",
+              "web-render/usage"
             ]
           },
           {
             "group": "Configuration",
             "pages": [
-              "unblocker/geotargeting",
-              "unblocker/scheduling",
-              "unblocker/pricing"
+              "web-render/geotargeting",
+              "web-render/scheduling",
+              "web-render/pricing"
             ]
           },
           {
             "group": "API Reference",
             "pages": [
-              "unblocker/reference/ai",
-              "unblocker/reference/ai/completions",
-              "unblocker/reference/ai/devices",
-              "unblocker/reference/browser",
-              "unblocker/reference/browser/content",
-              "unblocker/reference/browser/devices",
-              "unblocker/reference/search",
-              "unblocker/reference/search/results",
-              "unblocker/reference/usage",
-              "unblocker/reference/user",
-              "unblocker/reference/users",
-              "unblocker/reference/users/get",
-              "unblocker/reference/users/patch"
+              "web-render/reference/ai",
+              "web-render/reference/ai/completions",
+              "web-render/reference/ai/devices",
+              "web-render/reference/browser",
+              "web-render/reference/browser/content",
+              "web-render/reference/browser/devices",
+              "web-render/reference/search",
+              "web-render/reference/search/results",
+              "web-render/reference/usage",
+              "web-render/reference/user",
+              "web-render/reference/users",
+              "web-render/reference/users/get",
+              "web-render/reference/users/patch"
             ]
           }
         ]

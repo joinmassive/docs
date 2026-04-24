@@ -32,7 +32,7 @@ jobs:
         run: |
           npm install --no-audit --no-fund
           npm run whitelabel -- \
-            --path 'unblocker' \
+            --path 'web-render' \
             --company 'Massive' \
             --email 'support@joinmassive.com' \
             --endpoint 'unblocker.joinmassive.com' \
@@ -43,9 +43,9 @@ jobs:
         run: |
           # Drop the `## Additional examples` / <Emails /> section from usage.mdx.
           # Upstream hasn't adopted this; see docs commit 15236c5.
-          sed -i '/^## Additional examples$/,$d' unblocker/usage.mdx
+          sed -i '/^## Additional examples$/,$d' web-render/usage.mdx
           # Trim any trailing blank lines left by the delete
-          sed -i -e :a -e '/^$/N;/\n$/ba' unblocker/usage.mdx
+          sed -i -e :a -e '/^$/N;/\n$/ba' web-render/usage.mdx
 
       - name: Clean up upstream checkout
         run: rm -rf .whitelabel-tmp
@@ -66,7 +66,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           BRANCH="auto/whitelabel-sync-${UPSTREAM_SHA}"
-          TITLE="chore(unblocker): sync from agentfirstdev/whitelabel@${UPSTREAM_SHA}"
+          TITLE="chore(web-render): sync from agentfirstdev/whitelabel@${UPSTREAM_SHA}"
 
           # If a prior sync run already opened this exact PR, skip
           if gh pr list --head "$BRANCH" --state open --json number --jq 'length' | grep -q '^[1-9]'; then
@@ -90,7 +90,7 @@ jobs:
           **Upstream:** \`agentfirstdev/whitelabel@${UPSTREAM_SHA}\`
 
           Local customizations re-applied after the whitelabel script run:
-          - \`unblocker/usage.mdx\`: removed \`## Additional examples\` / \`<Emails />\` section
+          - \`web-render/usage.mdx\`: removed \`## Additional examples\` / \`<Emails />\` section
 
           Review the diff, check the Mintlify preview, then merge. If upstream changes something that needs manual attention (e.g. a new nav page in \`docs.json\`, a new customization to preserve), follow up separately.
 
