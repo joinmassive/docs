@@ -35,7 +35,7 @@ jobs:
             --path 'web-render' \
             --company 'Massive' \
             --email 'support@joinmassive.com' \
-            --endpoint 'unblocker.joinmassive.com' \
+            --endpoint 'render.joinmassive.com' \
             --dashboard 'https://partners.joinmassive.com' \
             --checkout 'https://partners.joinmassive.com'
 
