@@ -45,6 +45,15 @@ paths:
 
             Accepted formats: date, RFC3339.
           example: "2025-01-01 or 2025-01-01T10:00:00Z"
+        - in: query
+          name: group_by
+          schema:
+            type: string
+          required: false
+          description: |
+            Group usage data by the specified dimension.
+
+            When set to `subaccount`, returns usage broken down by sub-account with an additional `username` field in each record.
       responses:
         "200":
           description: Successfully retrieved usage
@@ -54,6 +63,27 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/UsageRecord"
+              examples:
+                default:
+                  summary: Default usage
+                  value:
+                    - date: "2025-01-01"
+                      total: 1000
+                      successful: 500
+                      used_bytes: 123456789
+                grouped_by_subaccount:
+                  summary: Grouped by sub-account
+                  value:
+                    - date: "2025-01-01"
+                      username: "user1_sub1"
+                      total: 800
+                      successful: 400
+                      used_bytes: 98765432
+                    - date: "2025-01-01"
+                      username: "user1_sub2"
+                      total: 200
+                      successful: 100
+                      used_bytes: 24691357
         "400":
           $ref: "#/components/responses/BadRequestError"
         "407":
@@ -75,6 +105,9 @@ components:
           type: string
           description: Date for usage data
           example: "2025-01-01"
+        username:
+          type: string
+          description: Sub-account proxy username. Only present when `group_by=subaccount`.
         total:
           type: number
           description: Total number of connections
