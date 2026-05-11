@@ -13,7 +13,9 @@
   },
   "favicon": "/favicon.svg",
   "css": "/global.css",
-  "openapi": ["web-render/openapi.json"],
+  "openapi": [
+    "web-render/openapi.json"
+  ],
   "redirects": [
     {
       "source": "/unblocker",
@@ -186,34 +188,56 @@
             "pages": [
               "web-render/ai",
               "web-render/browser",
-              "web-render/search",
-              "web-render/usage"
+              "web-render/search"
             ]
           },
           {
             "group": "Configuration",
             "pages": [
               "web-render/geotargeting",
-              "web-render/scheduling",
-              "web-render/pricing"
+              "web-render/scheduling"
+            ]
+          },
+          {
+            "group": "API Management",
+            "pages": [
+              "web-render/pricing",
+              "web-render/usage"
             ]
           },
           {
             "group": "API Reference",
             "pages": [
-              "web-render/reference/ai",
-              "web-render/reference/ai/completions",
-              "web-render/reference/ai/devices",
-              "web-render/reference/browser",
-              "web-render/reference/browser/content",
-              "web-render/reference/browser/devices",
-              "web-render/reference/search",
-              "web-render/reference/search/results",
-              "web-render/reference/usage",
-              "web-render/reference/user",
-              "web-render/reference/users",
-              "web-render/reference/users/get",
-              "web-render/reference/users/patch"
+              {
+                "group": "AI",
+                "pages": [
+                  "web-render/reference/ai",
+                  "web-render/reference/ai/completions",
+                  "web-render/reference/ai/devices"
+                ]
+              },
+              {
+                "group": "Browser",
+                "pages": [
+                  "web-render/reference/browser",
+                  "web-render/reference/browser/content",
+                  "web-render/reference/browser/devices"
+                ]
+              },
+              {
+                "group": "Search",
+                "pages": [
+                  "web-render/reference/search",
+                  "web-render/reference/search/results"
+                ]
+              },
+              {
+                "group": "Reporting",
+                "pages": [
+                  "web-render/reference/usage",
+                  "web-render/reference/user"
+                ]
+              }
             ]
           }
         ]
