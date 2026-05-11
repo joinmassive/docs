@@ -202,6 +202,7 @@
             "group": "API Reference",
             "pages": [
               "web-render/reference/ai",
+              "web-render/reference/ai/completions",
               "web-render/reference/ai/devices",
               "web-render/reference/browser",
               "web-render/reference/browser/content",
