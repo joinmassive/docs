@@ -1282,7 +1282,7 @@
           "text/plain": {
             "schema": {
               "type": "string",
-              "example": "Credit balance is 0; top up at https://partners.joinmassive.com"
+              "example": "Credit balance is 0; top up at https://dashboard.joinmassive.com/plans"
             }
           }
         }

@@ -3,7 +3,7 @@ name: Sync AgentFirst whitelabel docs
 on:
   schedule:
     # Mondays at 09:00 UTC — picks up upstream changes from the prior week
-    - cron: '0 9 * * 1'
+    - cron: "0 9 * * 1"
   workflow_dispatch:
 
 permissions:
@@ -18,7 +18,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: "22"
 
       - name: Clone upstream whitelabel
         run: |
@@ -36,8 +36,8 @@ jobs:
             --company 'Massive' \
             --email 'support@joinmassive.com' \
             --endpoint 'render.joinmassive.com' \
-            --dashboard 'https://partners.joinmassive.com' \
-            --checkout 'https://partners.joinmassive.com'
+            --dashboard 'https://dashboard.joinmassive.com' \
+            --checkout 'https://dashboard.joinmassive.com/plans'
 
       - name: Re-apply local customizations
         run: |
