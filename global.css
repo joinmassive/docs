@@ -1,16 +1,20 @@
-.bg-background-light, .bg-white {
+.bg-background-light,
+.bg-white {
   background-color: #FFFFFF !important;
 }
 
-.dark\:bg-background-dark:is(.dark *), .dark\:bg-codeblock:is(.dark *) {
+.dark\:bg-background-dark:is(.dark *),
+.dark\:bg-codeblock:is(.dark *) {
   background-color: #121117 !important;
 }
 
-#content-area a, #content-area a:visited {
+#content-area a,
+#content-area a:visited {
   color: #d74939;
 }
 
-.dark #content-area a, .dark #content-area a:visited {
+.dark #content-area a,
+.dark #content-area a:visited {
   color: #ff8163;
 }
 
@@ -48,11 +52,6 @@
   color: #ff8163 !important;
 }
 
-table th:not(:last-child), table td:not(:last-child) {
-  min-width: 0;
-  white-space: nowrap;
-}
-
 .latex-style {
   display: block;
   margin-bottom: 1.5em;
@@ -65,6 +64,6 @@ footer {
   padding-bottom: 4rem !important;
 }
 
-footer > div:nth-of-type(2) {
+footer>div:nth-of-type(2) {
   visibility: hidden;
 }
