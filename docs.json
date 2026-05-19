@@ -138,6 +138,7 @@
           {
             "group": "Sample Integrations",
             "pages": [
+              "residential/sample-integrations",
               "residential/samples/puppeteer",
               "residential/samples/python",
               "residential/samples/scrapy",
