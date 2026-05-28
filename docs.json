@@ -286,9 +286,7 @@
                 "group": "Desktop",
                 "pages": [
                   "monetization-sdk/desktop",
-                  "monetization-sdk/desktop-windows",
-                  "monetization-sdk/desktop-mac-objective-c",
-                  "monetization-sdk/desktop-mac-swift"
+                  "monetization-sdk/desktop-windows"
                 ]
               },
               {
