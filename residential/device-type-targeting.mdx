@@ -30,3 +30,15 @@ curl -x https://network.joinmassive.com:65535 \
      -U '{PROXY_USERNAME}-type-mobile-country-US-subdivision-NY-session-1:{API_KEY}' \
      https://cloudflare.com/cdn-cgi/trace
 ```
+
+## Multiple device types
+
+Provide a comma-separated list to match **any** of several device types. The following request targets a mobile **or** tv node in the US:
+
+```bash
+curl -x https://network.joinmassive.com:65535 \
+     -U '{PROXY_USERNAME}-type-mobile,tv-country-US:{API_KEY}' \
+     https://cloudflare.com/cdn-cgi/trace
+```
+
+An unrecognized `type` value returns HTTP 400.
