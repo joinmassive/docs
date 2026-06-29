@@ -81,6 +81,16 @@
             "in": "query"
           },
           {
+            "name": "url",
+            "description": "The encoded URL of the results page to retrieve; if given, the URL overrides any of the above params.",
+            "schema": {
+              "type": "string",
+              "format": "uri",
+              "example": "https://www.google.com/search?q=foo+bar+baz&hl=fr&gl=fr&ie=UTF-8"
+            },
+            "in": "query"
+          },
+          {
             "name": "awaiting",
             "description": "The lazy result features to wait to load; any AI overview, which can take significant time to generate, is awaited for a maximum of **1 minute**; multiple features can be provided by repeating the key; lazy results aren’t awaited by default.",
             "schema": { "type": "string", "enum": ["ai", "answers", "ads"], "example": "ai" },
@@ -96,6 +106,15 @@
             "name": "mode",
             "description": "The synchronous or asynchronous mode of results retrieval (see the [async resource](search/results)).",
             "schema": { "$ref": "#/components/schemas/Mode" },
+            "in": "query"
+          },
+          {
+            "name": "callback",
+            "description": "The HTTP or HTTPS callback URL or Amazon SQS queue URL or ARN to notify when the (prerequisite) asynchronous results have been retrieved.",
+            "schema": {
+              "type": "string",
+              "example": "https://webhook.site/02e249f8-1faf-4fab-bcf5-78ce683e85a8"
+            },
             "in": "query"
           }
         ],
@@ -393,7 +412,7 @@
             "description": "The difficulty pool to attempt to access the URL from.",
             "schema": {
               "type": "string",
-              "enum": ["low", "medium", "high (planned)"],
+              "enum": ["low", "medium", "high"],
               "default": "low",
               "example": "low"
             },
@@ -613,7 +632,7 @@
                     "example": "user@example.com"
                   },
                   "credits": {
-                    "description": "The number of credits to grant the account.",
+                    "description": "The number of API credits to preload the account with.",
                     "type": "integer",
                     "example": 1000
                   }
@@ -633,7 +652,7 @@
                   "type": "object",
                   "properties": {
                     "email": {
-                      "description": "The account email address as recorded by the API.",
+                      "description": "The email address of the new account as recorded by the API.",
                       "type": "string",
                       "format": "email",
                       "example": "user@example.com"
@@ -642,9 +661,14 @@
                       "description": "The bearer token issued to the account for authentication.",
                       "type": "string",
                       "example": "a1-0dF6qKHYD7SNU5kAtjOmwHpH3iFgpylA"
+                    },
+                    "credits": {
+                      "description": "The number of initial credits granted to the account.",
+                      "type": "integer",
+                      "example": 1000
                     }
                   },
-                  "required": ["email", "token"]
+                  "required": ["email", "token", "credits"]
                 }
               }
             }
@@ -658,70 +682,9 @@
           "500": { "$ref": "#/components/responses/unknownError" }
         }
       },
-      "patch": {
-        "summary": "Credit grant",
-        "description": "Allocate credits to an account.",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "description": "The (case-insensitive) email address of the user whose account to grant credits to.",
-                    "type": "string",
-                    "format": "email",
-                    "example": "user@example.com"
-                  },
-                  "amount": {
-                    "description": "The number of credits to grant the account.",
-                    "type": "integer",
-                    "example": 1000
-                  }
-                },
-                "required": ["email", "amount"]
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "The account credits.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "email": {
-                      "description": "The account email address.",
-                      "type": "string",
-                      "format": "email",
-                      "example": "user@example.com"
-                    },
-                    "credits": {
-                      "description": "The number of granted credits as recorded by the API.",
-                      "type": "integer",
-                      "example": 1000
-                    }
-                  },
-                  "required": ["email", "credits"]
-                }
-              }
-            }
-          },
-          "401": { "$ref": "#/components/responses/authenticationError" },
-          "403": { "$ref": "#/components/responses/authorizationError" },
-          "400": { "$ref": "#/components/responses/malformedError" },
-          "422": { "$ref": "#/components/responses/paramsError" },
-          "429": { "$ref": "#/components/responses/throttlingError" },
-          "404": { "$ref": "#/components/responses/unsupportedError" },
-          "500": { "$ref": "#/components/responses/unknownError" }
-        }
-      },
       "get": {
         "summary": "Credit balances",
-        "description": "Retrieve the settings and remaining credits of one or more accounts.",
+        "description": "Retrieve the settings and credits of one or more accounts.",
         "parameters": [
           {
             "name": "email",
@@ -750,7 +713,7 @@
                         "example": "user@example.com"
                       },
                       "credits": {
-                        "description": "The number of remaining credits allocated to the account.",
+                        "description": "The number of remaining API credits allocated to the account.",
                         "type": "integer",
                         "example": 1000
                       }
@@ -764,6 +727,123 @@
           "401": { "$ref": "#/components/responses/authenticationError" },
           "403": { "$ref": "#/components/responses/authorizationError" },
           "429": { "$ref": "#/components/responses/throttlingError" },
+          "500": { "$ref": "#/components/responses/unknownError" }
+        }
+      },
+      "patch": {
+        "summary": "Credit grant",
+        "description": "Allocate credits to an account.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "description": "The (case-insensitive) email address of the user whose account to grant credits.",
+                    "type": "string",
+                    "format": "email",
+                    "example": "user@example.com"
+                  },
+                  "amount": {
+                    "description": "The number of additional API credits to grant the account.",
+                    "type": "integer",
+                    "example": 1000
+                  }
+                },
+                "required": ["email", "amount"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The updated account credits.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "description": "The account email address.",
+                      "type": "string",
+                      "format": "email",
+                      "example": "user@example.com"
+                    },
+                    "credits": {
+                      "description": "The number of updated API credits allocated to the account.",
+                      "type": "integer",
+                      "example": 1000
+                    }
+                  },
+                  "required": ["email", "credits"]
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/authenticationError" },
+          "403": { "$ref": "#/components/responses/authorizationError" },
+          "400": { "$ref": "#/components/responses/malformedError" },
+          "422": { "$ref": "#/components/responses/paramsError" },
+          "429": { "$ref": "#/components/responses/throttlingError" },
+          "404": { "$ref": "#/components/responses/unsupportedError" },
+          "500": { "$ref": "#/components/responses/unknownError" }
+        }
+      },
+      "delete": {
+        "summary": "User deactivation",
+        "description": "Disable an account.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "description": "The (case-insensitive) email address of the user whose account to deactivate.",
+                    "type": "string",
+                    "format": "email",
+                    "example": "user@example.com"
+                  }
+                },
+                "required": ["email"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The confirmed account credits.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "description": "The account email address.",
+                      "type": "string",
+                      "format": "email",
+                      "example": "user@example.com"
+                    },
+                    "credits": {
+                      "description": "The zeroed-out credits as confirmed by the API.",
+                      "type": "integer",
+                      "example": 0
+                    }
+                  },
+                  "required": ["email", "credits"]
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/authenticationError" },
+          "403": { "$ref": "#/components/responses/authorizationError" },
+          "400": { "$ref": "#/components/responses/malformedError" },
+          "422": { "$ref": "#/components/responses/paramsError" },
+          "429": { "$ref": "#/components/responses/throttlingError" },
+          "404": { "$ref": "#/components/responses/unsupportedError" },
           "500": { "$ref": "#/components/responses/unknownError" }
         }
       }
@@ -905,6 +985,12 @@
                         "minimum": 1,
                         "example": 17208
                       },
+                      "credits": {
+                        "description": "The number of credits consumed by the API calls.",
+                        "type": "integer",
+                        "minimum": 0,
+                        "example": 17208
+                      },
                       "meanSecs": {
                         "description": "The average number of elapsed seconds of the API calls.",
                         "type": "number",
@@ -912,7 +998,16 @@
                         "example": 6.78
                       }
                     },
-                    "required": ["email", "from", "to", "service", "result", "calls", "meanSecs"]
+                    "required": [
+                      "email",
+                      "from",
+                      "to",
+                      "service",
+                      "result",
+                      "calls",
+                      "credits",
+                      "meanSecs"
+                    ]
                   }
                 }
               }
@@ -1196,7 +1291,12 @@
             "type": "string",
             "example": "<div class=\"border-token-border-default mt-2 border-t py-4 text-sm\" ..."
           },
-          "fanouts": {
+          "sse (ChatGPT only)": {
+            "description": "The server-sent events JSON that was used to populate the conversation HTML.",
+            "type": "string",
+            "example": "{\"type\": \"conversation_detail_metadata\" ..."
+          },
+          "fanouts (ChatGPT only)": {
             "description": "The fanout queries that the model searched to generate the completion; only some models expose these queries.",
             "type": "array",
             "items": { "type": "string" },
@@ -1249,6 +1349,7 @@
           "completion",
           "sources",
           "ads",
+          "sse",
           "fanouts"
         ]
       },
@@ -1342,7 +1443,7 @@
           "text/plain": {
             "schema": {
               "type": "string",
-              "example": "Service is autoscaling; please retry in 180 seconds"
+              "example": "Service is autoscaling; please retry in 60 seconds"
             }
           }
         }
