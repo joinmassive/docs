@@ -19,7 +19,7 @@
   "redirects": [
     {
       "source": "/unblocker",
-      "destination": "/web-render/ai"
+      "destination": "/web-render/overview"
     },
     {
       "source": "/unblocker/ai",
@@ -184,6 +184,12 @@
       {
         "tab": "Web Render API",
         "groups": [
+          {
+            "group": "Get started",
+            "pages": [
+              "web-render/overview"
+            ]
+          },
           {
             "group": "Endpoints",
             "pages": [
