@@ -1,0 +1,15 @@
+```shell
+curl -X POST 'https://render.joinmassive.com/browser/batches' \
+-H "Authorization: Bearer $MASSIVE_TOKEN" \
+-H 'Content-Type: application/json' \
+-d '{
+  "urls": [
+    "https://guitars.com/",
+    "https://cartervintage.com/",
+    "https://musiccityvintageguitars.com/",
+    "[Additional URLs here]"
+  ],
+  "country": "US",
+  "city": "Nashville"
+}'
+```

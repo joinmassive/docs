@@ -1,0 +1,57 @@
+---
+title: Bulk processing
+icon: list-check
+iconType: light
+description: Make massively parallel requests.
+---
+
+import { apiEndpoint } from '/snippets/whitelabel/config.mdx';
+import Terms from '/snippets/whitelabel/search/batches/terms.mdx';
+import Prompts from '/snippets/whitelabel/ai/batches/prompts.mdx';
+import Urls from '/snippets/whitelabel/browser/batches/urls.mdx';
+import Results from '/snippets/whitelabel/search/batches/id.mdx';
+import Completions from '/snippets/whitelabel/ai/batches/id.mdx';
+import Content from '/snippets/whitelabel/browser/batches/id.mdx';
+
+## Batch jobs
+
+Each service has a batch endpoint that accepts a JSON array of up to **1,000 requests** in a `POST`
+body:
+
+<Prompts />
+
+<AccordionGroup>
+  <Accordion icon='terminal' title='View search example'>
+    <Terms />
+  </Accordion>
+
+  <Accordion icon='terminal' title='View browser example'>
+    <Urls />
+  </Accordion>
+</AccordionGroup>
+
+<Link href='search#search-parameters'>Search</Link>, <Link href='ai#chat-parameters'>AI</Link>, or
+<Link href='browser#rest-parameters'>browsing</Link> and
+<Link href='geotargeting'>geotargeting parameters</Link> can be included in the body. In response,
+the API will provide a job identifier and confirmation of the request count:
+
+```json
+{
+  "id": "b3829f53-abc9-4e62-8a65-2d9359d586d6",
+  "count": 37
+}
+```
+
+The job status can be requested any time thereafter by passing back the ID:
+
+<Completions />
+
+<AccordionGroup>
+  <Accordion icon='terminal' title='View search example'>
+    <Results />
+  </Accordion>
+
+  <Accordion icon='terminal' title='View browser example'>
+    <Content />
+  </Accordion>
+</AccordionGroup>
