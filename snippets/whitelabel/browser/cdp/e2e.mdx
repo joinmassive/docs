@@ -1,0 +1,26 @@
+```py
+#!/usr/bin/env python3
+import os
+from playwright.sync_api import sync_playwright
+
+ENDPOINT = 'wss://render.joinmassive.com/browser'
+API_TOKEN = os.environ['MASSIVE_TOKEN']
+URL = 'https://example.com/'
+
+print(f"Connecting to {ENDPOINT} ...")
+
+with sync_playwright() as playwright:
+    browser = playwright.chromium.connect_over_cdp(
+        ENDPOINT,
+        headers={'Authorization': f"Bearer {API_TOKEN}"}
+    )
+    context = browser.contexts[0]
+    page = context.pages[0]
+
+    print(f"Going to {URL} ...")
+
+    page.goto(URL)
+    print(f"URL: {page.url}")
+    print(f"Title: {page.title()}")
+    browser.close()
+```

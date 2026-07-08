@@ -1,0 +1,7 @@
+```js
+const [page] = await browser.pages();
+
+await page.goto('https://example.com/');
+console.log('URL:', page.url());
+console.log('Title:', await page.title());
+```

@@ -1,0 +1,11 @@
+```js
+#!/usr/bin/env node
+import puppeteer from 'puppeteer';
+
+const browser = await puppeteer.connect({
+  browserWSEndpoint: 'wss://render.joinmassive.com/browser',
+  headers: {
+    Authorization: `Bearer ${process.env.MASSIVE_TOKEN}`
+  }
+});
+```

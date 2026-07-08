@@ -10,9 +10,15 @@ import { Reference } from '/snippets/whitelabel/reference.mdx';
 import { Autoscaling } from '/snippets/whitelabel/autoscaling.mdx';
 import Authentication from '/snippets/whitelabel/authentication.mdx';
 import Url from '/snippets/whitelabel/browser/url.mdx';
+import Puppeteer from '/snippets/whitelabel/browser/cdp/puppeteer.mdx';
+import Playwright from '/snippets/whitelabel/browser/cdp/playwright.mdx';
+import Difficulty from '/snippets/whitelabel/browser/cdp/difficulty.mdx';
+import Goto from '/snippets/whitelabel/browser/cdp/goto.mdx';
+import Rest2Cdp from '/snippets/whitelabel/browser/cdp/rest2cdp.mdx';
 import Device from '/snippets/whitelabel/browser/device.mdx';
+import CdpDevice from '/snippets/whitelabel/browser/cdp/device.mdx';
 import Expiration from '/snippets/whitelabel/browser/expiration.mdx';
-import Session from '/snippets/whitelabel/browser/session.mdx';
+import E2E from '/snippets/whitelabel/browser/cdp/e2e.mdx';
 import Devices from '/snippets/whitelabel/browser/devices.mdx';
 
 <Reference endpoint='browser' />
@@ -22,13 +28,15 @@ import Devices from '/snippets/whitelabel/browser/devices.mdx';
 **{companyName}'s** browser service navigates intelligently on your behalf, rendering JavaScript,
 solving [captchas](https://www.ibm.com/topics/captcha), and retrying failed requests. The service
 has a RESTful interface that accepts `GET` requests at
-**https://&zwj;{apiEndpoint}/browser**.
+**https://&zwj;{apiEndpoint}/browser** and a
+[Chrome DevTools Protocol (CDP) interface](#cdp-interaction) for controlling browser navigation
+yourself that accepts WebSocket connections at **wss://{apiEndpoint}/browser**.
 
-Webpages can be localized with <Link href='geotargeting'>geotargeting parameters</Link>. They're
-retrieved in real time by default or optionally queued for <Link href='scheduling'>subsequent
-retrieval</Link>. Up to **3 minutes** is allotted per real-time API call to accommodate
-captcha-solving, multiple retries, and other mitigations. <Link href='usage'>Usage data</Link> is
-published regularly.
+Webpages can be localized with <Link href='geotargeting'>geotargeting parameters</Link>. Those
+requested via REST are retrieved in real time by default or optionally queued for <Link
+href='scheduling'>subsequent retrieval</Link>. Up to **3 minutes** is allotted per real-time API
+call to accommodate captcha-solving, multiple retries, and other mitigations. <Link
+href='usage'>Usage data</Link> is published regularly.
 
 <Tip>
   If a site you're targeting remains blocked, even with different browsing params, <a
@@ -42,29 +50,69 @@ published regularly.
 
 <Autoscaling />
 
-### Browsing parameters
+### REST parameters
 
 Besides the [geotargeting and scheduling params linked above](#service-usage), required and optional
-browsing params can be added in a
+REST params can be added in a
 [standard query string](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_is_a_URL#parameters).
 See <Link href='pricing'>our rate card</Link> for the prices of premium params. The keys and values
 **{companyName}** supports are as follows:
 
-| Key          | Required | Premium | Value                                                                                                                                                                                                                                               |
-| :----------- | :------- | :------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `url`        | ✅       | ⬜      | The URL of the page to browse; any unsafe characters require [URL encoding](https://developer.mozilla.org/en-US/docs/Glossary/Percent-encoding)                                                                                                     |
-| `difficulty` | ⬜       | ✅      | The difficulty pool to attempt to access the URL from, `low`, `medium`, or `high` (planned); `low` is the default difficulty                                                                                                                        |
-| `speed`      | ⬜       | ✅      | The speed to attempt to access the URL at, `light`, `ridiculous`, or `ludicrous` (planned), where `ridiculous` is 30 percent faster on average than `light` speed; `light` is the default speed                                                     |
-| `device`     | ⬜       | ⬜      | The name as returned by the [devices resource](#device-emulation) of the device to emulate browsing on (these names are case insensitive but must include form- or URL-encoded spaces and punctuation marks); device emulation is unused by default |
-| `captcha`    | ⬜       | ⬜      | The intended resolution of any detected captcha, `solved`, `ignored`, or `rejected`, where `rejected` results in a `403` response; `solved` is the default captcha resolution                                                                       |
-| `readiness`  | ⬜       | ⬜      | The standard ready event to await before snapshotting browsed content, `load` or `domcontentloaded`; `load` is the default ready event                                                                                                              |
-| `delay`      | ⬜       | ⬜      | The number of supplemental seconds to delay before snapshotting browsed content, from `.1` to `10` inclusive; no delay is used by default                                                                                                           |
-| `format`     | ⬜       | ⬜      | The format to output to, `rendered`, `raw`, or `markdown` (see the [section below](#response-format)); `rendered` is the default format                                                                                                             |
-| `expiration` | ⬜       | ⬜      | The age in days of when to consider cached content expired, where `0` disables caching; `1` is the default number of days before expiration                                                                                                         |
+| Key          | Required | Premium | Value                                                                                                                                                                                                                                                                                               |
+| :----------- | :------- | :------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `url`        | ✅       | ⬜      | The URL of up to 2,047 characters of the page to browse; any unsafe characters require [URL encoding](https://developer.mozilla.org/en-US/docs/Glossary/Percent-encoding)                                                                                                                           |
+| `difficulty` | ⬜       | ✅      | The difficulty pool to attempt to access the URL from, `low`, `medium`, or `high` (planned); `low` is the default difficulty                                                                                                                                                                        |
+| `speed`      | ⬜       | ✅      | The speed to attempt to access the URL at, `light`, `ridiculous`, or `ludicrous` (planned), where `ridiculous` is 30 percent faster on average than `light` speed; `light` is the default speed                                                                                                     |
+| `device`     | ⬜       | ⬜      | The name as returned by the [devices resource](#device-emulation) of the device to emulate browsing on (these names are case insensitive but must include form- or URL-encoded spaces and punctuation marks); device emulation is unused by default                                                 |
+| `session`    | ⬜       | ⬜      | Any unique identifier of up to 255 characters (regardless of character encoding); **{companyName}** will make best efforts to route calls in the same session to the same egress node for up to 12 minutes                                                                                          |
+| `captcha`    | ⬜       | ⬜      | The intended resolution of any detected captcha, `solved`, `ignored`, or `rejected`, where `rejected` results in a `403` response; `solved` is the default captcha resolution                                                                                                                       |
+| `readiness`  | ⬜       | ⬜      | The standard ready event to await before snapshotting browsed content, `load` or `domcontentloaded`; `load` is the default ready event                                                                                                                                                              |
+| `delay`      | ⬜       | ⬜      | The number of supplemental seconds to delay before snapshotting browsed content, from `.1` to `10` inclusive; no delay is used by default                                                                                                                                                           |
+| `format`     | ⬜       | ⬜      | The format to output to, `rendered`, `raw`, or `markdown` (see the [section below](#response-format)); `rendered` is the default format                                                                                                                                                             |
+| `expiration` | ⬜       | ⬜      | The age in days of when to consider cached content expired, where `0` disables caching; `1` is the default number of days before expiration                                                                                                                                                         |
+| `callback`   | ⬜       | ⬜      | The encoded HTTP or HTTPS callback URL or Amazon SQS queue URL or ARN of up to 2,047 characters to notify when the (prerequisite) asynchronous content has been retrieved; any SQS queue must grant `sqs:SendMessage` permission to the `arn:aws:iam::180363035301:role/api-instance` AWS principal |
+
+### CDP interaction
+
+If your use case involves interacting with not just reading pages, you can connect
+[Puppeteer](https://pptr.dev/), [Playwright](https://playwright.dev/), or
+[another CDP-compatible automation framework](https://github.com/ChromeDevTools/awesome-chrome-devtools#libraries-for-driving-the-protocol-or-a-layer-above)
+to the browser service:
+
+<Puppeteer />
+
+<Accordion icon='terminal' title='View Playwright sample'>
+  <Playwright />
+</Accordion>
+
+The connection string takes geotargeting params and a subset of the [REST params](#rest-parameters),
+namely `difficulty`, `device`, and `session`:
+
+<Difficulty />
+
+After connecting, most of your framework's API (see the [Puppeteer reference](https://pptr.dev/api),
+[Playwright reference](https://playwright.dev/docs/api/class-playwright), et cetera) will be
+available:
+
+<Goto />
+
+CDP use is metered by time, so you should disconnect from the service when done by calling
+`browser.disconnect()` (Puppeteer), `browser.close()` (Playwright), or the equivalent.
+
+### Protocol mixture
+
+You can control costs by mixing REST requests and CDP use within a sticky browser session. E.g., you
+may want to prepare a page for interaction over REST then interact with the page over CDP:
+
+<Accordion icon='terminal' title='View REST-to-CDP sample'>
+  <Rest2Cdp />
+</Accordion>
+
+To hand off in reverse, from CDP to REST, call your disconnect method first.
 
 ### Device emulation
 
-The `device` param lets you fetch device-specific content, rather than the default desktop content.
+The `device` param lets you browse device-specific content, rather than the default desktop content.
 For a list of supported smartphone and tablet devices, make a request with your API token and no
 params to **https://&zwj;{apiEndpoint}/browser/devices**:
 
@@ -81,24 +129,25 @@ The API will return JSON that contains an alphabetized array of device names:
 ]
 ```
 
-Then, pass your device name of choice into your browsing request:
+Then, pass your device name of choice into your browsing request or connection:
 
 <Device />
 
-### Sticky sessions
-
-To reuse a browser session across requests, set a cookie named `session`:
-
-<Session />
-
-The cookie value can be any unique identifier of up to **255 characters** (regardless of character
-encoding) and **{companyName}** will make best efforts to route calls in the same session to the
-same egress node for up to **12 minutes**.
+<CdpDevice />
 
 ### Response format
 
-Pages are returned as rendered HTML, raw (unrendered) HTML, or Markdown optimized for LLM prompts.
+Read-only pages are returned as rendered HTML, raw (unrendered) HTML, or Markdown optimized for LLM
+prompts.
 
 ## Additional examples
 
+### Cachebusting
+
 <Expiration />
+
+### End-to-end Playwright
+
+<Accordion icon='terminal' title='View end-to-end sample'>
+  <E2E />
+</Accordion>

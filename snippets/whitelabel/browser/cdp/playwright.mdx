@@ -1,0 +1,14 @@
+```py
+#!/usr/bin/env python3
+import os
+from playwright.sync_api import sync_playwright
+
+with sync_playwright() as playwright:
+    browser = playwright.chromium.connect_over_cdp(
+        'wss://render.joinmassive.com/browser',
+        headers={
+            'Authorization':
+                f"Bearer {os.environ['MASSIVE_TOKEN']}"
+        }
+    )
+```

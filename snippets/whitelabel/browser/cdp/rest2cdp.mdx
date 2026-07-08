@@ -1,0 +1,149 @@
+```js
+#!/usr/bin/env node
+import puppeteer from 'puppeteer';
+
+const restEndpoint = 'https://render.joinmassive.com/browser';
+const cdpEndpoint = 'wss://render.joinmassive.com/browser';
+const apiToken = process.env.MASSIVE_TOKEN;
+const headers = { Authorization: `Bearer ${apiToken}` };
+const sessionId = Date.now();
+const orderUrl = 'https://httpbin.org/forms/post';
+const sizeSelector = '[name="size"][value="small"]';
+const toppingSelector = '[name="topping"][value="cheese"]';
+const buttonSelector = 'button';
+const requestTimeoutMs = 180_000;
+const connectionTimeoutMs = 10_000;
+const delayMs = 1_000;
+const delay = (ms) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+};
+const getCookies = (response) => {
+  const cookies = response.headers.getSetCookie?.() ?? [];
+  const keyvals = cookies.map((cookie) => {
+    return cookie.split(';', 1)[0];
+  });
+
+  return keyvals.join('; ');
+};
+
+console.log(
+  'Making REST request with session',
+  sessionId,
+  '...'
+);
+
+const controller = new AbortController();
+let timeoutId = setTimeout(() => {
+  controller.abort();
+}, requestTimeoutMs);
+let response;
+
+try {
+  const url =
+    restEndpoint +
+    '?url=' +
+    encodeURIComponent(orderUrl) +
+    '&session=' +
+    sessionId +
+    '&expiration=0';
+  response = await fetch(
+    url,
+    { headers, signal: controller.signal }
+  );
+} catch (error) {
+  const hasTimedOut = error.name == 'AbortError';
+  response = new Response(
+    hasTimedOut
+      ? 'Request timed out'
+      : 'Unknown error occurred',
+    { status: hasTimedOut ? 504 : 500 }
+  );
+} finally {
+  clearTimeout(timeoutId);
+}
+
+if (response.ok) {
+  console.log('Order form read successfully');
+} else {
+  const text = await response.text();
+
+  console.error('Order form read failure:', text.trimEnd());
+
+  process.exit(1);
+}
+
+console.log(
+  'Connecting via CDP with session',
+  sessionId,
+  '...'
+);
+
+timeoutId = setTimeout(() => {
+  console.error('Connection timed out');
+
+  process.exit(1);
+}, connectionTimeoutMs);
+const url = `${cdpEndpoint}?session=${sessionId}`;
+const browser = await puppeteer.connect({
+  browserWSEndpoint: url,
+  headers: { ...headers, Cookie: getCookies(response) }
+});
+
+clearTimeout(timeoutId);
+
+const page = (await browser.pages()).find((page) => {
+  return page.url().includes(orderUrl);
+});
+
+if (page) {
+  console.log('Session handed off successfully');
+} else {
+  console.error('Session handoff failure');
+
+  process.exit(1);
+}
+
+await page.waitForSelector(sizeSelector);
+await page.click(sizeSelector);
+await delay(delayMs);
+await page.waitForSelector(toppingSelector);
+await page.click(toppingSelector);
+await delay(delayMs);
+await page.waitForSelector(buttonSelector);
+await Promise.all([
+  page.waitForNavigation({ waitUntil: 'domcontentloaded' }),
+  page.click(buttonSelector)
+]);
+
+try {
+  const json = await page.evaluate(() => {
+    return document.body.innerText;
+  });
+  const data = JSON.parse(json);
+
+  if (
+    data.form &&
+    typeof data.form.size == 'string' &&
+    typeof data.form.topping == 'string'
+  ) {
+    console.log(
+      'Ordered',
+      data.form.size.toLowerCase(),
+      'pizza with',
+      data.form.topping.toLowerCase()
+    );
+  } else {
+    console.error('Receipt was malformed');
+
+    process.exit(1);
+  }
+} catch (error) {
+  console.error('Receipt parse failure:', error.message);
+
+  process.exit(1);
+}
+
+await browser.disconnect();
+```

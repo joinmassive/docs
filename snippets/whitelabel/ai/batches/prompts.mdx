@@ -1,0 +1,15 @@
+```shell
+curl -X POST 'https://render.joinmassive.com/ai/batches' \
+-H "Authorization: Bearer $MASSIVE_TOKEN" \
+-H 'Content-Type: application/json' \
+-d '{
+  "prompts": [
+    "Where can I buy a vintage guitar?",
+    "Help me find guitar repair shops nearby.",
+    "Do any local stores sell vinyl records?",
+    "[Additional prompts here]"
+  ],
+  "country": "US",
+  "subdivision": "TN"
+}'
+```
