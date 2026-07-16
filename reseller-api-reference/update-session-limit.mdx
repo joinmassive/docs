@@ -1,0 +1,7 @@
+---
+openapi: put /accounts/{id}/session-limit
+---
+
+<Note>
+  Applies to sub-accounts you own. Each ceiling has three states: omit the field to inherit the parent account's value, send `0` to disable it, or send a positive value to cap it. The proxy disconnects the session once it reaches either ceiling.
+</Note>
