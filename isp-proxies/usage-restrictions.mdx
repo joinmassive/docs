@@ -8,7 +8,7 @@ description: 'Some limitations apply to HTTP and SOCKS5 endpoints for ISP proxie
 - **Limited Ports:** Only standard ports (80, 443) are available.
     - Allowed: `http://example.com/`, `https://example.com/`
     - Not Allowed: `http://example.com:8080`
-- **Content Policy:** The ISP proxy network is designed for activities falling within the legal framework of all jurisdictions. Requests targeting high-risk, offensive, harmful, or illegal content may be blocked.
+- **Content Policy:** The ISP proxy network is designed for activities falling within the legal framework of all jurisdictions. Requests targeting high-risk, offensive, harmful, or illegal content may be blocked. See [Blocked Destination Categories](https://www.joinmassive.com/blocked-destinations) for the specific categories.
 
 Requests blocked due to protocol, port, or content restrictions return a `452 Disallowed Content` error.
 

@@ -8,10 +8,16 @@ description: 'Some restrictions apply to the use of both the HTTP(S) and SOCKS5 
 - Ports other than the standard `80` and `443` are blocked; `http://example.com/` and `https://example.com/` are acceptable targets, for example, but `http://example.com:8080` would be rejected.
 - The Massive Network is intended to optimize delivery of content that could be reasonably considered “family friendly” to a (currently) worldwide userbase (in the future, regional distinctions are planned), so potentially dangerous or offensive content isn’t allowed.
 
-A request that’s blocked due to any of these protocol, port, or content restrictions will fail with a `452` Disallowed Content error message.
+A request that’s blocked due to any of these protocol, port, or content restrictions will fail with a `452` Disallowed Content error message. See [Blocked Destination Categories](https://www.joinmassive.com/blocked-destinations) for the specific categories blocked at the network layer.
 
 # Restricted Domains
 - We restrict access to content that is generally used to evade the law or site TOS policies. If you are getting blocked from accessing certain content that you have a legitimate reason to access, then contact support to complete our KYC process to gain access.
+
+<Note>
+  The full set of blocked destination categories, the activity prohibited under our
+  Acceptable Use Policy, and the exception and waiver process are published at
+  [Blocked Destination Categories](https://www.joinmassive.com/blocked-destinations).
+</Note>
 
 # Port 25
 - `Port 25` cannot be opened on our residential proxy network. If you want to use residential proxies to test email sending, you can request access for `Port 587` or `Port 465`.
