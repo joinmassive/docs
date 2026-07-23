@@ -8,7 +8,7 @@ description: "We support session persistence (AKA sticky sessions) with a custom
 | Key        | Value                                                                                                                                                                          | TTL                                                    | Examples        |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------ | --------------- |
 | session    | Any unique identifier of up to 255 characters (regardless of character encoding); Massive will make best efforts to route requests in the same session to the same egress node | Default: 15 minutes (customizable with `sessionttl`) | session42, 1234 |
-| sessionttl | Customizable session TTL in minutes, up to 240 minutes                                                                                                                          | Default: 15 minutes                                    | 30, 60, 120, 240 |
+| sessionttl | Customizable session TTL in minutes, up to 1440 minutes                                                                                                                         | Default: 15 minutes                                    | 30, 60, 240, 1440 |
 
 You can inject a session identifier, like a unique representation of your app or active task, to specify that multiple requests should originate from a single egress node (if available):
 
@@ -20,7 +20,7 @@ curl -x https://network.joinmassive.com:65535 \
 
 ### Session TTL Behavior
 
-* Session TTL defaults to 15 minutes but can be customized using the `sessionttl` parameter up to 240 minutes (4 hours).
+* Session TTL defaults to 15 minutes but can be customized using the `sessionttl` parameter up to 1440 minutes (24 hours).
 * **Important**: Sessions use static TTL - they expire at creation time + TTL and are not extended by subsequent requests.
 * For example, to set the TTL to 30 minutes:
 
