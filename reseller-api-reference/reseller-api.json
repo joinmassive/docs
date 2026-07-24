@@ -824,12 +824,12 @@
           "properties": {
             "session_traffic_limit": {
               "type": "string",
-              "description": "Per-session traffic ceiling: SI size string (\"250mb\" = 250×1000² bytes; not binary \"mib\") or raw byte count. `0` disables; a positive value is >= 1000 bytes.",
+              "description": "Per-session traffic ceiling: SI size string (\"250kb\", \"250mb\", \"250gb\") or raw byte count. `0` disables; a positive value is >= 1000 bytes.",
               "example": "250mb"
             },
             "session_duration_limit": {
               "type": "string",
-              "description": "Per-session duration ceiling as a Go duration (\"15m\", \"1h30m\"). `0`/`\"0s\"` disables; a positive value is >= 1s.",
+              "description": "Per-session duration ceiling as a duration (\"15m\", \"1h30m\"). `0`/`\"0s\"` disables; a positive value is >= 1s.",
               "example": "15m"
             }
           }
