@@ -19,3 +19,11 @@ curl --location 'https://api-network.joinmassive.com/reporting/v1/usage' \
 --header 'Content-Type: application/json' \
 --header 'x-api-key: {PROXY_PASSWORD}'
 ```
+
+# Data freshness
+
+Usage data is aggregated hourly, a few minutes after each hour completes. A calendar day (UTC) is final approximately 15 minutes after midnight UTC, once its last hour is aggregated. For daily reporting jobs, query after 00:30 UTC with `to=YYYY-MM-DDT23:59:59Z`.
+
+<Note>
+  Usage is recorded when a connection closes, so a session that crosses midnight counts toward the day in which it ends.
+</Note>

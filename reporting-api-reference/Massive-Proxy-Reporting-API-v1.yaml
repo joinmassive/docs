@@ -17,6 +17,8 @@ paths:
         Get usage data for the given time range.
 
         If no time range is provided, returns usage for the past 7 days (including today).
+
+        Usage is aggregated hourly — see [Data freshness](/reporting-api-reference/reporting-api#data-freshness) before scheduling reporting jobs.
       operationId: getUsage
       security:
         - ApiKeyAuth: []
@@ -39,11 +41,13 @@ paths:
             type: string
           required: false
           description: |
-            End data to query usage (UTC).
+            End date/time to query usage (UTC).
 
-            Must be greater than 'from' date.
+            Accepted formats: date (`2025-01-01`) or RFC3339 (`2025-01-01T10:00:00Z`).
 
-            Accepted formats: date, RFC3339.
+            Must be greater than 'from'.
+
+            Usage is aggregated in hourly buckets, and the range **includes the hourly bucket containing** `to`. A date-only value is interpreted as midnight UTC (00:00:00), so it returns only the first hour of that day — to include a full final day, pass `to=YYYY-MM-DDT23:59:59Z`.
           example: "2025-01-01 or 2025-01-01T10:00:00Z"
       responses:
         "200":
@@ -85,7 +89,10 @@ components:
           example: 500
         used_bytes:
           type: number
-          description: The number of used bytes
+          description: |
+            Bytes consumed (raw bytes).
+
+            To convert to GB as shown in the dashboard, divide by 10⁹ (decimal GB, not 2³⁰).
           example: 123456789
     Error:
       type: object
