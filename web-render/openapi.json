@@ -479,7 +479,7 @@
             "description": "The AI model to chat with.",
             "schema": {
               "type": "string",
-              "enum": ["chatgpt", "gemini", "perplexity", "copilot"],
+              "enum": ["chatgpt", "gemini", "perplexity"],
               "default": "chatgpt",
               "example": "gemini"
             },
@@ -682,7 +682,7 @@
                   "model": {
                     "description": "The AI model to chat with.",
                     "type": "string",
-                    "enum": ["chatgpt", "gemini", "perplexity", "copilot"],
+                    "enum": ["chatgpt", "gemini", "perplexity"],
                     "default": "chatgpt",
                     "example": "gemini"
                   },
@@ -1914,7 +1914,7 @@
           "model": {
             "description": "The AI model that generated the completion.",
             "type": "string",
-            "enum": ["chatgpt", "gemini", "perplexity", "copilot"],
+            "enum": ["chatgpt", "gemini", "perplexity"],
             "example": "chatgpt"
           },
           "query": {
