@@ -18,7 +18,7 @@ When a TCP connection closes, it does **not** mean your sticky session has expir
 
 A sticky session is a logical mapping between your session ID and a specific proxy node (IP address). It is tracked server-side and persists independently of TCP connections.
 
-- **Default TTL**: 15 minutes (customizable up to 240 minutes via `sessionttl`)
+- **Default TTL**: 15 minutes (customizable up to 1440 minutes via `sessionttl`)
 - **TTL is static**: Set at creation time, not extended by subsequent requests
 - **Scope**: All requests sharing the same session ID, regardless of how many TCP connections they use
 - **Lifetime**: Minutes to hours, controlled by `sessionttl` parameter.
@@ -55,7 +55,7 @@ Within a single sticky session, many TCP connections can open and close — your
 |---|---|---|
 | **What it is** | Network socket between client and proxy | Logical IP-to-session mapping |
 | **Idle timeout** | 30 seconds | None (static TTL) |
-| **Max lifetime** | As long as data flows | 240 minutes (`sessionttl-240`) |
+| **Max lifetime** | As long as data flows | 1440 minutes (`sessionttl-1440`) |
 
 <Info>
   The 30-second idle timeout applies to the TCP connection, not the session TTL. If your TCP connection closes due to inactivity, simply open a new connection with the same session ID — you will get the same IP as long as the session TTL has not expired.
