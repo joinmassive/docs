@@ -31,6 +31,42 @@ curl -x https://network.joinmassive.com:65535 \
 
 _Please, take into account, that due to technical reasons, the more strict geotargeting narrows the range of appropriate nodes._
 
+## Targeting multiple locations
+
+Each of `country`, `subdivision`, `city`, and `zipcode` accepts a comma-separated list of up to **5** values. The request is then served by any node that matches one of the listed values, and traffic is spread across them.
+
+```bash
+curl -x https://network.joinmassive.com:65535 \
+     -U '{PROXY_USERNAME}-country-US,GB,DE:{API_KEY}' \
+     https://cloudflare.com/cdn-cgi/trace
+```
+
+### Rules for multiple values
+
+- **One list per request.** Only one parameter may hold a list. Passing a list in two parameters at once (for example several countries _and_ several cities) returns HTTP 400.
+- **A list of countries can't be narrowed.** When `country` holds more than one value, `subdivision`, `city`, and `zipcode` may not be used, because the same region or city name can exist in more than one country. A single `asn` can still be combined with multiple countries.
+- **`country` is still required** whenever any geo parameter is set.
+- **Up to 5 values** per parameter. More than 5 returns HTTP 400.
+- Duplicate and empty values are ignored — `US,US` counts as a single value.
+
+### Examples
+
+Multiple countries:
+
+```bash
+curl -x https://network.joinmassive.com:65535 \
+     -U '{PROXY_USERNAME}-country-US,GB,DE:{API_KEY}' \
+     https://cloudflare.com/cdn-cgi/trace
+```
+
+A single country, multiple cities:
+
+```bash
+curl -x https://network.joinmassive.com:65535 \
+     -U '{PROXY_USERNAME}-country-US-city-New%20York,Chicago:{API_KEY}' \
+     https://cloudflare.com/cdn-cgi/trace
+```
+
 ## Zipcode Notes
 
 For the following countries, we accept partial postal codes with the number of characters indicated below:
