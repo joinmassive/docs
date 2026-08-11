@@ -22,3 +22,15 @@ curl -x https://network.joinmassive.com:65535 \
      -U '{PROXY_USERNAME}-country-US-asn-7018:{API_KEY}' \
      https://cloudflare.com/cdn-cgi/trace
 ```
+
+## Multiple ASNs
+
+`asn` accepts a comma-separated list of up to **5** values. The request is served by a node on any of the listed networks:
+
+```bash
+curl -x https://network.joinmassive.com:65535 \
+     -U '{PROXY_USERNAME}-country-US-asn-7018,7922:{API_KEY}' \
+     https://cloudflare.com/cdn-cgi/trace
+```
+
+Only one parameter may hold a list per request, so a list of ASNs requires the other parameters (such as `country`) to be single-valued. A single `asn` can still be combined with [multiple countries](/residential/geotargeting#targeting-multiple-locations).
