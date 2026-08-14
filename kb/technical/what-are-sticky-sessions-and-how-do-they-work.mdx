@@ -15,6 +15,6 @@ Sticky sessions (session persistence) maintain the same proxy IP for multiple re
 2. Session Modes:
    - **Strict Mode** (Default): Any error immediately rotates to a new node
    - **Flex Mode**: Tolerates up to N consecutive errors before rotating (default 15, customizable via `sessionerr`)
-   - **No-Rotate Mode**: Never rotates on errors; returns 502/503 instead
+   - **No-Rotate Mode**: Never rotates on errors; returns 472 (tunnel error) or 475 (node offline) instead
 
 For more details, refer to the [sticky sessions documentation](/residential/sticky-sessions).

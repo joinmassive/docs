@@ -10,7 +10,7 @@ description: 'Some limitations apply to HTTP and SOCKS5 endpoints for ISP proxie
     - Not Allowed: `http://example.com:8080`
 - **Content Policy:** The ISP proxy network is designed for activities falling within the legal framework of all jurisdictions. Requests targeting high-risk, offensive, harmful, or illegal content may be blocked. See [Blocked Destination Categories](https://www.joinmassive.com/blocked-destinations) for the specific categories.
 
-Requests blocked due to protocol, port, or content restrictions return a `452 Disallowed Content` error.
+Requests blocked due to protocol or content restrictions return a `452 Disallowed Content` error; requests to a blocked port return `453 Port Forbidden`.
 
 ## Restricted Domains
 We restrict access to content that is generally used to evade the law or site TOS policies. If you are getting blocked from accessing certain content that you have a legitimate reason to access, then [contact support](https://joinmassive.atlassian.net/servicedesk/customer/portal/2/group/2/create/13) to complete our KYC process to gain access.

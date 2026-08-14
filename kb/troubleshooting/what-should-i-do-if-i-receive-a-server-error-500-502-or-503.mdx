@@ -2,16 +2,16 @@
 title: "What should I do if I receive a server error (500, 502, or 503)?"
 ---
 
-The response depends on the error code:
+A 500, 502, or 503 on a proxied request comes from the target site, not from Massive. Errors that originate within the Massive network use status codes in the 452–454 and 470–477 ranges and always include an `X-Massive-Reason` response header.
 
-- 500 (Internal Server Error):
-  - Wait a few minutes and retry
-  - Contact support if persistent
+- If the response has no `X-Massive-Reason` header, the target site returned the error and Massive delivered it unchanged. Retry the request, or check the status of the target site.
 
-- 502 (Bad Gateway):
-  - Check if routing parameters are too restrictive 
-  - Try again as it might be temporary node unavailability
+- If the response carries a Massive status code instead:
+  - 470, 472, or 473: The condition is usually temporary; wait a moment and retry
+  - 471: The geotargeting is too restrictive; relax the routing parameters
+  - 474: Retry, and contact support if the error persists
+  - 475: The sticky session's node went offline; start a new session
+  - 476: Connections to the target host timed out; check the target or increase the connect timeout
+  - 477: The sticky session's node is temporarily busy; retry with the same session ID shortly
 
-- 503 (Service Unavailable):
-  - Review geotargeting specifications
-  - Try during lower demand periods
+See [Error Types](/residential/error-types) for the full list of status codes.
