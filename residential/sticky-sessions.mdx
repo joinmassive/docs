@@ -91,7 +91,7 @@ curl -x https://network.joinmassive.com:65535 \
 
 Sessions can operate in **norotate mode** where node errors cause immediate failure instead of rotation. This is useful when IP consistency is critical and you would rather fail than silently switch IPs. Note that TTL expiry still creates a new session (same as other modes).
 
-- Returns **502** on tunnel errors (node responds with an error) or **503** when the node has gone offline
+- Returns **472** on tunnel errors (node responds with an error) or **475** when the node has gone offline; see [Error Types](/residential/error-types)
 - The `sessionerr` parameter is ignored in norotate mode — any error fails immediately
 
 <Warning>

@@ -3,12 +3,37 @@ title: 'Error Types'
 description: 'Massive may respond with one of several common or custom error messages:'
 ---
 
-| Status code | Reason phrase                    | Additional comments                                                                                                                                          |
-|-------------|----------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `400`       | Bad Request                      | Your request was malformed, most likely because of invalid routing parameters; see the response body for human-readable details                              |
-| `407`       | Proxy Authentication Required    | Your login email address, Massive API token, or both were incorrect                                                                                           |
-| `452`       | Disallowed Content               | The protocol, port, or content that you requested conflicts with Massive’s content policy; see the Link header for the entire policy                          |
-| `500`       | Internal server error            | Something went wrong on the serverside                                                                                                                        |
-| `502`       | Bad gateway                      | Massive was unable to find an appropriate node                                                                                                                |
-| `503`       | Service Unavailable              | Massive was unable to satisfy the geotargeting specifications or other elements of your request; or Massive network experiences high demand |
-| `521`       | No Upstream Proxy Available      | Massive does not have sufficient capacity to handle requests for the specified geographic location or ASN. This may occur when targeting regions with limited or no node availability. Try relaxing geographic constraints |
+Status codes `452`–`454` and `470`–`477` indicate errors that originated within the Massive network. Any other status code — including a plain `500`, `502`, or `503` — was returned by the target site and is passed through unchanged.
+
+Every Massive-generated error also includes an `X-Massive-Reason` response header with a short machine-readable cause. Codes `400`, `407`, and `429` are unchanged. The **Previously** column shows the code that was returned before this scheme was introduced.
+
+| Status code | Reason phrase                 | Previously   | Additional comments                                                                                              |
+|-------------|-------------------------------|--------------|--------------------------------------------------------------------------------------------------------------------|
+| `400`       | Bad Request                   | –            | The request was malformed, most likely because of invalid routing parameters; the response body contains details |
+| `407`       | Proxy Authentication Required | –            | The login email address, the Massive API token, or both were incorrect                                           |
+| `429`       | Too Many Requests             | –            | The request rate limit for the account was exceeded                                                              |
+| `452`       | Disallowed Content            | `452`        | The requested protocol or content conflicts with Massive’s content policy; the Link header lists the entire policy |
+| `453`       | Port Forbidden                | `452`        | The requested port is not available on the account; ports `80` and `443` are open by default, and support can enable others |
+| `454`       | Target Unresolvable           | `502`        | The target hostname could not be resolved; retries fail until the hostname is corrected                          |
+| `470`       | No Nodes Available            | `503`        | No proxy nodes were available; the condition is usually temporary and a retry is likely to succeed               |
+| `471`       | No Route Match                | `521`, `503` | No available node matched the geotargeting or routing parameters; retries fail until the targeting is relaxed    |
+| `472`       | Node Tunnel Failed            | `502`        | A tunnel to a proxy node could not be established; the condition is usually temporary                            |
+| `473`       | Upstream Unavailable          | `503`        | A Massive server involved in routing the request was unreachable; the condition is usually temporary             |
+| `474`       | Proxy Internal Error          | `500`        | An internal Massive error occurred; persistent occurrences are worth reporting to support                        |
+| `475`       | Sticky Node Gone              | `503`        | The node serving the sticky session went offline; a new session is required                                      |
+| `476`       | Target Connect Timeout        | `502`        | Connections to the target host timed out on every attempt; a longer connect timeout may help                     |
+| `477`       | Sticky Node At Capacity       | `503`        | The node serving the sticky session is temporarily at capacity; the same session can be retried after a short delay |
+
+## SOCKS5 errors
+
+The SOCKS5 protocol has no response headers, so error information is limited to the reply code in the `CONNECT` response:
+
+| Reply code | Meaning                                                                                       |
+|------------|-----------------------------------------------------------------------------------------------|
+| `0x04`     | The request was blocked by Massive’s content policy, or the target hostname could not be resolved |
+| `0x06`     | Connections to the target host timed out                                                      |
+| `0x0A`     | The requested port is not available on the account (custom code)                              |
+| `0x0B`     | No available node matched the geotargeting parameters (custom code)                           |
+| `0x01`     | Any other error within the Massive network                                                    |
+
+Applications that need more detail can use the HTTP(S) endpoint, which returns the full set of status codes and the `X-Massive-Reason` header described above.
