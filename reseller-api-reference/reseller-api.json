@@ -86,6 +86,7 @@
         },
         "get": {
           "summary": "Get list of existing accounts",
+          "description": "Returns every subaccount belonging to the authenticated reseller, including each one's cumulative `used_bytes`, its `limit` and whether it has hit that limit (`limit_reached`).\n\n**This is the recommended way to monitor usage across subaccounts.** A single call returns usage for all of them. Polling `GET /accounts/{id}/usage` once per subaccount instead is significantly slower for you and puts substantially more load on the API.",
           "security": [
             {
               "api-key": []
@@ -477,19 +478,24 @@
       "/accounts/{id}/usage": {
         "get": {
           "summary": "Get account usage",
+          "description": "Returns traffic used by a single account, optionally restricted to a time range.\n\nUse this endpoint only when you need usage for a **specific time window**. If you want each subaccount's cumulative usage against its allowance, read `used_bytes` from `GET /accounts`, which returns it for every subaccount in a single call.",
           "parameters": [
             {
               "name": "from",
               "in": "query",
+              "description": "Start of the range, as a Unix timestamp in seconds. Omit for no lower bound (usage is counted from the start of the account's history).",
               "schema": {
-                "type": "string"
+                "type": "string",
+                "example": "1708526022"
               }
             },
             {
               "name": "to",
               "in": "query",
+              "description": "End of the range, as a Unix timestamp in seconds. Defaults to now.",
               "schema": {
-                "type": "string"
+                "type": "string",
+                "example": "1708612422"
               }
             },
             {
@@ -781,6 +787,11 @@
               "type": "integer",
               "description": "The allocated traffic in bytes.",
               "example": 1000000
+            },
+            "used_bytes": {
+              "type": "integer",
+              "description": "Cumulative (lifetime) traffic used by the account, in bytes. This is the figure the account allowance is enforced against, so compare it directly with `limit` (see also `limit_reached`). Updated periodically from aggregated usage data, so it is near-real-time rather than instantaneous.\n\nBecause this field is returned for every subaccount by `GET /accounts`, a single call to that endpoint gives you usage for all of your subaccounts at once. Prefer it over calling `GET /accounts/{id}/usage` once per subaccount.",
+              "example": 524288000
             },
             "domains_blocklist": {
               "type": "array",
