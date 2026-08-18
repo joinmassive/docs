@@ -47,6 +47,29 @@ curl --location 'https://api-network.joinmassive.com/resellers/accounts/{account
 
 Replace {account_id} with the ID received in Step 2.
 
+# Step 4: Monitor Usage Across Your Accounts
+
+To track how much traffic your sub-accounts have used, list your accounts:
+
+```bash
+curl --location 'https://api-network.joinmassive.com/resellers/accounts' \
+--header 'x-api-key: {API_KEY}'
+```
+
+Every account in the response includes:
+
+- `used_bytes` - cumulative traffic used by that account, in bytes
+- `limit` - the traffic allocated to it
+- `limit_reached` - whether it has hit that allocation
+
+**Use this endpoint to monitor usage.** One call returns the figures for all of your
+sub-accounts at once, so you do not need to request each account individually.
+
+`GET /accounts/{account_id}/usage` is only needed when you want usage for a **specific
+time range** (via the `from` and `to` parameters, Unix timestamps in seconds). Calling it
+once per sub-account in a loop is much slower for you and puts significantly more load on
+the API than a single call to `/accounts`.
+
 # Next Steps
 
 You've now successfully created and retrieved an account using the Proxy Resellers API!
