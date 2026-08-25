@@ -545,6 +545,78 @@
           ]
         }
       },
+      "/accounts/{id}/usage/daily": {
+        "get": {
+          "summary": "Get daily account usage",
+          "description": "Returns one entry per UTC day for a single account, so a multi-day traffic chart costs one request instead of one per day.\n\nBoth `from` and `to` are required and the range may not exceed **90 days**. Days with no traffic are returned with zeroed counters, so the series is always contiguous and needs no gap handling.\n\nData is sourced from an hourly rollup that lags roughly 90 minutes and begins on 2026-04-10, so days before that date return zeros. Use this endpoint for **historical charts**, not for real-time or lifetime usage \u2014 for cumulative usage against an account's allowance, read `used_bytes` from `GET /accounts`.",
+          "parameters": [
+            {
+              "name": "from",
+              "in": "query",
+              "required": true,
+              "description": "Start of the range, inclusive, as a Unix timestamp in seconds.",
+              "schema": {
+                "type": "string",
+                "example": "1754006400"
+              }
+            },
+            {
+              "name": "to",
+              "in": "query",
+              "required": true,
+              "description": "End of the range, exclusive, as a Unix timestamp in seconds. Must be after `from` and no more than 90 days later.",
+              "schema": {
+                "type": "string",
+                "example": "1756598400"
+              }
+            },
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "security": [
+            {
+              "api-key": []
+            }
+          ],
+          "operationId": "getAccountUsageDaily",
+          "responses": {
+            "200": {
+              "description": "One entry per UTC day in the requested range.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/usageDailyResponseOK"
+                  }
+                }
+              }
+            },
+            "400": {
+              "$ref": "#/components/responses/BadRequestError"
+            },
+            "401": {
+              "$ref": "#/components/responses/UnauthorizedError"
+            },
+            "403": {
+              "$ref": "#/components/responses/ForbiddenError"
+            },
+            "404": {
+              "$ref": "#/components/responses/AccountNotFound"
+            },
+            "500": {
+              "$ref": "#/components/responses/InternalServerError"
+            }
+          },
+          "tags": [
+            "Usage"
+          ]
+        }
+      },
       "/accounts/{id}/allocations": {
         "post": {
           "summary": "Allocate traffic for an account",
@@ -699,6 +771,35 @@
               "type": "integer",
               "description": "The allocated traffic allowance in bytes.",
               "example": 1000000
+            }
+          }
+        },
+        "usageDailyResponseOK": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "date": {
+                "type": "string",
+                "format": "date",
+                "description": "The UTC day, as YYYY-MM-DD.",
+                "example": "2026-08-01"
+              },
+              "used_bytes": {
+                "type": "integer",
+                "description": "Bytes of traffic used by the account on this day.",
+                "example": 1336682714
+              },
+              "total_requests": {
+                "type": "integer",
+                "description": "Requests made by the account on this day.",
+                "example": 20462
+              },
+              "successful_requests": {
+                "type": "integer",
+                "description": "Of those, the requests that succeeded.",
+                "example": 20283
+              }
             }
           }
         },

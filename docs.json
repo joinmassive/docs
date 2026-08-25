@@ -171,6 +171,7 @@
               "reseller-api-reference/update-session-limit",
               "reseller-api-reference/allocate-traffic-for-an-account",
               "reseller-api-reference/get-account-usage",
+              "reseller-api-reference/get-account-usage-daily",
               "reseller-api-reference/get-the-allocation-list"
             ]
           },
