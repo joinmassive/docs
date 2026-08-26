@@ -33,7 +33,7 @@ paths:
 
             Maximum 31 days from current date. 
 
-            Must be less than 'to' date.
+            Must be earlier than the `to` date/time.
           example: "2025-01-01"
         - in: query
           name: to
@@ -45,7 +45,7 @@ paths:
 
             Accepted formats: date (`2025-01-01`) or RFC3339 (`2025-01-01T10:00:00Z`).
 
-            Must be greater than 'from'.
+            Must be later than the `from` date/time.
 
             Usage is aggregated in hourly buckets, and the range **includes the hourly bucket containing** `to`. A date-only value is interpreted as midnight UTC (00:00:00), so it returns only the first hour of that day — to include a full final day, pass `to=YYYY-MM-DDT23:59:59Z`.
           example: "2025-01-01 or 2025-01-01T10:00:00Z"
