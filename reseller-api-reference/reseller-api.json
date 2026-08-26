@@ -548,7 +548,7 @@
       "/accounts/{id}/usage/daily": {
         "get": {
           "summary": "Get daily account usage",
-          "description": "Returns one entry per UTC day for a single account, so a multi-day traffic chart costs one request instead of one per day.\n\nBoth `from` and `to` are required and the range may not exceed **90 days**. Days with no traffic are returned with zeroed counters, so the series is always contiguous and needs no gap handling.\n\nData is sourced from an hourly rollup that lags roughly 90 minutes and begins on 2026-04-10, so days before that date return zeros. Use this endpoint for **historical charts**, not for real-time or lifetime usage \u2014 for cumulative usage against an account's allowance, read `used_bytes` from `GET /accounts`.",
+          "description": "Returns one entry per UTC day for a single account, so a multi-day traffic chart costs one request instead of one per day.\n\nBoth `from` and `to` are required and the range may not exceed **90 days**. Days with no traffic are returned with zeroed counters, so the series is always contiguous and needs no gap handling.\n\nData is sourced from an hourly rollup. Each hour is published a few minutes after it closes, so the series is complete through the end of the previous hour and is not suitable for live enforcement. The rollup begins on 2026-04-10, so days before that date return zeros. For cumulative usage against an account's allowance, read `used_bytes` from `GET /accounts`.",
           "parameters": [
             {
               "name": "from",
