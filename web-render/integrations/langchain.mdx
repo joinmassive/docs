@@ -1,0 +1,146 @@
+---
+title: LangChain
+icon: link
+iconType: light
+description: Give a LangChain agent live web access as a tool.
+---
+
+import { dashboardUrl } from '/snippets/whitelabel/config.mdx';
+
+A LangChain agent can only reason over what it's given. Wrapping the
+[browsing endpoint](/web-render/browser) in a tool lets the model decide when it needs a live page
+and fetch one mid-run, without you writing retry, rendering, or captcha logic.
+
+## Prerequisites
+
+```shell
+pip install langchain langgraph requests
+```
+
+Set your API token, available from **{dashboardUrl}** under **Developer → API Keys**:
+
+```shell
+export MASSIVE_TOKEN='[API token here]'
+```
+
+## Defining the tool
+
+The `@tool` decorator turns a function into something the model can call. The docstring is passed to
+the model as the tool description, so it should say *when* to reach for the tool, not just what the
+tool does.
+
+```python
+import os
+import requests
+from langchain_core.tools import tool
+
+MASSIVE_TOKEN = os.environ['MASSIVE_TOKEN']
+ENDPOINT      = 'https://render.joinmassive.com/browser'
+
+
+@tool
+def browse(url: str, country: str = 'us') -> str:
+    """Fetch the current contents of a web page as Markdown.
+
+    Use this whenever the answer depends on information that may have changed
+    recently — prices, stock levels, published dates, headlines, or any figure
+    that would be stale in training data. `country` is a two-letter ISO code and
+    controls which country the page is requested from, which matters for
+    localized pricing and region-gated content.
+    """
+    response = requests.get(
+        ENDPOINT,
+        headers={'Authorization': f'Bearer {MASSIVE_TOKEN}'},
+        params={
+            'url':        url,
+            'country':    country,
+            'format':     'markdown',
+            'expiration': 0,
+        },
+        timeout=200,
+    )
+    response.raise_for_status()
+    return response.text
+```
+
+Three parameter choices are worth calling out:
+
+| Parameter    | Value      | Why                                                                                                                                                                        |
+| :----------- | :--------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `format`     | `markdown` | Rendered HTML wastes context on markup the model doesn't need. Markdown keeps the token count low enough that a page fits alongside the rest of the conversation.           |
+| `expiration` | `0`        | Disables caching. Correct for prices and other volatile figures; drop it and let the default one-day cache apply when the page changes slowly.                              |
+| `timeout`    | `200`      | Up to **3 minutes** is allotted per real-time call to cover captcha-solving and retries, so a client timeout below that will abort requests the service would have finished. |
+
+## Binding the tool to an agent
+
+```python
+from langchain.chat_models import init_chat_model
+from langgraph.prebuilt import create_react_agent
+
+model = init_chat_model('<your-model>', model_provider='<your-provider>')
+agent = create_react_agent(model, tools=[browse])
+
+result = agent.invoke({
+    'messages': [
+        ('user', 'What does example.com currently list as its contact address?')
+    ]
+})
+
+print(result['messages'][-1].content)
+```
+
+The model calls `browse` on its own when the question requires a live page, and answers directly when
+it doesn't. Any chat model LangChain supports will work.
+
+## Geotargeting from the agent
+
+Because `country` is an argument on the tool rather than a constant, the model can vary it per call.
+That's what makes questions spanning several markets answerable in a single run:
+
+```python
+result = agent.invoke({
+    'messages': [
+        ('user', 'Compare the price of this product in the US, Germany, and Japan: '
+                 'https://example.com/product/12345')
+    ]
+})
+```
+
+The agent issues three calls to `browse` with `country` set to `us`, `de`, and `jp`, then compares
+the results. Add `city` or `subdivision` arguments the same way for finer targeting — see
+<Link href='/web-render/geotargeting'>geotargeting</Link> for the full parameter list.
+
+## Harder targets
+
+`browse` defaults to the `low` difficulty pool. Sites with stronger anti-bot measures may need
+`difficulty` set to `medium`, which is a premium param — see
+<Link href='/web-render/pricing'>pricing</Link>. Expose it as an argument only if the model has a
+reason to choose it; otherwise pin it in `params` so cost stays predictable.
+
+<Tip>
+  If a site remains blocked at every difficulty, [let us know](mailto:support@joinmassive.com). We
+  can usually unblock any site within **48 hours**.
+</Tip>
+
+## Searching instead of fetching
+
+When the agent needs to find pages rather than read a known URL, wrap the
+<Link href='/web-render/search'>search endpoint</Link> as a second tool and register both. A common
+pattern is `search` to locate candidate URLs, then `browse` to read the most promising one.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Browsing" icon="browser" href="/web-render/browser">
+    Every parameter the browsing endpoint accepts.
+  </Card>
+  <Card title="Search" icon="magnifying-glass" href="/web-render/search">
+    Real-time search results as structured JSON.
+  </Card>
+  <Card title="Geotargeting" icon="earth-americas" href="/web-render/geotargeting">
+    Country, subdivision, and city targeting.
+  </Card>
+  <Card title="Pricing" icon="credit-card" href="/web-render/pricing">
+    Credit costs, including paid params.
+  </Card>
+</CardGroup>
