@@ -28,6 +28,7 @@ curl -x https://network.joinmassive.com:65535 \
     - If both subdivision and zipcode are provided, the city is ignored.
     - If both zipcode and city are provided, the city is ignored.
     - If subdivision and city are provided, both are strictly matched.
+- `city` is matched by name only. If the same city name exists in more than one subdivision of the country, the request can be served from any of them. To target a specific one, `subdivision` must be specified together with `city`.
 
 _Please, take into account, that due to technical reasons, the more strict geotargeting narrows the range of appropriate nodes._
 
@@ -98,6 +99,14 @@ curl -x https://network.joinmassive.com:65535 \
 ```bash
 curl -x https://network.joinmassive.com:65535 \
      -U '{PROXY_USERNAME}-country-US-city-New%20York:{API_KEY}' \
+     https://cloudflare.com/cdn-cgi/trace
+```
+
+If the city name is not unique within the country, add `subdivision`:
+
+```bash
+curl -x https://network.joinmassive.com:65535 \
+     -U '{PROXY_USERNAME}-country-US-subdivision-NY-city-New%20York:{API_KEY}' \
      https://cloudflare.com/cdn-cgi/trace
 ```
 
