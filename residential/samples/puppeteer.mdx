@@ -14,7 +14,7 @@ const puppeteer = require('puppeteer');
   const page    = (await browser.pages())[0];
 
   await page.authenticate({
-    username: '{PROXY_USERNAME},
+    username: '{PROXY_USERNAME}',
     password: '{API_KEY}'
   });
   await page.goto('https://cloudflare.com/cdn-cgi/trace'); // Insert your target URL here

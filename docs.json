@@ -208,6 +208,12 @@
             ]
           },
           {
+            "group": "Integrations",
+            "pages": [
+              "web-render/integrations/langchain"
+            ]
+          },
+          {
             "group": "API Management",
             "pages": [
               "web-render/pricing",
