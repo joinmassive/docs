@@ -1,9 +1,9 @@
 ---
 title: "Geohash targeting"
-description: "A request can be targeted at a rectangular area on the map by its geohash, a short code built from latitude and longitude."
+description: "A request can be targeted at an area on the map by its geohash."
 ---
 
-A [geohash](https://en.wikipedia.org/wiki/Geohash) is a short code for a rectangular area on the map. The `geohash` parameter selects nodes located inside that area, independent of city or region names.
+A [geohash](https://en.wikipedia.org/wiki/Geohash) is a short code for a rectangular area on the map. The `geohash` parameter selects nodes inside that area.
 
 ```bash
 curl -x https://network.joinmassive.com:65535 \
@@ -11,61 +11,21 @@ curl -x https://network.joinmassive.com:65535 \
      https://cloudflare.com/cdn-cgi/trace
 ```
 
-## Precision
+| Characters | Area, approx.  | Example           |
+| ---------- | -------------- | ----------------- |
+| 1          | 5000 × 5000 km | `d`               |
+| 2          | 1250 × 625 km  | `dr`              |
+| 3          | 156 × 156 km   | `dr5`             |
+| 4          | 39 × 20 km     | `dr5r` (New York) |
 
-A code has 1 to 4 characters. Each additional character makes the area smaller.
+Node locations are approximate, so longer codes match fewer nodes.
 
-| Characters | Area, approx.   | Example                 |
-| ---------- | --------------- | ----------------------- |
-| 1          | 5000 × 5000 km  | `d`                     |
-| 2          | 1250 × 625 km   | `dr`                    |
-| 3          | 156 × 156 km    | `dr5`                   |
-| 4          | 39 × 20 km      | `dr5r` (New York)       |
+## Options
 
-Sizes are given at the equator; away from it, areas become narrower. Codes use the digits `0`–`9` and the letters `b`–`z` except `i`, `l` and `o`, and are case insensitive. A code for any coordinates can be obtained from a geohash encoder, for example [this one](https://www.movable-type.co.uk/scripts/geohash.html).
+- `geohashnear` adds the 8 surrounding areas of the same size: `-geohash-dr5r-geohashnear`. It applies to a single code.
+- Up to 5 codes can be listed: `-geohash-dr5r,dp3w`.
+- `country` is optional and limits the area to one country: `-country-US-geohash-dp`.
+- `subdivision`, `city` and `zipcode` cannot be combined with `geohash`.
+- As with [other geo parameters](/residential/geotargeting#targeting-multiple-locations), only one parameter may hold a list; `geohashnear` counts as a list.
 
-A node's location is determined from its IP address and is approximate. When a node's location is known only within a large radius, the node matches shorter codes but not longer ones, so a 4-character code reaches fewer nodes than its 3-character parent.
-
-## Neighbouring areas
-
-`geohashnear` adds the 8 surrounding areas of the same size, so the request is served from a 3 × 3 block around the given code. This helps when the target is close to the edge of an area or when an area has few nodes.
-
-```bash
-curl -x https://network.joinmassive.com:65535 \
-     -U '{PROXY_USERNAME}-geohash-dr5r-geohashnear:{API_KEY}' \
-     https://cloudflare.com/cdn-cgi/trace
-```
-
-`geohashnear` can end the username as shown. Elsewhere in the username it takes a value: `geohashnear-on`. It applies to a single code only.
-
-## Multiple areas
-
-`geohash` accepts a comma-separated list of up to **5** codes, which may have different lengths. The request is served by a node in any of the listed areas. A code that lies inside another listed code is ignored.
-
-```bash
-curl -x https://network.joinmassive.com:65535 \
-     -U '{PROXY_USERNAME}-geohash-dr5r,dp3w,9q8y:{API_KEY}' \
-     https://cloudflare.com/cdn-cgi/trace
-```
-
-## Combining with other parameters
-
-- `country` is optional. When it is set, only nodes in that country are used, which is useful when an area crosses a border. `country` may also hold a list.
-- `subdivision`, `city` and `zipcode` cannot be combined with `geohash`; such a request returns HTTP 400.
-- `asn`, [device type](/residential/device-type-targeting) and [sticky sessions](/residential/sticky-sessions) work with `geohash` as with other targeting.
-- Only one parameter may hold a list per request, as with [other geo parameters](/residential/geotargeting#targeting-multiple-locations). A list of codes, or `geohashnear`, requires `country` and `asn` to be single-valued.
-
-```bash
-curl -x https://network.joinmassive.com:65535 \
-     -U '{PROXY_USERNAME}-country-US-geohash-dp:{API_KEY}' \
-     https://cloudflare.com/cdn-cgi/trace
-```
-
-A sticky session with `geohash` stays inside the area. If the session's node moves outside it, the session continues on another node in the area; with `sessionmode-norotate`, the request returns 475 instead.
-
-## Errors
-
-| Code | Meaning                                                                                       |
-| ---- | --------------------------------------------------------------------------------------------- |
-| 400  | The code is longer than 4 characters or contains other characters, or the parameters cannot be combined. |
-| 471  | No node is currently available in the requested area. A shorter code or `geohashnear` covers more nodes. |
+A request with an invalid code or combination returns 400; a request with no available node in the area returns 471.
