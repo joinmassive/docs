@@ -27,6 +27,7 @@ Node locations are approximate: a node whose location is known only roughly matc
 - `geohashnear` adds the 8 surrounding areas of the same size: `-geohash-dr5r-geohashnear`. It applies to a single code. At the end of the username it needs no value; elsewhere it is written as `geohashnear-on`.
 - Up to 5 codes can be listed: `-geohash-dr5r,dp3w`.
 - `country` is optional and limits the area to the given country, which helps when an area crosses a border: `-country-US-geohash-dp`. A list of countries can be used with a single code.
+- [`asn`](/residential/asn-type-targeting) and [device type](/residential/device-type-targeting) can be combined with `geohash`: `-geohash-dr5r-asn-7922`.
 - `subdivision`, `city` and `zipcode` cannot be combined with `geohash`.
 - As with [other geo parameters](/residential/geotargeting#targeting-multiple-locations), only one parameter may hold a list; `geohashnear` counts as a list.
 
