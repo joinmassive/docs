@@ -22,7 +22,7 @@ curl -x https://network.joinmassive.com:65535 \
 
 ## Geotargeting rules
 
-- `country` key must always persist if any of the geo parameters is specified. Otherwise, HTTP 400 is returned.
+- `country` key must always persist if any of the geo parameters is specified. Otherwise, HTTP 400 is returned. [Geohash targeting](/residential/geohash-targeting) is the exception: there `country` is optional.
 - If more than one geo key is specified, the server finds an appropriate node strictly matching all the parameters. The only exception is `zipcode`: if specified, `city` key is ignored.
   - **Details**:
     - If both subdivision and zipcode are provided, the city is ignored.
