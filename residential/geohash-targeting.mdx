@@ -1,0 +1,36 @@
+---
+title: "Geohash targeting"
+description: "A request can be targeted at an area on the map by its geohash."
+---
+
+A [geohash](https://en.wikipedia.org/wiki/Geohash) is a short code for a rectangular area on the map. The `geohash` parameter selects nodes inside that area.
+
+```bash
+curl -x https://network.joinmassive.com:65535 \
+     -U '{PROXY_USERNAME}-geohash-dr5r:{API_KEY}' \
+     https://cloudflare.com/cdn-cgi/trace
+```
+
+| Characters | Area, approx.  | Example           |
+| ---------- | -------------- | ----------------- |
+| 1          | 5000 × 5000 km | `d`               |
+| 2          | 1250 × 625 km  | `dr`              |
+| 3          | 156 × 156 km   | `dr5`             |
+| 4          | 39 × 20 km     | `dr5r` (New York) |
+
+Sizes are given at the equator; away from it, areas are narrower. Codes are case insensitive.
+
+Node locations are approximate: a node whose location is known only roughly matches shorter codes but not longer ones. When a 4-character code returns 471, its 3-character parent or `geohashnear` usually finds nodes.
+
+## Options
+
+- `geohashnear` adds the 8 surrounding areas of the same size: `-geohash-dr5r-geohashnear`. It applies to a single code. At the end of the username it needs no value; elsewhere it is written as `geohashnear-on`.
+- Up to 5 codes can be listed: `-geohash-dr5r,dp3w`.
+- `country` is optional and limits the area to the given country, which helps when an area crosses a border: `-country-US-geohash-dp`. A list of countries can be used with a single code.
+- [`asn`](/residential/asn-type-targeting) and [`type`](/residential/device-type-targeting) (device type) can be combined with `geohash`: `-geohash-dr5r-asn-7922`.
+- `subdivision`, `city` and `zipcode` cannot be combined with `geohash`.
+- As with [other geo parameters](/residential/geotargeting#targeting-multiple-locations), only one parameter may hold a list; `geohashnear` counts as a list.
+
+A [sticky session](/residential/sticky-sessions) with `geohash` stays inside the area: if its node moves outside, the session continues on another node in the area, and with `sessionmode-norotate` the request returns 475.
+
+A request with an invalid code or combination returns 400; a request with no available node in the area returns 471.

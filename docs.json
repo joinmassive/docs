@@ -125,6 +125,7 @@
             "pages": [
               "residential/routing",
               "residential/geotargeting",
+              "residential/geohash-targeting",
               "residential/sticky-sessions",
               "residential/device-type-targeting",
               "residential/asn-type-targeting",
