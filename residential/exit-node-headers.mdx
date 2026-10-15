@@ -5,7 +5,7 @@ description: "Exit node metadata automatically included in CONNECT response head
 
 ## Overview
 
-Exit node headers are automatically included in the HTTP 200 OK response to CONNECT requests, providing visibility into the exit node properties that will be used for tunneled connections (HTTPS traffic). These headers include the exit IP address, country, timezone, and ASN information.
+Exit node headers are automatically included in the HTTP 200 OK response to CONNECT requests, providing visibility into the exit node properties that will be used for tunneled connections (HTTPS traffic). These headers include the exit IP address, country, timezone, ASN and geohash information.
 
 ## HTTP vs HTTPS Proxy Behavior
 
@@ -38,6 +38,7 @@ X-Exit-IP: 203.0.113.42
 X-Exit-Country: US
 X-Exit-Timezone: America/New_York
 X-Exit-ASN: 7922
+X-Exit-Geohash: dr5r
 
 ```
 
@@ -69,6 +70,13 @@ These headers provide information about the exit node before any actual HTTPS da
 - **Example**: `X-Exit-ASN: 7922`
 - **Availability**: Included when ASN data is available
 
+### X-Exit-Geohash
+- **Description**: [Geohash](/residential/geohash-targeting) of the area where the exit node is located, as precise as the node's location is known
+- **Format**: 1 to 4 characters
+- **Example**: `X-Exit-Geohash: dr5r`
+- **Availability**: Included when the node's location is known precisely enough for a geohash, whether or not the request uses `geohash`
+- **Note**: The value describes the exit node, not the request, so it can be longer than the requested code: a request for `geohash-dr5` can receive `X-Exit-Geohash: dr5r`
+
 ## Availability
 
 Exit node headers:
@@ -95,6 +103,7 @@ In verbose mode, you'll see:
 < X-Exit-Country: US
 < X-Exit-Timezone: America/New_York
 < X-Exit-ASN: 7922
+< X-Exit-Geohash: dr5r
 ```
 
 ## Use Cases

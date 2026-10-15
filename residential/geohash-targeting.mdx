@@ -34,3 +34,5 @@ Node locations are approximate: a node whose location is known only roughly matc
 A [sticky session](/residential/sticky-sessions) with `geohash` stays inside the area: if its node moves outside, the session continues on another node in the area, and with `sessionmode-norotate` the request returns 475.
 
 A request with an invalid code or combination returns 400; a request with no available node in the area returns 471.
+
+The area of the exit node is returned in the [`X-Exit-Geohash`](/residential/exit-node-headers#x-exit-geohash) header of the CONNECT response.
