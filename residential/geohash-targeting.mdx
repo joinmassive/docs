@@ -26,7 +26,7 @@ Node locations are approximate. A node located only roughly matches short codes 
 
 - `geohashnear` also includes the 8 surrounding areas of the same size: `-geohash-dr5r-geohashnear`.
 - `geohashfallback` returns the nearest available node instead of 471: `-geohash-dr5r-geohashfallback`. The search moves outward from the area, then to the whole country. Other parameters still apply. Codes longer than 4 characters are shortened to 4.
-- Both work with a single code and need no value; `-on` and `-off` are also accepted.
+- Both work with a single code and need no value.
 - Up to 5 codes can be listed: `-geohash-dr5r,dp3w`.
 - `country` is optional and limits the area to that country, which helps near borders: `-country-US-geohash-dp`.
 - [`asn`](/residential/asn-type-targeting) and [`type`](/residential/device-type-targeting) can be added: `-geohash-dr5r-asn-7922`.
