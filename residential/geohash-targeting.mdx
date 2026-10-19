@@ -18,23 +18,23 @@ curl -x https://network.joinmassive.com:65535 \
 | 3          | 156 × 156 km   | `dr5`             |
 | 4          | 39 × 20 km     | `dr5r` (New York) |
 
-Sizes are given at the equator; away from it, areas are narrower. Codes are case insensitive.
+Sizes are at the equator; areas get narrower toward the poles. Codes are case insensitive.
 
-Node locations are approximate: a node whose location is known only roughly matches shorter codes but not longer ones. When a 4-character code returns 471, its 3-character parent or `geohashnear` usually finds nodes; `geohashfallback` widens the search automatically.
+Node locations are approximate. A node located only roughly matches short codes but not long ones, so a 4-character code can return 471 where its 3-character parent finds nodes.
 
 ## Options
 
-- `geohashnear` adds the 8 surrounding areas of the same size: `-geohash-dr5r-geohashnear`. It applies to a single code.
-- `geohashfallback` returns the nearest available node instead of 471: `-geohash-dr5r-geohashfallback`. If the area has no available node, the search moves outward to nearby areas, then to the whole country, or anywhere if no country is given. Other parameters, such as `asn` and `type`, still apply. It works with a single code; longer codes are shortened to 4 characters.
-- `geohashnear` and `geohashfallback` need no value; `-on` and `-off` are also accepted.
+- `geohashnear` also includes the 8 surrounding areas of the same size: `-geohash-dr5r-geohashnear`.
+- `geohashfallback` returns the nearest available node instead of 471: `-geohash-dr5r-geohashfallback`. The search moves outward from the area, then to the whole country, or anywhere if no country is given. Other parameters still apply. Codes longer than 4 characters are shortened to 4.
+- Both work with a single code and need no value; `-on` and `-off` are also accepted.
 - Up to 5 codes can be listed: `-geohash-dr5r,dp3w`.
-- `country` is optional and limits the area to the given country, which helps when an area crosses a border: `-country-US-geohash-dp`. A list of countries can be used with a single code.
-- [`asn`](/residential/asn-type-targeting) and [`type`](/residential/device-type-targeting) (device type) can be combined with `geohash`: `-geohash-dr5r-asn-7922`.
-- `subdivision`, `city` and `zipcode` cannot be combined with `geohash`.
-- As with [other geo parameters](/residential/geotargeting#targeting-multiple-locations), only one parameter may hold a list; `geohashnear` counts as a list.
+- `country` is optional and limits the area to that country, which helps near borders: `-country-US-geohash-dp`.
+- [`asn`](/residential/asn-type-targeting) and [`type`](/residential/device-type-targeting) can be added: `-geohash-dr5r-asn-7922`.
+- `subdivision`, `city` and `zipcode` cannot be used with `geohash`.
+- Only [one parameter may hold a list](/residential/geotargeting#targeting-multiple-locations); `geohashnear` counts as one.
 
-A [sticky session](/residential/sticky-sessions) with `geohash` stays inside the area: if its node moves outside, the session continues on another node in the area, and with `sessionmode-norotate` the request returns 475. With `geohashfallback`, the session is held only to the country, when one is given.
+## Behavior
 
-A request with an invalid code or combination returns 400; a request with no available node in the area returns 471. With `geohashfallback`, 471 is returned only when no node matches the country and other parameters.
-
-The area of the exit node is returned in the [`X-Exit-Geohash`](/residential/exit-node-headers#x-exit-geohash) header of the CONNECT response. With `geohashfallback`, it shows where the node is, which can differ from the requested code; the header is absent when the node's location is known only to the country.
+- A [sticky session](/residential/sticky-sessions) stays inside the area. If its node leaves, the session moves to another node in the area; with `sessionmode-norotate` the request returns 475. With `geohashfallback`, it is limited only by `country`.
+- An invalid code or combination returns 400. 471 means no available node in the area; with `geohashfallback`, no matching node in the whole country, or anywhere when no country is given.
+- The [`X-Exit-Geohash`](/residential/exit-node-headers#x-exit-geohash) header of the CONNECT response shows the exit node's area. With `geohashfallback` it can differ from the requested code, and it is absent when the node's location is known only to the country.
