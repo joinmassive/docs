@@ -25,7 +25,7 @@ Node locations are approximate: a node whose location is known only roughly matc
 ## Options
 
 - `geohashnear` adds the 8 surrounding areas of the same size: `-geohash-dr5r-geohashnear`. It applies to a single code.
-- `geohashfallback` returns the nearest available node instead of 471: `-geohash-dr5r-geohashfallback`. The search widens step by step: the 8 surrounding areas, then the parent area and the areas around it, then the same at 2 characters, then the whole country, or any location when no country is given. `country`, `asn` and `type` apply at every step. It applies to a single code; a code longer than 4 characters is shortened to 4.
+- `geohashfallback` returns the nearest available node instead of 471: `-geohash-dr5r-geohashfallback`. If the area has no available node, the search moves outward to nearby areas, then to the whole country, or anywhere if no country is given. Other parameters, such as `asn` and `type`, still apply. It works with a single code; longer codes are shortened to 4 characters.
 - `geohashnear` and `geohashfallback` need no value; `-on` and `-off` are also accepted.
 - Up to 5 codes can be listed: `-geohash-dr5r,dp3w`.
 - `country` is optional and limits the area to the given country, which helps when an area crosses a border: `-country-US-geohash-dp`. A list of countries can be used with a single code.
