@@ -682,7 +682,7 @@
                   "model": {
                     "description": "The AI model to chat with.",
                     "type": "string",
-                    "enum": ["chatgpt", "gemini", "perplexity", "aio"],
+                    "enum": ["chatgpt", "gemini", "perplexity"],
                     "default": "chatgpt",
                     "example": "gemini"
                   },
