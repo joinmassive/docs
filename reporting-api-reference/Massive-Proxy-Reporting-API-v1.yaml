@@ -58,6 +58,10 @@ paths:
             Group usage data by the specified dimension.
 
             When set to `subaccount`, returns usage broken down by sub-account with an additional `username` field in each record.
+
+            When set to `subuser`, returns usage broken down by the `subaccount` label set in the proxy username, with an additional `subuser` field in each record. Traffic without a label is returned in a record without `subuser`.
+
+            Any other value returns `400`.
       responses:
         "200":
           description: Successfully retrieved usage
@@ -88,6 +92,18 @@ paths:
                       total: 200
                       successful: 100
                       used_bytes: 24691357
+                grouped_by_subuser:
+                  summary: Grouped by sub-user
+                  value:
+                    - date: "2025-01-01"
+                      subuser: "crawler"
+                      total: 700
+                      successful: 350
+                      used_bytes: 86419753
+                    - date: "2025-01-01"
+                      total: 300
+                      successful: 150
+                      used_bytes: 37037036
         "400":
           $ref: "#/components/responses/BadRequestError"
         "407":
@@ -112,6 +128,9 @@ components:
         username:
           type: string
           description: Sub-account proxy username. Only present when `group_by=subaccount`.
+        subuser:
+          type: string
+          description: Sub-user label from the `subaccount` proxy username parameter. Only present when `group_by=subuser` and the traffic has a label.
         total:
           type: number
           description: Total number of connections
