@@ -5,7 +5,7 @@ description: 'Massive may respond with one of several common or custom error mes
 
 Status codes `452`–`454` and `470`–`477` indicate errors that originated within the Massive network. Any other status code — including a plain `500`, `502`, or `503` — was returned by the target site and is passed through unchanged.
 
-Every Massive-generated error also includes an `X-Massive-Reason` response header with a short machine-readable cause. Codes `400`, `407`, and `429` are unchanged. The **Previously** column shows the code that was returned before this scheme was introduced.
+Every Massive-generated error also includes an `X-Reason` response header with a short machine-readable cause. Codes `400`, `407`, and `429` are unchanged. The **Previously** column shows the code that was returned before this scheme was introduced.
 
 | Status code | Reason phrase                 | Previously   | Additional comments                                                                                              |
 |-------------|-------------------------------|--------------|--------------------------------------------------------------------------------------------------------------------|
@@ -36,4 +36,4 @@ The SOCKS5 protocol has no response headers, so error information is limited to 
 | `0x0B`     | No available node matched the geotargeting parameters (custom code)                           |
 | `0x01`     | Any other error within the Massive network                                                    |
 
-Applications that need more detail can use the HTTP(S) endpoint, which returns the full set of status codes and the `X-Massive-Reason` header described above.
+Applications that need more detail can use the HTTP(S) endpoint, which returns the full set of status codes and the `X-Reason` header described above.
