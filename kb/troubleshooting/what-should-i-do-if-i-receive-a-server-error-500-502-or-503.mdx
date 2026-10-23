@@ -2,9 +2,9 @@
 title: "What should I do if I receive a server error (500, 502, or 503)?"
 ---
 
-A 500, 502, or 503 on a proxied request comes from the target site, not from Massive. Errors that originate within the Massive network use status codes in the 452–454 and 470–477 ranges and always include an `X-Massive-Reason` response header.
+A 500, 502, or 503 on a proxied request comes from the target site, not from Massive. Errors that originate within the Massive network use status codes in the 452–454 and 470–477 ranges and always include an `X-Reason` response header.
 
-- If the response has no `X-Massive-Reason` header, the target site returned the error and Massive delivered it unchanged. Retry the request, or check the status of the target site.
+- If the response has no `X-Reason` header, the target site returned the error and Massive delivered it unchanged. Retry the request, or check the status of the target site.
 
 - If the response carries a Massive status code instead:
   - 470, 472, or 473: The condition is usually temporary; wait a moment and retry
