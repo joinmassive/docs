@@ -31,7 +31,7 @@ paths:
           description: |
             Start date to query usage (UTC). 
 
-            Maximum 31 days from current date. 
+            The range from `from` to `to` can be at most 31 days long. It can start on any date.
 
             Must be earlier than the `to` date/time.
           example: "2025-01-01"
