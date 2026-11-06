@@ -38,6 +38,24 @@ For detailed information on available endpoints and operations, see the API Refe
 
 All API requests must include your API key in the `x-api-key` header. Learn more in our [Authentication Guide](/pool-stats-api-reference/pool-stats-api-authentication).
 
+# Compression
+
+Send `Accept-Encoding: gzip` with your requests. Responses are then gzip-compressed and about 10 times smaller.
+
+<Warning>
+Uncompressed responses larger than about 5 MB fail with a `502`. Large groupings without filters, such as `group_by=country,city` across all regions, can reach that size. Compressed, they stay well under it.
+</Warning>
+
+```bash
+curl --compressed -H "x-api-key: YOUR_API_KEY" \
+  "https://api-network.joinmassive.com/pool-stats/v1/live?group_by=country,city"
+```
+
+- **curl:** add `--compressed`.
+- **Guzzle (PHP):** set `'decode_content' => 'gzip'`. Guzzle does not request compression by default.
+- **Python requests and httpx, Node.js axios and fetch, Go net/http:** these request gzip and decompress automatically.
+- **Behind a CDN or proxy:** make sure it forwards the `Accept-Encoding` header.
+
 # Need Help?
 
 If you have any questions or need assistance, please contact our support team at support@joinmassive.com.
