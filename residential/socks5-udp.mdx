@@ -1,0 +1,77 @@
+---
+title: 'SOCKS5 UDP'
+description: 'Send UDP traffic, such as QUIC and HTTP/3, through Massive with SOCKS5 UDP ASSOCIATE'
+hidden: true
+---
+
+Massive supports the SOCKS5 `UDP ASSOCIATE` command ([RFC 1928, section 7](https://www.rfc-editor.org/rfc/rfc1928#section-7)) on the SOCKS5 port, with the same credentials as `CONNECT`.
+
+|             |                          |
+|-------------|--------------------------|
+| SOCKS5 Port | 65533                    |
+| Command     | `UDP ASSOCIATE` (`0x03`) |
+
+<Info>
+  curl cannot send UDP through a SOCKS5 proxy. Use a client or library that supports SOCKS5 UDP ASSOCIATE.
+</Info>
+
+## How it works
+
+1. Open a TCP connection to `network.joinmassive.com:65533`, authenticate, and send `UDP ASSOCIATE`. `DST.ADDR` and `DST.PORT` in the request can be `0.0.0.0:0`.
+2. The reply contains a relay address, `BND.ADDR:BND.PORT`. Send your datagrams, each with the standard SOCKS5 UDP header, to exactly that address and port. Replies come back from the same address and port.
+3. Keep the TCP connection open while you use the association. Closing it ends the association.
+
+<Warning>
+  Use the IP address from the reply as is. Do not resolve `network.joinmassive.com` again for the UDP traffic: it can point to a different server, which does not know your association.
+</Warning>
+
+## Sticky sessions and `udp-on`
+
+UDP is available on a subset of our nodes. Add `udp-on` to the username of any session you plan to use for UDP, so the session is bound to a node that can carry it:
+
+```text
+{PROXY_USERNAME}-session-37-udp-on:{API_KEY}
+```
+
+- Send `udp-on` on every request of that session, starting with the first one, TCP requests included. The session's TCP and UDP traffic then leave through the same exit node.
+- `udp-on` also limits the session's TCP requests to UDP-capable nodes, so use it only for sessions that need UDP.
+- Use `udp-on`. Invalid values are rejected.
+
+Without `udp-on`, a session created by a TCP request may be bound to a node that cannot carry UDP. What happens then depends on the [session mode](/residential/sticky-sessions#session-modes):
+
+| Session mode | What happens to `UDP ASSOCIATE` |
+|--------------|---------------------------------|
+| `strict`     | Moves the session to a UDP-capable node, so the session's TCP exit changes too |
+| `flex`       | Fails until the error limit (`sessionerr`) is reached. Successful TCP requests on the session reset that count |
+| `norotate`   | Fails until the sticky session TTL (`sessionttl`) expires |
+
+Adding `udp-on` later moves a `strict` or `flex` session to a UDP-capable node on its next request. A `norotate` session never moves, so that request fails, TCP included: start a new session ID with `udp-on` instead.
+
+## Limitations
+
+- **Same source IP.** Send datagrams from the same public IP address as the TCP connection that sent `UDP ASSOCIATE`. Datagrams from any other IP are dropped. The source port can vary, and you can use several UDP sockets from that IP under one association. Watch for networks where UDP leaves from a different public IP than TCP, such as carrier-grade NAT pools, dual-stack hosts, or multi-WAN setups. The relay address uses the same IP version as your TCP connection.
+- **First datagram.** Send the first datagram within 10 seconds of the reply, or the association is closed.
+- **Lifetime.** An association ends when you close the TCP connection or after 5 minutes without traffic in either direction. An active association is also closed 24 hours after it opens; open a new one to continue.
+- **One exit node.** An association stays on the node it started on, even after the sticky session TTL (`sessionttl`) expires. If that node goes offline, the association ends; send a new `UDP ASSOCIATE`.
+- **Exit node, not exit IP.** TCP and UDP traffic in one session share an exit node. They usually share its IP address too, but a node with more than one network connection can send them from different addresses, so this is not guaranteed.
+- **Ports and content.** UDP follows the same [usage restrictions](/residential/usage-restrictions) as TCP: only the destination ports open for your account (80, 443 and 53 by default), no private or local addresses, and blocked domains stay blocked. A datagram that breaks a rule is dropped without an error, because SOCKS5 cannot report errors for single datagrams.
+- **No fragmentation.** Datagrams with a non-zero `FRAG` field are dropped.
+- **Datagram size.** The SOCKS5 header adds 10 to 262 bytes to every datagram, and your network path to the proxy must carry the total. Keep payloads at or below about 1,280 bytes, the QUIC default. If a QUIC handshake hangs with no error on either side, check your path MTU first.
+
+## HTTP/3 in browsers
+
+Name resolution through the proxy does not return the DNS records that announce HTTP/3. A browser therefore loads a site over HTTP/2 first and switches to HTTP/3 from the next load, using the site's `Alt-Svc` header. Test with at least two page loads. A client that resolves names itself can send its DNS queries to UDP port 53 through the association and use HTTP/3 from the first load.
+
+## Errors
+
+If the proxy cannot set up the association, it answers `UDP ASSOCIATE` with an error reply and closes the connection. There is no fallback to TCP.
+
+| Reply  | Meaning | What to do |
+|--------|---------|------------|
+| `0x01` | No UDP-capable node matches the request, or the node failed | Retry, add `udp-on`, or relax geo or device targeting |
+| `0x09` | Invalid username parameters, such as a wrong `udp` value | Fix the username |
+| `0x0B` | No route matches your targeting | Relax geo or device targeting |
+
+## Usage accounting
+
+UDP traffic counts toward your usage like TCP traffic: the payload of your datagrams in both directions. SOCKS5 headers are not counted. Usage for an association is recorded when it ends.
