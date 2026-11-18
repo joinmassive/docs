@@ -51,13 +51,13 @@ Without `udp-on`, a session created by a TCP request may be bound to a node that
 - **Lifetime.** An association ends when you close the TCP connection or after 5 minutes without traffic in either direction. An active association is also closed 24 hours after it opens; open a new one to continue.
 - **One exit node.** An association stays on the node it started on, even after the session TTL expires. If that node goes offline, the association ends; send a new `UDP ASSOCIATE`.
 - **Exit node, not exit IP.** TCP and UDP traffic in one session share an exit node. They usually share its IP address too, but a node with more than one network connection can send them from different addresses, so this is not guaranteed.
-- **Ports and content.** UDP follows the same [usage restrictions](/residential/usage-restrictions) as TCP: only the destination ports open for your account (80 and 443 by default), no private or local addresses, and blocked domains stay blocked. A datagram that breaks a rule is dropped without an error, because SOCKS5 cannot report errors for single datagrams.
+- **Ports and content.** UDP follows the same [usage restrictions](/residential/usage-restrictions) as TCP: only the destination ports open for your account (80, 443 and 53 by default), no private or local addresses, and blocked domains stay blocked. A datagram that breaks a rule is dropped without an error, because SOCKS5 cannot report errors for single datagrams.
 - **No fragmentation.** Datagrams with a non-zero `FRAG` field are dropped.
 - **Datagram size.** The SOCKS5 header adds 10 to 262 bytes to every datagram, and your network path to the proxy must carry the total. Keep payloads at or below about 1,280 bytes, the QUIC default. If a QUIC handshake hangs with no error on either side, check your path MTU first.
 
 ## HTTP/3 in browsers
 
-Name resolution through the proxy does not return the DNS records that announce HTTP/3. A browser therefore loads a site over HTTP/2 first and switches to HTTP/3 from the next load, using the site's `Alt-Svc` header. Test with at least two page loads. If UDP port 53 is open for your account, a client that resolves names itself can send its DNS queries through the association and use HTTP/3 from the first load.
+Name resolution through the proxy does not return the DNS records that announce HTTP/3. A browser therefore loads a site over HTTP/2 first and switches to HTTP/3 from the next load, using the site's `Alt-Svc` header. Test with at least two page loads. A client that resolves names itself can send its DNS queries to UDP port 53 through the association and use HTTP/3 from the first load.
 
 ## Errors
 
