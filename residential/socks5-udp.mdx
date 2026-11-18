@@ -38,11 +38,13 @@ UDP is available on a subset of our nodes. Add `udp-on` to the username of any s
 
 Without `udp-on`, a session created by a TCP request may be bound to a node that cannot carry UDP. What happens then depends on the [session mode](/residential/sticky-sessions#session-modes):
 
-| Session mode | `UDP ASSOCIATE` without `udp-on` | First request with `udp-on` |
-|--------------|----------------------------------|-----------------------------|
-| `strict`     | Moves the session to a UDP-capable node, so the session's TCP exit changes too | Moves the session to a UDP-capable node |
-| `flex`       | Fails until the error limit (`sessionerr`) is reached. Successful TCP requests on the session reset that count | Moves the session to a UDP-capable node |
-| `norotate`   | Fails until the session TTL expires | Fails, TCP included. Start a new session ID with `udp-on` from its first request |
+| Session mode | What happens to `UDP ASSOCIATE` |
+|--------------|---------------------------------|
+| `strict`     | Moves the session to a UDP-capable node, so the session's TCP exit changes too |
+| `flex`       | Fails until the error limit (`sessionerr`) is reached. Successful TCP requests on the session reset that count |
+| `norotate`   | Fails until the session TTL expires |
+
+Adding `udp-on` later moves a `strict` or `flex` session to a UDP-capable node on its next request. A `norotate` session never moves, so that request fails, TCP included: start a new session ID with `udp-on` instead.
 
 ## Limitations
 
