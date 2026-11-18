@@ -48,7 +48,7 @@ Without `udp-on`, a session created by a TCP request may be bound to a node that
 
 - **Same source IP.** Send datagrams from the same public IP address as the TCP connection that sent `UDP ASSOCIATE`. Datagrams from any other IP are dropped. The source port can vary, and you can use several UDP sockets from that IP under one association. Watch for networks where UDP leaves from a different public IP than TCP, such as carrier-grade NAT pools, dual-stack hosts, or multi-WAN setups. The relay address uses the same IP version as your TCP connection.
 - **First datagram.** Send the first datagram within 10 seconds of the reply, or the association is closed.
-- **Lifetime.** An association ends when you close the TCP connection, after 5 minutes without traffic in either direction, or after 24 hours unless your account has a different session duration limit.
+- **Lifetime.** An association ends when you close the TCP connection or after 5 minutes without traffic in either direction. An active association is also closed 24 hours after it opens, or at your account's session duration limit if one is set; open a new one to continue.
 - **One exit node.** An association stays on the node it started on, even after the session TTL expires. If that node goes offline, the association ends; send a new `UDP ASSOCIATE`.
 - **Exit node, not exit IP.** TCP and UDP traffic in one session share an exit node. They usually share its IP address too, but a node with more than one network connection can send them from different addresses, so this is not guaranteed.
 - **Ports and content.** UDP follows the same [usage restrictions](/residential/usage-restrictions) as TCP: only the destination ports open for your account (80 and 443 by default), no private or local addresses, and blocked domains stay blocked. A datagram that breaks a rule is dropped without an error, because SOCKS5 cannot report errors for single datagrams.
@@ -57,7 +57,7 @@ Without `udp-on`, a session created by a TCP request may be bound to a node that
 
 ## HTTP/3 in browsers
 
-Name resolution through the proxy does not return the DNS records that announce HTTP/3. A browser therefore loads a site over HTTP/2 first and switches to HTTP/3 from the next load, using the site's `Alt-Svc` header. Test with at least two page loads.
+Name resolution through the proxy does not return the DNS records that announce HTTP/3. A browser therefore loads a site over HTTP/2 first and switches to HTTP/3 from the next load, using the site's `Alt-Svc` header. Test with at least two page loads. If UDP port 53 is open for your account, a client that resolves names itself can send its DNS queries through the association and use HTTP/3 from the first load.
 
 ## Errors
 
@@ -66,8 +66,7 @@ If the proxy cannot set up the association, it answers `UDP ASSOCIATE` with an e
 | Reply  | Meaning | What to do |
 |--------|---------|------------|
 | `0x01` | No UDP-capable node matches the request, or the node failed | Retry, add `udp-on`, or relax geo or device targeting |
-| `0x05` | Your concurrent connection limit is reached | Reduce concurrent connections |
-| `0x07` | UDP is not available on this endpoint | Contact support |
+| `0x05` | Your account's request limit is reached, the same limit that returns `429` over HTTP. Accounts have no such limit unless one was set for them | Slow down, or contact support to review the limit |
 | `0x09` | Invalid username parameters, such as a wrong `udp` value | Fix the username |
 | `0x0B` | No route matches your targeting | Relax geo or device targeting |
 
