@@ -34,7 +34,7 @@ UDP is available on a subset of our nodes. Add `udp-on` to the username of any s
 
 - Send `udp-on` on every request of that session, starting with the first one, TCP requests included. The session's TCP and UDP traffic then leave through the same exit node.
 - `udp-on` also limits the session's TCP requests to UDP-capable nodes, so use it only for sessions that need UDP.
-- Valid values are `udp-on` and `udp-off`. Any other value is rejected.
+- Use `udp-on`. Invalid values are rejected.
 
 Without `udp-on`, a session created by a TCP request may be bound to a node that cannot carry UDP. What happens then depends on the [session mode](/residential/sticky-sessions#session-modes):
 
@@ -57,7 +57,7 @@ Without `udp-on`, a session created by a TCP request may be bound to a node that
 
 ## HTTP/3 in browsers
 
-Name resolution through the proxy does not return the DNS records that announce HTTP/3, and UDP port 53 is not available. A browser therefore loads a site over HTTP/2 first and switches to HTTP/3 from the next load, using the site's `Alt-Svc` header. Test with at least two page loads.
+Name resolution through the proxy does not return the DNS records that announce HTTP/3. A browser therefore loads a site over HTTP/2 first and switches to HTTP/3 from the next load, using the site's `Alt-Svc` header. Test with at least two page loads.
 
 ## Errors
 
