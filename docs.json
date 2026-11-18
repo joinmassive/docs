@@ -127,6 +127,7 @@
               "residential/geotargeting",
               "residential/geohash-targeting",
               "residential/sticky-sessions",
+              "residential/socks5-udp",
               "residential/device-type-targeting",
               "residential/asn-type-targeting",
               "residential/accounting",
