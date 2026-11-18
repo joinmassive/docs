@@ -42,7 +42,7 @@ Without `udp-on`, a session created by a TCP request may be bound to a node that
 |--------------|---------------------------------|
 | `strict`     | Moves the session to a UDP-capable node, so the session's TCP exit changes too |
 | `flex`       | Fails until the error limit (`sessionerr`) is reached. Successful TCP requests on the session reset that count |
-| `norotate`   | Fails until the session TTL expires |
+| `norotate`   | Fails until the sticky session TTL (`sessionttl`) expires |
 
 Adding `udp-on` later moves a `strict` or `flex` session to a UDP-capable node on its next request. A `norotate` session never moves, so that request fails, TCP included: start a new session ID with `udp-on` instead.
 
@@ -51,7 +51,7 @@ Adding `udp-on` later moves a `strict` or `flex` session to a UDP-capable node o
 - **Same source IP.** Send datagrams from the same public IP address as the TCP connection that sent `UDP ASSOCIATE`. Datagrams from any other IP are dropped. The source port can vary, and you can use several UDP sockets from that IP under one association. Watch for networks where UDP leaves from a different public IP than TCP, such as carrier-grade NAT pools, dual-stack hosts, or multi-WAN setups. The relay address uses the same IP version as your TCP connection.
 - **First datagram.** Send the first datagram within 10 seconds of the reply, or the association is closed.
 - **Lifetime.** An association ends when you close the TCP connection or after 5 minutes without traffic in either direction. An active association is also closed 24 hours after it opens; open a new one to continue.
-- **One exit node.** An association stays on the node it started on, even after the session TTL expires. If that node goes offline, the association ends; send a new `UDP ASSOCIATE`.
+- **One exit node.** An association stays on the node it started on, even after the sticky session TTL (`sessionttl`) expires. If that node goes offline, the association ends; send a new `UDP ASSOCIATE`.
 - **Exit node, not exit IP.** TCP and UDP traffic in one session share an exit node. They usually share its IP address too, but a node with more than one network connection can send them from different addresses, so this is not guaranteed.
 - **Ports and content.** UDP follows the same [usage restrictions](/residential/usage-restrictions) as TCP: only the destination ports open for your account (80, 443 and 53 by default), no private or local addresses, and blocked domains stay blocked. A datagram that breaks a rule is dropped without an error, because SOCKS5 cannot report errors for single datagrams.
 - **No fragmentation.** Datagrams with a non-zero `FRAG` field are dropped.
