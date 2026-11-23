@@ -1,0 +1,94 @@
+---
+title: 'SOCKS5 UDP'
+description: 'Send UDP traffic, such as QUIC and HTTP/3, through Massive ISP proxies with SOCKS5 UDP ASSOCIATE'
+---
+
+Massive ISP proxies support the SOCKS5 `UDP ASSOCIATE` command ([RFC 1928, section 7](https://www.rfc-editor.org/rfc/rfc1928#section-7)), on the same host, SOCKS5 port, and credentials you use for `CONNECT` (see [Authentication](/isp-proxies/authentication)).
+
+|             |                          |
+|-------------|--------------------------|
+| SOCKS5 Port | 8000                     |
+| Command     | `UDP ASSOCIATE` (`0x03`) |
+
+<Info>
+  curl cannot send UDP through a SOCKS5 proxy. Use a library that supports SOCKS5 UDP ASSOCIATE (see the [example](#example) below).
+</Info>
+
+## How it works
+
+1. Open a TCP connection to the proxy, authenticate, and send `UDP ASSOCIATE`.
+2. The reply carries a relay address, `BND.ADDR:BND.PORT`. Prefix each datagram with the SOCKS5 UDP header (`RSV RSV FRAG ATYP DST.ADDR DST.PORT`) and send it to that address. Replies arrive from the same address, carrying the source address in the same header.
+3. Keep the TCP connection open while you use the association. Closing it ends the association.
+
+<Warning>
+  Use the IP address from the reply as is. Do not resolve the proxy host again for the UDP traffic: it can point to a different server, which does not know your association.
+</Warning>
+
+## Sticky sessions
+
+An association uses one exit IP for its whole life. Add a [session identifier](/isp-proxies/sticky-sessions) to keep that same IP across the session's TCP and UDP traffic; without one, each association gets its own IP.
+
+```text
+{PROXY_USERNAME}-session-37:{API_KEY}
+```
+
+## Limitations
+
+- **Same source IP.** Datagrams must come from the same public IP as the TCP connection; others are dropped. Behind carrier-grade NAT or a multi-WAN setup, UDP may leave from a different public IP than TCP, which breaks the association.
+- **Timing.** Send the first datagram within 60 seconds of the reply. The association ends when the TCP connection closes, after 2 minutes without traffic either way, or if its exit server goes offline — then open a new one.
+- **Ports and destinations.** Same [restrictions](/isp-proxies/usage-restrictions) as TCP: ports 80 and 443 only, no private or blocked destinations. A datagram that breaks a rule is dropped silently, because SOCKS5 has no per-datagram error.
+- **Two-way only, unfragmented.** A destination that never answers receives at most the first 32 datagrams (64 KiB), so one-way UDP does not work; `FRAG` must be zero.
+- **Size and encryption.** The SOCKS5 header adds up to 262 bytes; the full datagram, header included, must fit the path MTU to the proxy, so keep payloads at or below the QUIC default (~1,200 bytes). Datagrams are not encrypted at the proxy — QUIC and HTTP/3 provide their own encryption end to end.
+
+<Note>
+  UDP counts toward your usage like TCP: datagram payload in both directions. SOCKS5 headers are not counted.
+</Note>
+
+## HTTP/3 in browsers
+
+Name resolution through the proxy does not return the records that advertise HTTP/3, so a browser loads a site over HTTP/2 first and switches to HTTP/3 on the next load via its `Alt-Svc` header. Test with at least two page loads.
+
+## Errors
+
+If the proxy cannot set up the association, it answers `UDP ASSOCIATE` with an error reply and closes the connection — there is no fallback to TCP.
+
+| Reply  | Meaning | What to do |
+|--------|---------|------------|
+| `0x02` | Not allowed: auth failed, account blocked, or destination refused | Check credentials and destination; bans apply as for `CONNECT` |
+| `0x07` | UDP not available on this connection | Fall back to TCP, or contact support to enable UDP |
+
+## Example
+
+For the SOCKS5 UDP layer use [PySocks](https://github.com/Anorov/PySocks) in Python or the [`socks`](https://github.com/JoshGlazebrook/socks) package in Node.js; for QUIC or HTTP/3 on top, drive the proxied socket with [aioquic](https://github.com/aiortc/aioquic) (Python) or [quic-go](https://github.com/quic-go/quic-go) (Go). No mainstream library does the whole HTTP/3-over-SOCKS5 stack on its own.
+
+With PySocks, `bind()` runs the `UDP ASSOCIATE` handshake and `send`/`recv` frame the datagrams. This example sends a QUIC Initial with a reserved version, which any QUIC server answers with a Version Negotiation packet, confirming the UDP path end to end. For real traffic, hand `s` to a QUIC/HTTP3 client such as aioquic.
+
+```python
+import os
+import socket
+
+import socks  # pip install pysocks
+
+s = socks.socksocket(socket.AF_INET, socket.SOCK_DGRAM)
+s.set_proxy(socks.SOCKS5, "{PROXY_HOST}", 8000,
+            username="{PROXY_USERNAME}-session-37",  # keep one exit IP
+            password="{API_KEY}")
+s.bind(("", 0))                 # UDP ASSOCIATE handshake
+s.connect((socket.gethostbyname("cloudflare-quic.com"), 443))  # a QUIC server
+s.settimeout(5)
+
+# QUIC long-header Initial; version 0x1a2a3a4a is reserved, so the server must
+# reply with Version Negotiation instead of accepting the connection.
+dcid, scid = os.urandom(8), os.urandom(8)
+initial = (b"\xc0" + b"\x1a\x2a\x3a\x4a"
+           + bytes([len(dcid)]) + dcid
+           + bytes([len(scid)]) + scid)
+initial += b"\x00" * (1200 - len(initial))  # a client Initial must be >= 1200 bytes
+s.send(initial)
+
+reply = s.recv(2048)
+assert reply[1:5] == b"\x00\x00\x00\x00"     # version 0 marks Version Negotiation
+print("QUIC reachable through the proxy")
+
+s.close()                       # ends the association
+```
