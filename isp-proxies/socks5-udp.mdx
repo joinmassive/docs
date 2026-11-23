@@ -1,7 +1,6 @@
 ---
 title: 'SOCKS5 UDP'
 description: 'Send UDP traffic, such as QUIC and HTTP/3, through Massive ISP proxies with SOCKS5 UDP ASSOCIATE'
-hidden: true
 ---
 
 Massive ISP proxies support the SOCKS5 `UDP ASSOCIATE` command ([RFC 1928, section 7](https://www.rfc-editor.org/rfc/rfc1928#section-7)), on the same host, SOCKS5 port, and credentials you use for `CONNECT` (see [Authentication](/isp-proxies/authentication)).
@@ -35,11 +34,11 @@ An association uses one exit IP for its whole life. Add a [session identifier](/
 
 ## Limitations
 
-- **Same source IP.** Datagrams must come from the same public IP as the TCP connection; others are dropped. Watch out behind carrier-grade NAT or multi-WAN, where UDP may leave from a different IP than TCP.
+- **Same source IP.** Datagrams must come from the same public IP as the TCP connection; others are dropped. Behind carrier-grade NAT or a multi-WAN setup, UDP may leave from a different public IP than TCP, which breaks the association.
 - **Timing.** Send the first datagram within 60 seconds of the reply. The association ends when the TCP connection closes, after 2 minutes without traffic either way, or if its exit server goes offline — then open a new one.
 - **Ports and destinations.** Same [restrictions](/isp-proxies/usage-restrictions) as TCP: ports 80 and 443 only, no private or blocked destinations. A datagram that breaks a rule is dropped silently, because SOCKS5 has no per-datagram error.
 - **Two-way only, unfragmented.** A destination that never answers receives at most the first 32 datagrams (64 KiB), so one-way UDP does not work; `FRAG` must be zero.
-- **Size and encryption.** The SOCKS5 header adds up to 262 bytes, so keep payloads near the QUIC default (~1,200 bytes) and mind your path MTU. Datagrams are not encrypted at the proxy — QUIC and HTTP/3 provide their own encryption end to end.
+- **Size and encryption.** The SOCKS5 header adds up to 262 bytes; the full datagram, header included, must fit the path MTU to the proxy, so keep payloads at or below the QUIC default (~1,200 bytes). Datagrams are not encrypted at the proxy — QUIC and HTTP/3 provide their own encryption end to end.
 
 <Note>
   UDP counts toward your usage like TCP: datagram payload in both directions. SOCKS5 headers are not counted.
