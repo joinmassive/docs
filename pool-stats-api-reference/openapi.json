@@ -111,6 +111,16 @@
               "type": "string",
               "example": "mobile"
             }
+          },
+          {
+            "name": "udp_capable",
+            "in": "query",
+            "required": false,
+            "description": "Filter by SOCKS5 UDP support: true counts only nodes that report UDP support, false only nodes that do not",
+            "schema": {
+              "type": "boolean",
+              "example": true
+            }
           }
         ],
         "responses": {
@@ -160,6 +170,11 @@
                       "device_type": {
                         "type": "string",
                         "description": "Device type (mobile, tv, or common) (present when grouping by device_type)",
+                        "nullable": true
+                      },
+                      "udp_capable": {
+                        "type": "boolean",
+                        "description": "SOCKS5 UDP support (present when filtering by udp_capable)",
                         "nullable": true
                       },
                       "count": {
