@@ -17,8 +17,8 @@ Massive ISP proxies support the SOCKS5 `UDP ASSOCIATE` command ([RFC 1928, secti
 
 ## How it works
 
-1. Open a TCP connection to the proxy, authenticate, and send `UDP ASSOCIATE`. `DST.ADDR:DST.PORT` in the request can be `0.0.0.0:0`.
-2. The reply contains a relay address, `BND.ADDR:BND.PORT`. Send your datagrams, each wrapped in the standard SOCKS5 UDP header (`RSV RSV FRAG ATYP DST.ADDR DST.PORT DATA`), to exactly that address. Replies come back from it with the same header.
+1. Open a TCP connection to the proxy, authenticate, and send `UDP ASSOCIATE`.
+2. The reply contains a relay address, `BND.ADDR:BND.PORT`. Send your datagrams, each wrapped in the standard SOCKS5 UDP header, to that address; replies come back from it. A library handles this framing for you.
 3. Keep the TCP connection open while you use the association. Closing it ends the association.
 
 <Warning>
@@ -36,8 +36,7 @@ An association uses one exit IP for its whole life. Add a [session identifier](/
 ## Limitations
 
 - **Same source IP.** Datagrams must come from the same public IP as the TCP connection; others are dropped. Watch out behind carrier-grade NAT or multi-WAN, where UDP may leave from a different IP than TCP.
-- **Timing.** Send the first datagram within 60 seconds of the reply. The association ends when the TCP connection closes or after 2 minutes without traffic either way.
-- **One exit IP.** A session's TCP and UDP share one exit IP. If that server goes offline, the association ends — open a new one.
+- **Timing.** Send the first datagram within 60 seconds of the reply. The association ends when the TCP connection closes, after 2 minutes without traffic either way, or if its exit server goes offline — then open a new one.
 - **Ports and destinations.** Same [restrictions](/isp-proxies/usage-restrictions) as TCP: ports 80 and 443 only, no private or blocked destinations. A datagram that breaks a rule is dropped silently, because SOCKS5 has no per-datagram error.
 - **Two-way only, unfragmented.** A destination that never answers receives at most the first 32 datagrams (64 KiB), so one-way UDP does not work; `FRAG` must be zero.
 - **Size and encryption.** The SOCKS5 header adds up to 262 bytes, so keep payloads near the QUIC default (~1,200 bytes) and mind your path MTU. Datagrams are not encrypted at the proxy — QUIC and HTTP/3 provide their own encryption end to end.
@@ -61,9 +60,9 @@ If the proxy cannot set up the association, it answers `UDP ASSOCIATE` with an e
 
 ## Example
 
-You do not have to frame datagrams by hand. For the SOCKS5 UDP layer use [PySocks](https://github.com/Anorov/PySocks) in Python or the [`socks`](https://github.com/JoshGlazebrook/socks) package in Node.js. For QUIC or HTTP/3 on top, drive the proxied socket with a QUIC library such as [aioquic](https://github.com/aiortc/aioquic) (Python) or [quic-go](https://github.com/quic-go/quic-go) (Go) — no mainstream library does the whole HTTP/3-over-SOCKS5 stack on its own.
+For the SOCKS5 UDP layer use [PySocks](https://github.com/Anorov/PySocks) in Python or the [`socks`](https://github.com/JoshGlazebrook/socks) package in Node.js; for QUIC or HTTP/3 on top, drive the proxied socket with [aioquic](https://github.com/aiortc/aioquic) (Python) or [quic-go](https://github.com/quic-go/quic-go) (Go). No mainstream library does the whole HTTP/3-over-SOCKS5 stack on its own.
 
-With PySocks a datagram socket speaks SOCKS5 UDP for you: `bind()` runs the `UDP ASSOCIATE` handshake, and `send`/`recv` frame the datagrams. Closing the socket ends the association.
+With PySocks, `bind()` runs the `UDP ASSOCIATE` handshake and `send`/`recv` frame the datagrams:
 
 ```python
 import socket
