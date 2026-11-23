@@ -18,7 +18,7 @@ Massive ISP proxies support the SOCKS5 `UDP ASSOCIATE` command ([RFC 1928, secti
 ## How it works
 
 1. Open a TCP connection to the proxy, authenticate, and send `UDP ASSOCIATE`.
-2. The reply contains a relay address, `BND.ADDR:BND.PORT`. Send your datagrams, each wrapped in the standard SOCKS5 UDP header, to that address; replies come back from it. A library handles this framing for you.
+2. The reply carries a relay address, `BND.ADDR:BND.PORT`. Prefix each datagram with the SOCKS5 UDP header (`RSV RSV FRAG ATYP DST.ADDR DST.PORT`) and send it to that address. Replies arrive from the same address, carrying the source address in the same header.
 3. Keep the TCP connection open while you use the association. Closing it ends the association.
 
 <Warning>
