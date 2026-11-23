@@ -1,0 +1,262 @@
+---
+title: 'SOCKS5 UDP'
+description: 'Send UDP traffic, such as QUIC and HTTP/3, through Massive ISP proxies with SOCKS5 UDP ASSOCIATE'
+hidden: true
+---
+
+Massive ISP proxies support the SOCKS5 `UDP ASSOCIATE` command ([RFC 1928, section 7](https://www.rfc-editor.org/rfc/rfc1928#section-7)) on the SOCKS5 port, with the same credentials as `CONNECT`.
+
+|             |                          |
+|-------------|--------------------------|
+| Host        | `isp.joinmassive.com`    |
+| SOCKS5 Port | 8000                     |
+| Command     | `UDP ASSOCIATE` (`0x03`) |
+
+<Info>
+  curl cannot send UDP through a SOCKS5 proxy. Use a client or library that supports SOCKS5 UDP ASSOCIATE (see the [examples](#examples) below).
+</Info>
+
+## How it works
+
+1. Open a TCP connection to `isp.joinmassive.com:8000`, authenticate with your username and API key, and send `UDP ASSOCIATE`. `DST.ADDR` and `DST.PORT` in the request can be `0.0.0.0:0`.
+2. The reply contains a relay address, `BND.ADDR:BND.PORT`. Send your datagrams, each wrapped in the standard SOCKS5 UDP header, to exactly that address and port. Replies come back from the same address and port.
+3. Keep the TCP connection open for as long as you use the association. Closing it ends the association.
+
+Each datagram you send is framed as `RSV RSV FRAG ATYP DST.ADDR DST.PORT DATA`; replies carry the target's IP and port in the same header.
+
+<Warning>
+  Use the IP address from the reply as is. Do not resolve `isp.joinmassive.com` again for the UDP traffic: it can point to a different server, which does not know your association.
+</Warning>
+
+## Sticky sessions
+
+An association uses one egress IP for its whole lifetime. Add a [session identifier](/isp-proxies/sticky-sessions) to the username to keep that same IP across the session's TCP and UDP traffic:
+
+```text
+{PROXY_USERNAME}-session-37:{API_KEY}
+```
+
+The session's `CONNECT` tunnels and its UDP association then leave through the same exit IP. Without a session identifier, each association gets an IP of its own.
+
+## Limitations
+
+- **Same source IP.** Send datagrams from the same public IP address as the TCP connection that sent `UDP ASSOCIATE`. Datagrams from any other IP are dropped. The source port can vary, and you can use several UDP sockets from that IP under one association. Watch for networks where UDP leaves from a different public IP than TCP, such as carrier-grade NAT pools, dual-stack hosts, or multi-WAN setups.
+- **First datagram.** Send the first datagram within 60 seconds of the reply, or the association is closed.
+- **Lifetime.** An association ends when you close the TCP connection, or after 2 minutes without traffic in either direction. Open a new one to continue.
+- **One exit IP.** TCP and UDP traffic in one session share one exit IP. If that server goes offline, the association ends; send a new `UDP ASSOCIATE`.
+- **Ports.** UDP follows the same [usage restrictions](/isp-proxies/usage-restrictions) as TCP: only the destination ports open for your account (80 and 443), no private or internal addresses, and blocked destinations stay blocked. A datagram that breaks a rule is dropped without an error, because SOCKS5 cannot report errors for single datagrams.
+- **Two-way only.** A destination that never answers receives at most the first 32 datagrams (64 KiB of payload) of a flow, so one-way UDP protocols do not work. This is enough for a QUIC handshake or a STUN query and their retries.
+- **No fragmentation.** Datagrams with a non-zero `FRAG` field are dropped.
+- **Datagram size.** The SOCKS5 header adds 10 to 262 bytes to every datagram, and your network path to the proxy must carry the total. Keep payloads at or below about 1,200 bytes, the QUIC default. If a QUIC handshake hangs with no error on either side, check your path MTU first.
+- **Not encrypted.** The datagrams are not encrypted, even when the TCP control connection uses TLS. QUIC and HTTP/3 provide their own encryption end to end.
+
+## HTTP/3 in browsers
+
+Name resolution through the proxy does not return the DNS records that advertise HTTP/3. A browser therefore loads a site over HTTP/2 first and switches to HTTP/3 from the next load, using the site's `Alt-Svc` header. Test with at least two page loads.
+
+## Errors
+
+If the proxy cannot set up the association, it answers `UDP ASSOCIATE` with an error reply and closes the connection. There is no fallback to TCP on the same request.
+
+| Reply  | Meaning | What to do |
+|--------|---------|------------|
+| `0x02` | Connection not allowed: authentication failed, the account is blocked, or the destination is refused | Check your credentials and destination; a banned client is refused the same way as for `CONNECT` |
+| `0x07` | Command not supported: UDP is not available on this connection | Fall back to TCP, or contact support to enable UDP for your account |
+
+A datagram that breaks a rule once the association is open (a disallowed port, a blocked or internal destination, a wrong source IP, or a set `FRAG` field) is dropped silently, because SOCKS5 has no per-datagram error.
+
+## Usage accounting
+
+UDP traffic counts toward your usage like TCP traffic: the payload of your datagrams in both directions. SOCKS5 headers are not counted.
+
+## Examples
+
+### Python
+
+The standard library is enough to open an association and frame datagrams. This helper performs the handshake and returns the relay address plus encode/decode functions for the SOCKS5 UDP header; hand the resulting socket to a QUIC or HTTP/3 library to send real traffic.
+
+```python
+import socket
+import struct
+
+PROXY = ("isp.joinmassive.com", 8000)
+USERNAME = b"{PROXY_USERNAME}-session-37"  # keep one exit IP for the association
+API_KEY = b"{API_KEY}"
+
+
+def udp_associate():
+    """Authenticate and send UDP ASSOCIATE. Returns (tcp_conn, relay_addr).
+
+    Keep tcp_conn open: closing it ends the association.
+    """
+    tcp = socket.create_connection(PROXY)
+
+    # Greeting: SOCKS5, offering the username/password method (0x02).
+    tcp.sendall(b"\x05\x01\x02")
+    if tcp.recv(2)[1] != 0x02:
+        raise RuntimeError("proxy did not accept username/password auth")
+
+    # Username/password auth (RFC 1929).
+    tcp.sendall(b"\x01" + bytes([len(USERNAME)]) + USERNAME
+                + bytes([len(API_KEY)]) + API_KEY)
+    if tcp.recv(2)[1] != 0x00:
+        raise RuntimeError("authentication failed")
+
+    # UDP ASSOCIATE (0x03); DST.ADDR:DST.PORT may be 0.0.0.0:0.
+    tcp.sendall(b"\x05\x03\x00\x01\x00\x00\x00\x00\x00\x00")
+    reply = tcp.recv(10)
+    if reply[1] != 0x00:
+        raise RuntimeError(f"UDP ASSOCIATE refused: 0x{reply[1]:02x}")
+
+    relay = (socket.inet_ntoa(reply[4:8]), struct.unpack("!H", reply[8:10])[0])
+    return tcp, relay
+
+
+def encap(host, port, payload):
+    """Wrap a payload in the SOCKS5 UDP header for host:port (IPv4 target)."""
+    return (b"\x00\x00\x00\x01" + socket.inet_aton(host)
+            + struct.pack("!H", port) + payload)
+
+
+def decap(datagram):
+    """Strip the SOCKS5 UDP header from a reply (IPv4 target)."""
+    return datagram[10:]
+
+
+tcp, relay = udp_associate()
+udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+udp.settimeout(5)
+
+# Send your QUIC/HTTP3 datagrams to `relay`; the proxy forwards them to the
+# target. Replies arrive wrapped in the same header.
+udp.sendto(encap("104.16.0.0", 443, your_quic_initial), relay)
+reply, _ = udp.recvfrom(65535)
+payload = decap(reply)
+
+# ... keep `tcp` open while the association is in use ...
+tcp.close()  # ends the association
+```
+
+### Go
+
+This adapter exposes the association as a `net.PacketConn` bound to one target, which is what a QUIC library such as [quic-go](https://github.com/quic-go/quic-go) needs to run HTTP/3 over the relay.
+
+```go
+package main
+
+import (
+	"encoding/binary"
+	"fmt"
+	"io"
+	"net"
+	"time"
+)
+
+const (
+	proxyAddr = "isp.joinmassive.com:8000"
+	username  = "{PROXY_USERNAME}-session-37" // keep one exit IP for the association
+	password  = "{API_KEY}"
+)
+
+// associate authenticates and sends UDP ASSOCIATE. The returned TCP connection
+// must stay open: closing it ends the association.
+func associate() (net.Conn, *net.UDPAddr, error) {
+	tcp, err := net.Dial("tcp", proxyAddr)
+	if err != nil {
+		return nil, nil, err
+	}
+	// Greeting, offering the username/password method (0x02).
+	if _, err = tcp.Write([]byte{0x05, 0x01, 0x02}); err != nil {
+		return nil, nil, err
+	}
+	buf := make([]byte, 2)
+	if _, err = io.ReadFull(tcp, buf); err != nil {
+		return nil, nil, err
+	}
+	if buf[1] != 0x02 {
+		return nil, nil, fmt.Errorf("proxy did not accept username/password auth")
+	}
+	// Username/password auth (RFC 1929).
+	auth := append([]byte{0x01, byte(len(username))}, username...)
+	auth = append(auth, byte(len(password)))
+	auth = append(auth, password...)
+	if _, err = tcp.Write(auth); err != nil {
+		return nil, nil, err
+	}
+	if _, err = io.ReadFull(tcp, buf); err != nil {
+		return nil, nil, err
+	}
+	if buf[1] != 0x00 {
+		return nil, nil, fmt.Errorf("authentication failed")
+	}
+	// UDP ASSOCIATE (0x03); DST.ADDR:DST.PORT 0.0.0.0:0.
+	if _, err = tcp.Write([]byte{0x05, 0x03, 0x00, 0x01, 0, 0, 0, 0, 0, 0}); err != nil {
+		return nil, nil, err
+	}
+	rep := make([]byte, 10)
+	if _, err = io.ReadFull(tcp, rep); err != nil {
+		return nil, nil, err
+	}
+	if rep[1] != 0x00 {
+		return nil, nil, fmt.Errorf("UDP ASSOCIATE refused: 0x%02x", rep[1])
+	}
+	relay := &net.UDPAddr{IP: net.IP(rep[4:8]), Port: int(binary.BigEndian.Uint16(rep[8:10]))}
+	return tcp, relay, nil
+}
+
+// socksConn adapts the relay to net.PacketConn for one fixed target. The remote
+// address it reports is the target's real ip:port, so a QUIC client's off-path
+// check keeps passing even though datagrams arrive from the proxy's relay.
+type socksConn struct {
+	udp    *net.UDPConn
+	relay  *net.UDPAddr
+	target *net.UDPAddr
+}
+
+func (c *socksConn) WriteTo(p []byte, _ net.Addr) (int, error) {
+	hdr := append([]byte{0, 0, 0, 0x01}, c.target.IP.To4()...)
+	hdr = binary.BigEndian.AppendUint16(hdr, uint16(c.target.Port))
+	if _, err := c.udp.WriteToUDP(append(hdr, p...), c.relay); err != nil {
+		return 0, err
+	}
+	return len(p), nil
+}
+
+func (c *socksConn) ReadFrom(p []byte) (int, net.Addr, error) {
+	buf := make([]byte, len(p)+262) // room for the SOCKS5 UDP header
+	n, _, err := c.udp.ReadFromUDP(buf)
+	if err != nil {
+		return 0, nil, err
+	}
+	return copy(p, buf[10:n]), c.target, nil // strip the IPv4 header
+}
+
+func (c *socksConn) Close() error                       { return c.udp.Close() }
+func (c *socksConn) LocalAddr() net.Addr                { return c.udp.LocalAddr() }
+func (c *socksConn) SetDeadline(t time.Time) error      { return c.udp.SetDeadline(t) }
+func (c *socksConn) SetReadDeadline(t time.Time) error  { return c.udp.SetReadDeadline(t) }
+func (c *socksConn) SetWriteDeadline(t time.Time) error { return c.udp.SetWriteDeadline(t) }
+
+func main() {
+	tcp, relay, err := associate()
+	if err != nil {
+		panic(err)
+	}
+	defer tcp.Close() // closing it ends the association
+
+	// Resolve the target yourself and dial it by IP.
+	target, err := net.ResolveUDPAddr("udp", "www.cloudflare.com:443")
+	if err != nil {
+		panic(err)
+	}
+	udp, err := net.ListenUDP("udp", nil)
+	if err != nil {
+		panic(err)
+	}
+	pc := &socksConn{udp: udp, relay: relay, target: target}
+
+	// Hand pc to your QUIC library as the net.PacketConn, dialing `target`,
+	// then run HTTP/3 over the returned connection.
+	_ = pc
+}
+```
