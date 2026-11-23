@@ -12,7 +12,7 @@ Massive ISP proxies support the SOCKS5 `UDP ASSOCIATE` command ([RFC 1928, secti
 | Command     | `UDP ASSOCIATE` (`0x03`) |
 
 <Info>
-  curl cannot send UDP through a SOCKS5 proxy. Use a client or library that supports SOCKS5 UDP ASSOCIATE (see the [example](#example) below).
+  curl cannot send UDP through a SOCKS5 proxy. Use a library that supports SOCKS5 UDP ASSOCIATE (see the [example](#example) below).
 </Info>
 
 ## How it works
@@ -61,62 +61,25 @@ If the proxy cannot set up the association, it answers `UDP ASSOCIATE` with an e
 
 ## Example
 
-The Python standard library is enough to open an association and frame datagrams; hand the relay socket to a QUIC or HTTP/3 library to send real traffic. The same handshake works in any language.
+You do not have to frame datagrams by hand. For the SOCKS5 UDP layer use [PySocks](https://github.com/Anorov/PySocks) in Python or the [`socks`](https://github.com/JoshGlazebrook/socks) package in Node.js. For QUIC or HTTP/3 on top, drive the proxied socket with a QUIC library such as [aioquic](https://github.com/aiortc/aioquic) (Python) or [quic-go](https://github.com/quic-go/quic-go) (Go) — no mainstream library does the whole HTTP/3-over-SOCKS5 stack on its own.
+
+With PySocks a datagram socket speaks SOCKS5 UDP for you: `bind()` runs the `UDP ASSOCIATE` handshake, and `send`/`recv` frame the datagrams. Closing the socket ends the association.
 
 ```python
 import socket
-import struct
 
-PROXY = ("{PROXY_HOST}", 8000)
-USERNAME = b"{PROXY_USERNAME}-session-37"  # keep one exit IP for the association
-API_KEY = b"{API_KEY}"
+import socks  # pip install pysocks
 
+s = socks.socksocket(socket.AF_INET, socket.SOCK_DGRAM)
+s.set_proxy(socks.SOCKS5, "{PROXY_HOST}", 8000,
+            username="{PROXY_USERNAME}-session-37",  # keep one exit IP
+            password="{API_KEY}")
+s.bind(("", 0))                 # UDP ASSOCIATE handshake
+s.connect(("104.16.0.0", 443))  # target IP; port 443 for QUIC/HTTP3
+s.settimeout(5)
 
-def udp_associate():
-    """Authenticate and send UDP ASSOCIATE. Returns (tcp_conn, relay_addr).
+s.send(your_quic_initial)       # your QUIC/HTTP3 datagrams
+reply = s.recv(65535)
 
-    Keep tcp_conn open: closing it ends the association.
-    """
-    tcp = socket.create_connection(PROXY)
-
-    # Greeting, offering the username/password method (0x02).
-    tcp.sendall(b"\x05\x01\x02")
-    if tcp.recv(2)[1] != 0x02:
-        raise RuntimeError("proxy did not accept username/password auth")
-
-    # Username/password auth (RFC 1929).
-    tcp.sendall(b"\x01" + bytes([len(USERNAME)]) + USERNAME
-                + bytes([len(API_KEY)]) + API_KEY)
-    if tcp.recv(2)[1] != 0x00:
-        raise RuntimeError("authentication failed")
-
-    # UDP ASSOCIATE (0x03); DST.ADDR:DST.PORT may be 0.0.0.0:0.
-    tcp.sendall(b"\x05\x03\x00\x01\x00\x00\x00\x00\x00\x00")
-    reply = tcp.recv(10)
-    if reply[1] != 0x00:
-        raise RuntimeError(f"UDP ASSOCIATE refused: 0x{reply[1]:02x}")
-
-    relay = (socket.inet_ntoa(reply[4:8]), struct.unpack("!H", reply[8:10])[0])
-    return tcp, relay
-
-
-def encap(host, port, payload):  # wrap a payload for an IPv4 target
-    return (b"\x00\x00\x00\x01" + socket.inet_aton(host)
-            + struct.pack("!H", port) + payload)
-
-
-def decap(datagram):  # strip the header from a reply (IPv4 target)
-    return datagram[10:]
-
-
-tcp, relay = udp_associate()
-udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-udp.settimeout(5)
-
-# Send your QUIC/HTTP3 datagrams to `relay`; replies arrive with the same header.
-udp.sendto(encap("104.16.0.0", 443, your_quic_initial), relay)
-reply, _ = udp.recvfrom(65535)
-payload = decap(reply)
-
-tcp.close()  # ends the association
+s.close()                       # ends the association
 ```
