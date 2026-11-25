@@ -55,11 +55,7 @@ If the proxy cannot set up the association, it answers `UDP ASSOCIATE` with an e
 | Reply  | Meaning | What to do |
 |--------|---------|------------|
 | `0x02` | Not allowed: auth failed, account blocked, or destination refused | Check credentials and destination; bans apply as for `CONNECT` |
-| `0x07` | UDP not available on this connection | Fall back to TCP, or contact support to enable UDP |
-
-## Unsupported commands
-
-The SOCKS5 `BIND` command is not supported. A `BIND` request is answered with `0x07` (command not supported); use `CONNECT` or `UDP ASSOCIATE`.
+| `0x07` | Command not supported — the SOCKS5 `BIND` command | Use `CONNECT` or `UDP ASSOCIATE` instead; `BIND` is not supported |
 
 ## Example
 
