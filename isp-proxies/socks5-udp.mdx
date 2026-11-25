@@ -57,6 +57,10 @@ If the proxy cannot set up the association, it answers `UDP ASSOCIATE` with an e
 | `0x02` | Not allowed: auth failed, account blocked, or destination refused | Check credentials and destination; bans apply as for `CONNECT` |
 | `0x07` | UDP not available on this connection | Fall back to TCP, or contact support to enable UDP |
 
+## Unsupported commands
+
+The SOCKS5 `BIND` command is not supported. A `BIND` request is answered with `0x07` (command not supported); use `CONNECT` or `UDP ASSOCIATE`.
+
 ## Example
 
 For the SOCKS5 UDP layer use [PySocks](https://github.com/Anorov/PySocks) in Python or the [`socks`](https://github.com/JoshGlazebrook/socks) package in Node.js; for QUIC or HTTP/3 on top, drive the proxied socket with [aioquic](https://github.com/aiortc/aioquic) (Python) or [quic-go](https://github.com/quic-go/quic-go) (Go). No mainstream library does the whole HTTP/3-over-SOCKS5 stack on its own.
