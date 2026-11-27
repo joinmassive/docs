@@ -75,3 +75,72 @@ If the proxy cannot set up the association, it answers `UDP ASSOCIATE` with an e
 ## Usage accounting
 
 UDP traffic counts toward your usage like TCP traffic: the payload of your datagrams in both directions. SOCKS5 headers are not counted. Usage for an association is recorded when it ends.
+
+## Examples
+
+### PySocks (UDP, Python)
+
+A DNS lookup over SOCKS5 UDP ASSOCIATE with [PySocks](https://github.com/Anorov/PySocks) (1.7.1); the username must carry `-udp-on`.
+
+```python
+import socket, struct, socks  # pip install PySocks
+
+PROXY_HOST, PROXY_PORT = "network.joinmassive.com", 65533
+USERNAME = "{PROXY_USERNAME}-udp-on"   # the -udp-on suffix is REQUIRED for UDP
+PASSWORD = "{API_KEY}"
+
+# Build a minimal DNS A-record query for example.com
+query = struct.pack(">HHHHHH", 0x1234, 0x0100, 1, 0, 0, 0)
+for label in (b"example", b"com"):
+    query += bytes([len(label)]) + label
+query += b"\x00" + struct.pack(">HH", 1, 1)       # end of name, QTYPE=A, QCLASS=IN
+
+# SOCKS5 UDP ASSOCIATE: set_proxy on a UDP socket, then sendto/recvfrom.
+sock = socks.socksocket(socket.AF_INET, socket.SOCK_DGRAM)
+sock.set_proxy(socks.SOCKS5, PROXY_HOST, PROXY_PORT, username=USERNAME, password=PASSWORD)
+sock.settimeout(10)
+sock.sendto(query, ("1.1.1.1", 53))               # first datagram opens the UDP relay
+data, _ = sock.recvfrom(4096)
+sock.close()
+
+# Print the A records from the answer section (the reply echoes the question)
+offset = len(query)
+for _ in range(struct.unpack(">H", data[6:8])[0]):
+    offset += 2                                   # compressed name pointer (0xc0 0x0c)
+    rtype, _, _, rdlen = struct.unpack(">HHIH", data[offset:offset + 10]); offset += 10
+    if rtype == 1:
+        print("example.com ->", socket.inet_ntoa(data[offset:offset + 4]))
+    offset += rdlen
+```
+
+### CloakBrowser (HTTP/3)
+
+Load a page over HTTP/3, with QUIC carried by the SOCKS5 UDP relay, using CloakBrowser.
+
+```python
+from cloakbrowser import launch
+
+# Massive residential SOCKS5 proxy. "-udp-on" pins UDP-capable exit nodes so QUIC
+# can ride the SOCKS5 UDP ASSOCIATE relay.
+proxy = "socks5://{PROXY_USERNAME}-udp-on:{API_KEY}@network.joinmassive.com:65533"
+
+# --origin-to-force-quic-on makes Chromium use HTTP/3 on the first load.
+browser = launch(
+    proxy=proxy,
+    headless=True,
+    args=["--origin-to-force-quic-on={TARGET_HOST}:443"],
+)
+page = browser.new_context().new_page()
+resp = page.goto("https://{TARGET_HOST}/")
+
+# Confirm the page arrived over HTTP/3 (QUIC over SOCKS5 UDP).
+proto = page.evaluate("performance.getEntriesByType('navigation')[0].nextHopProtocol")
+print(resp.status, proto)   # -> 200 h3
+browser.close()
+```
+
+`--origin-to-force-quic-on` forces HTTP/3 with no TCP fallback, so point it at a host you know serves HTTP/3. Without the flag, the first load is HTTP/2 and HTTP/3 appears on the next load through `Alt-Svc` (see [HTTP/3 in browsers](#http3-in-browsers)).
+
+<Note>
+  CloakBrowser resolves QUIC targets itself, so QUIC follows the customer's DNS answer, not the exit's.
+</Note>
