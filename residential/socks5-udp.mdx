@@ -142,5 +142,5 @@ browser.close()
 `--origin-to-force-quic-on` forces HTTP/3 with no TCP fallback, so point it at a host you know serves HTTP/3. Without the flag, the first load is HTTP/2 and HTTP/3 appears on the next load through `Alt-Svc` (see [HTTP/3 in browsers](#http3-in-browsers)).
 
 <Note>
-  CloakBrowser resolves QUIC targets itself, so QUIC follows the customer's DNS answer, not the exit's.
+  CloakBrowser resolves QUIC targets itself, so QUIC follows your DNS answer, not the exit node's.
 </Note>
